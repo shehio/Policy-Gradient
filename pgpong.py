@@ -4,7 +4,7 @@ import pickle
 import gym
 
 # hyperparameters
-H = 200  # number of hidden layer neurons
+hidden_layers_count = 200  # number of hidden layer neurons
 batch_size = 10  # every how many episodes to do a param update?
 learning_rate = 1e-4
 gamma = 0.99  # discount factor for reward
@@ -13,30 +13,29 @@ resume = False  # resume from previous checkpoint?
 render = False
 
 # model initialization
-D = 80 * 80  # input dimensionality: 80x80 grid
+pixels_count = 80 * 80  # input dimensionality: 80x80 grid
 if resume:
     model = pickle.load(open('save.p', 'rb'))
 else:
-    model = {}
-    model['W1'] = np.random.randn(H, D) / np.sqrt(D)  # "Xavier" initialization
-    model['W2'] = np.random.randn(H) / np.sqrt(H)
+    model = {'W1': np.random.randn(hidden_layers_count, pixels_count) / np.sqrt(pixels_count),
+             'W2': np.random.randn(hidden_layers_count) / np.sqrt(hidden_layers_count)}
 
 grad_buffer = {k: np.zeros_like(v) for k, v in model.iteritems()}  # update buffers that add up gradients over a batch
 rmsprop_cache = {k: np.zeros_like(v) for k, v in model.iteritems()}  # rmsprop memory
 
 
-def sigmoid(x):
-    return 1.0 / (1.0 + np.exp(-x))  # sigmoid "squashing" function to interval [0,1]
+def sigmoid(number):
+    return 1.0 / (1.0 + np.exp(-number))  # sigmoid "squashing" function to interval [0,1]
 
 
-def prepro(I):
+def preprocess_frame(image_frame):
     """ prepro 210x160x3 uint8 frame into 6400 (80x80) 1D float vector """
-    I = I[35:195]  # crop
-    I = I[::2, ::2, 0]  # downsample by factor of 2
-    I[I == 144] = 0  # erase background (background type 1)
-    I[I == 109] = 0  # erase background (background type 2)
-    I[I != 0] = 1  # everything else (paddles, ball) just set to 1
-    return I.astype(np.float).ravel()
+    image_frame = image_frame[35:195]  # crop
+    image_frame = image_frame[::2, ::2, 0]  # downsample by factor of 2
+    image_frame[image_frame == 144] = 0  # erase background (background type 1)
+    image_frame[image_frame == 109] = 0  # erase background (background type 2)
+    image_frame[image_frame != 0] = 1  # everything else (paddles, ball) just set to 1
+    return image_frame.astype(np.float).ravel()
 
 
 def discount_rewards(r):
@@ -80,8 +79,8 @@ if __name__ == '__main__':
             env.render()
 
         # preprocess the observation, set input to network to be difference image
-        cur_x = prepro(observation)
-        x = cur_x - prev_x if prev_x is not None else np.zeros(D)
+        cur_x = preprocess_frame(observation)
+        x = cur_x - prev_x if prev_x is not None else np.zeros(pixels_count)
         prev_x = cur_x
 
         # forward the policy network and sample an action from the returned probability
