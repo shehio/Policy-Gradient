@@ -2,6 +2,9 @@
 import numpy as np
 import pickle
 import gym
+import time
+
+from helpers import Helpers
 
 # hyperparameters
 hidden_layers_count = 200  # number of hidden layer neurons
@@ -9,8 +12,10 @@ batch_size = 10  # every how many episodes to do a param update?
 learning_rate = 1e-4
 gamma = 0.99  # discount factor for reward
 decay_rate = 0.99  # decay factor for RMSProp leaky sum of grad^2
-resume = False  # resume from previous checkpoint?
-render = False
+
+resume = True  # resume from previous checkpoint?
+render = True
+sleep_for_rendering_in_seconds = 0.02
 
 # model initialization
 pixels_count = 80 * 80  # input dimensionality: 80x80 grid
@@ -20,50 +25,8 @@ else:
     model = {'W1': np.random.randn(hidden_layers_count, pixels_count) / np.sqrt(pixels_count),
              'W2': np.random.randn(hidden_layers_count) / np.sqrt(hidden_layers_count)}
 
-grad_buffer = {k: np.zeros_like(v) for k, v in model.iteritems()}  # update buffers that add up gradients over a batch
-rmsprop_cache = {k: np.zeros_like(v) for k, v in model.iteritems()}  # rmsprop memory
-
-
-def sigmoid(number):
-    return 1.0 / (1.0 + np.exp(-number))  # sigmoid "squashing" function to interval [0,1]
-
-
-def preprocess_frame(image_frame):
-    """ prepro 210x160x3 uint8 frame into 6400 (80x80) 1D float vector """
-    image_frame = image_frame[35:195]  # crop
-    image_frame = image_frame[::2, ::2, 0]  # downsample by factor of 2
-    image_frame[image_frame == 144] = 0  # erase background (background type 1)
-    image_frame[image_frame == 109] = 0  # erase background (background type 2)
-    image_frame[image_frame != 0] = 1  # everything else (paddles, ball) just set to 1
-    return image_frame.astype(np.float).ravel()
-
-
-def discount_rewards(r):
-    """ take 1D float array of rewards and compute discounted reward """
-    discounted_r = np.zeros_like(r)
-    running_add = 0
-    for t in reversed(xrange(0, r.size)):
-        if r[t] != 0: running_add = 0  # reset the sum, since this was a game boundary (pong specific!)
-        running_add = running_add * gamma + r[t]
-        discounted_r[t] = running_add
-    return discounted_r
-
-
-def policy_forward(x):
-    h = np.dot(model['W1'], x)
-    h[h < 0] = 0  # ReLU nonlinearity
-    logp = np.dot(model['W2'], h)
-    p = sigmoid(logp)
-    return p, h  # return probability of taking action 2, and hidden state
-
-
-def policy_backward(eph, epdlogp):
-    """ backward pass. (eph is array of intermediate hidden states) """
-    dW2 = np.dot(eph.T, epdlogp).ravel()
-    dh = np.outer(epdlogp, model['W2'])
-    dh[eph <= 0] = 0  # backprop relu
-    dW1 = np.dot(dh.T, epx)
-    return {'W1': dW1, 'W2': dW2}
+grad_buffer = {k: np.zeros_like(v) for k, v in model.items()}  # update buffers that add up gradients over a batch
+rmsprop_cache = {k: np.zeros_like(v) for k, v in model.items()}  # rmsprop memory
 
 
 if __name__ == '__main__':
@@ -77,14 +40,15 @@ if __name__ == '__main__':
     while True:
         if render:
             env.render()
+            time.sleep(sleep_for_rendering_in_seconds)
 
         # preprocess the observation, set input to network to be difference image
-        cur_x = preprocess_frame(observation)
+        cur_x = Helpers.preprocess_frame(observation)
         x = cur_x - prev_x if prev_x is not None else np.zeros(pixels_count)
         prev_x = cur_x
 
         # forward the policy network and sample an action from the returned probability
-        aprob, h = policy_forward(x)
+        aprob, h = Helpers.policy_forward(model, x)
         action = 2 if np.random.uniform() < aprob else 3  # roll the dice!
 
         # record various intermediates (needed later for backprop)
@@ -110,18 +74,18 @@ if __name__ == '__main__':
             xs, hs, dlogps, drs = [], [], [], []  # reset array memory
 
             # compute the discounted reward backwards through time
-            discounted_epr = discount_rewards(epr)
+            discounted_epr = Helpers.discount_rewards(epr, gamma)
             # standardize the rewards to be unit normal (helps control the gradient estimator variance)
             discounted_epr -= np.mean(discounted_epr)
             discounted_epr /= np.std(discounted_epr)
 
             epdlogp *= discounted_epr  # modulate the gradient with advantage (PG magic happens right here.)
-            grad = policy_backward(eph, epdlogp)
+            grad = Helpers.policy_backward(model, eph, epdlogp, epx)
             for k in model: grad_buffer[k] += grad[k]  # accumulate grad over batch
 
             # perform rmsprop parameter update every batch_size episodes
             if episode_number % batch_size == 0:
-                for k, v in model.iteritems():
+                for k, v in model.items():
                     g = grad_buffer[k]  # gradient
                     rmsprop_cache[k] = decay_rate * rmsprop_cache[k] + (1 - decay_rate) * g ** 2
                     model[k] += learning_rate * g / (np.sqrt(rmsprop_cache[k]) + 1e-5)
@@ -130,10 +94,13 @@ if __name__ == '__main__':
             # boring book-keeping
             running_reward = reward_sum if running_reward is None else running_reward * 0.99 + reward_sum * 0.01
             print('resetting env. episode reward total was %f. running mean: %f' % (reward_sum, running_reward))
-            if episode_number % 100 == 0: pickle.dump(model, open('save.p', 'wb'))
+
+            if episode_number % 100 == 0:
+                pickle.dump(model, open('save.p', 'wb'))
+
             reward_sum = 0
             observation = env.reset()  # reset env
             prev_x = None
 
         if reward != 0:  # Pong has either +1 or -1 reward exactly when game ends.
-            print('ep %d: game finished, reward: %f' % (episode_number, reward)) + ('' if reward == -1 else ' !!!!!!!!')
+            print('ep %d: game finished, reward: %f' % (episode_number, reward) + ('' if reward == -1 else ' !!!!!!!!'))
