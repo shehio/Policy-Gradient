@@ -37,12 +37,13 @@ if __name__ == '__main__':
     running_reward = None
     reward_sum = 0
     episode_number = 0
+
     while True:
         if render:
             env.render()
             time.sleep(sleep_for_rendering_in_seconds)
 
-        # preprocess the observation, set input to network to be difference image
+        # pre-process the observation, set input to network to be difference image
         cur_x = Helpers.preprocess_frame(observation)
         x = cur_x - prev_x if prev_x is not None else np.zeros(pixels_count)
         prev_x = cur_x
