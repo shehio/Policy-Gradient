@@ -4,6 +4,7 @@ import time
 
 from helpers import Helpers
 from helpers import MLP
+from memory import Memory
 
 # hyper-parameters
 hidden_layers_count = 200  # number of hidden layer neurons
@@ -32,15 +33,16 @@ def train_agent():
         policy_network.train(learning_rate, decay_rate)
 
 
-def modify_gradient(states, hidden_layers, dlogps, discounted_rewards):
+def modify_gradient(memory):
     # stack together all inputs, hidden states, action gradients, and rewards for this episode
-    episode_states = np.vstack(states)
-    episode_hidden_layers = np.vstack(hidden_layers)
-    epdlogp = np.vstack(dlogps)
-    episode_discounted_rewards = np.vstack(discounted_rewards)
+    episode_states = np.vstack(memory.states)
+    episode_hidden_layers = np.vstack(memory.hidden_layers)
+    epdlogp = np.vstack(memory.dlogps)
+    episode_rewards = np.vstack(memory.rewards)
+
     # compute the discounted reward backwards through time
-    discounted_epr = Helpers.discount_and_normalize_rewards(episode_discounted_rewards, gamma)
-    epdlogp *= discounted_epr  # modulate the gradient with advantage (PG magic happens right here.)
+    episode_discounted_rewards = Helpers.discount_and_normalize_rewards(episode_rewards, gamma)
+    epdlogp *= episode_discounted_rewards  # modulate the gradient with advantage (PG magic happens right here.)
     policy_network.backward_pass(episode_hidden_layers, epdlogp, episode_states)
 
 
@@ -61,7 +63,8 @@ if __name__ == '__main__':
     env = gym.make("Pong-v0")
     observation = env.reset()
     previous_frame, running_reward = None, None  # used in computing the difference frame
-    states, hidden_layers, dlogps, discounted_rewards = [], [], [], []
+    memory = Memory()
+    # states, hidden_layers, dlogps, rewards = [], [], [], []
     reward_sum = 0
     episode_number = 0
 
@@ -78,19 +81,20 @@ if __name__ == '__main__':
         action_probability_space, hidden_layer = policy_network.forward_pass(state)
         action = DOWN if np.random.uniform() < action_probability_space else UP  # roll the dice!
 
-        # record various intermediates (needed later for backprop)
-        states.append(state)
-        hidden_layers.append(hidden_layer)
+        # record various intermediates (needed later for back-prop)
+        memory.states.append(state)
+        memory.hidden_layers.append(hidden_layer)
+
         y = 1 if action == 2 else 0  # a "fake label"
 
         # grad that encourages the action that was taken to be taken
         # (see http://cs231n.github.io/neural-networks-2/#losses if confused)
-        dlogps.append(y - action_probability_space)
+        memory.dlogps.append(y - action_probability_space)
 
         # step the environment and get new measurements
         observation, reward, done, info = env.step(action)
         reward_sum += reward
-        discounted_rewards.append(reward)  # record reward (has to be done after we call step() to get reward for previous action)
+        memory.rewards.append(reward)
 
         if reward != 0:  # Pong has either +1 or -1 reward exactly when game ends.
             print('ep %d: game finished, reward: %f' % (episode_number, reward) + ('' if reward == -1 else ' !!!!!!!!'))
@@ -98,7 +102,7 @@ if __name__ == '__main__':
         if done:  # an episode finished
             episode_number += 1
 
-            modify_gradient(states, hidden_layers, dlogps, discounted_rewards)
+            modify_gradient(memory)
             train_agent()
             save_agent()
 
@@ -108,4 +112,5 @@ if __name__ == '__main__':
             observation = env.reset()
             reward_sum = 0
             previous_frame = None
-            states, hidden_layers, dlogps, discounted_rewards = [], [], [], []
+            memory = Memory()
+            # states, hidden_layers, dlogps, rewards = [], [], [], []
