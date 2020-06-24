@@ -5,4 +5,3 @@ class Memory:
         self.hidden_layers = []
         self.rewards = []
         self.states = []
-

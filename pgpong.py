@@ -4,7 +4,6 @@ import time
 
 from agent import Agent
 from helpers import Helpers
-from memory import Memory
 
 # hyper-parameters
 hidden_layers_count = 200  # number of hidden layer neurons
@@ -45,19 +44,16 @@ if __name__ == '__main__':
         render_game()
         state, previous_frame = get_frame_difference()
         action = agent.get_action(state)
-
-        # step the environment and get new measurements
         observation, reward, done, info = env.step(action)
+        agent.reap_reward(reward)
         reward_sum += reward
-        agent.memory.rewards.append(reward)
 
         if reward != 0:  # Pong has either +1 or -1 reward exactly when game ends.
             print('ep %d: game finished, reward: %f' % (episode_number, reward) + ('' if reward == -1 else ' !!!!!!!!'))
 
         if done:
             episode_number += 1
-            agent.modify_gradient()
-            agent.episode_updates(episode_number)
+            agent.make_episode_end_updates(episode_number)
 
             running_reward = reward_sum if running_reward is None else running_reward * 0.99 + reward_sum * 0.01
             print('resetting env. episode reward total was %f. running mean: %f' % (reward_sum, running_reward))
