@@ -17,12 +17,51 @@ render = False
 sleep_for_rendering_in_seconds = 0.02
 
 pixels_count = 80 * 80  # input dimensionality: 80x80 grid
+DOWN = 2
+UP = 3
+
+
+def save_agent():
+    if episode_number % 100 == 0:
+        policy_network.save_network()
+
+
+def train_agent():
+    # perform rmsprop parameter update every batch_size episodes
+    if episode_number % batch_size == 0:
+        policy_network.train(learning_rate, decay_rate)
+
+
+def modify_gradient(states, hidden_layers, dlogps, discounted_rewards):
+    # stack together all inputs, hidden states, action gradients, and rewards for this episode
+    episode_states = np.vstack(states)
+    episode_hidden_layers = np.vstack(hidden_layers)
+    epdlogp = np.vstack(dlogps)
+    episode_discounted_rewards = np.vstack(discounted_rewards)
+    # compute the discounted reward backwards through time
+    discounted_epr = Helpers.discount_and_normalize_rewards(episode_discounted_rewards, gamma)
+    epdlogp *= discounted_epr  # modulate the gradient with advantage (PG magic happens right here.)
+    policy_network.backward_pass(episode_hidden_layers, epdlogp, episode_states)
+
+
+def render_game():
+    if render:
+        env.render()
+        time.sleep(sleep_for_rendering_in_seconds)
+
+
+def get_frame_difference():
+    # pre-process the observation, set input to network to be difference image
+    current_frame = Helpers.preprocess_frame(observation)
+    state = current_frame - previous_frame if previous_frame is not None else np.zeros(pixels_count)
+    return state, current_frame
+
 
 if __name__ == '__main__':
     env = gym.make("Pong-v0")
     observation = env.reset()
     previous_frame, running_reward = None, None  # used in computing the difference frame
-    xs, hs, dlogps, drs = [], [], [], []
+    states, hidden_layers, dlogps, discounted_rewards = [], [], [], []
     reward_sum = 0
     episode_number = 0
 
@@ -32,32 +71,26 @@ if __name__ == '__main__':
         policy_network.load_network()
 
     while True:
-        if render:
-            env.render()
-            time.sleep(sleep_for_rendering_in_seconds)
-
-        # pre-process the observation, set input to network to be difference image
-        cur_x = Helpers.preprocess_frame(observation)
-        x = cur_x - previous_frame if previous_frame is not None else np.zeros(pixels_count)
-        previous_frame = cur_x
+        render_game()
+        state, previous_frame = get_frame_difference()
 
         # forward the policy network and sample an action from the returned probability
-        aprob, h = policy_network.forward_pass(x)
-        action = 2 if np.random.uniform() < aprob else 3  # roll the dice!
+        action_probability_space, hidden_layer = policy_network.forward_pass(state)
+        action = DOWN if np.random.uniform() < action_probability_space else UP  # roll the dice!
 
         # record various intermediates (needed later for backprop)
-        xs.append(x)  # observation
-        hs.append(h)  # hidden state
+        states.append(state)
+        hidden_layers.append(hidden_layer)
         y = 1 if action == 2 else 0  # a "fake label"
 
         # grad that encourages the action that was taken to be taken
         # (see http://cs231n.github.io/neural-networks-2/#losses if confused)
-        dlogps.append(y - aprob)
+        dlogps.append(y - action_probability_space)
 
         # step the environment and get new measurements
         observation, reward, done, info = env.step(action)
         reward_sum += reward
-        drs.append(reward)  # record reward (has to be done after we call step() to get reward for previous action)
+        discounted_rewards.append(reward)  # record reward (has to be done after we call step() to get reward for previous action)
 
         if reward != 0:  # Pong has either +1 or -1 reward exactly when game ends.
             print('ep %d: game finished, reward: %f' % (episode_number, reward) + ('' if reward == -1 else ' !!!!!!!!'))
@@ -65,29 +98,14 @@ if __name__ == '__main__':
         if done:  # an episode finished
             episode_number += 1
 
-            # stack together all inputs, hidden states, action gradients, and rewards for this episode
-            epx = np.vstack(xs)
-            eph = np.vstack(hs)
-            epdlogp = np.vstack(dlogps)
-            epr = np.vstack(drs)
-
-            # compute the discounted reward backwards through time
-            discounted_epr = Helpers.discount_and_normalize_rewards(epr, gamma)
-            epdlogp *= discounted_epr  # modulate the gradient with advantage (PG magic happens right here.)
-            policy_network.backward_pass(eph, epdlogp, epx)
-
-            # perform rmsprop parameter update every batch_size episodes
-            if episode_number % batch_size == 0:
-                policy_network.train(learning_rate, decay_rate)
-
-            if episode_number % 100 == 0:
-                policy_network.save_network()
+            modify_gradient(states, hidden_layers, dlogps, discounted_rewards)
+            train_agent()
+            save_agent()
 
             running_reward = reward_sum if running_reward is None else running_reward * 0.99 + reward_sum * 0.01
             print('resetting env. episode reward total was %f. running mean: %f' % (reward_sum, running_reward))
 
-            # boring book-keeping
+            observation = env.reset()
             reward_sum = 0
-            observation = env.reset()  # reset env
             previous_frame = None
-            xs, hs, dlogps, drs = [], [], [], []  # reset array memory
+            states, hidden_layers, dlogps, discounted_rewards = [], [], [], []
