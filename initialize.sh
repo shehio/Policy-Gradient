@@ -1,5 +1,5 @@
 #!/bin/bash
-repo_src="hclone https://github.com/official-stockfish/Stockfish.git"
+repo_src="git@github.com:official-stockfish/Stockfish.git"
 local_repo="Stockfish"
 
 if [ ! -d "$local_repo/.git" ]; then
