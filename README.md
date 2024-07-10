@@ -15,5 +15,6 @@
 
 
 ### Gameplay Algorithms
+- [Game Tree](https://en.wikipedia.org/wiki/Game_tree)
 - [Minimax](https://en.wikipedia.org/wiki/Minimax).
 - [Alpha Beta Pruning](https://en.wikipedia.org/wiki/Alpha%E2%80%93beta_pruning)
