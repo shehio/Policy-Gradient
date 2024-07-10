@@ -19,3 +19,6 @@
 - [Minimax](https://en.wikipedia.org/wiki/Minimax).
 - [Alpha Beta Pruning](https://en.wikipedia.org/wiki/Alpha%E2%80%93beta_pruning)
 - [Monte Carlo Tree Search](https://github.com/shehio/monte-carlo-tree-search)
+
+
+### Todos
