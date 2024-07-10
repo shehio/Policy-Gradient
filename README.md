@@ -14,4 +14,6 @@
 - [Stockfish](https://en.wikipedia.org/wiki/Stockfish_(chess)): A free and open-source chess engine, available for various desktop and mobile platforms. 
 
 
-### Gameplay algorithms
+### Gameplay Algorithms
+- [Minimax](https://en.wikipedia.org/wiki/Minimax).
+- [Alpha Beta Pruning](https://en.wikipedia.org/wiki/Alpha%E2%80%93beta_pruning)
