@@ -12,7 +12,7 @@ cd Stockfish/src
 
 file="misc.cpp"
 old_string='constexpr std::string_view version = "dev";'
-new_string='constexpr std::string_view version = "16";'
+new_string='constexpr std::string_view version = "16.1";'
 sed -i '' "s|$old_string|$new_string|g" "$file"
 
 make clean
