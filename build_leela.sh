@@ -8,7 +8,7 @@ else
   git -C "$local_repo" pull
 fi
 
-bash install_homebrew.sh
+bash scripts/install_homebrew.sh
 
 brew install meson ninja python3 zlib gcc
 cd lc0 && mkdir build && cd build
