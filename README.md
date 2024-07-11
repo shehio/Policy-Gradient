@@ -2,7 +2,7 @@
 ### Why
 
 ### How
-- Clone and build Stockfish: `./build_stockfish.sh`
+- Clone and build Stockfish and lc0: `./build_engines.sh`
 - Activate Python virtual environment: `python3 -m venv venv && source venv/bin/activate`
 - Install Pip requirements: `pip3 install -r requirements.txt`
 - Test Stockfish integration `python3 test_stockfish.py`
