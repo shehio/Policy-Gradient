@@ -7,3 +7,13 @@ if [ ! -d "$local_repo/.git" ]; then
 else
   git -C "$local_repo" pull
 fi
+
+/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+echo 'eval "$(/opt/homebrew/bin/brew shellenv)"' >> ~/.zprofile
+eval "$(/opt/homebrew/bin/brew shellenv)"
+
+brew install meson ninja python3 zlib gcc
+cd lc0
+mkdir build && cd build
+meson setup --buildtype=release ..
+ninja
