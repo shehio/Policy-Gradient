@@ -1,13 +1,5 @@
 #!/bin/bash
-repo_src="git@github.com:official-stockfish/Stockfish.git"
-local_repo="Stockfish"
-
-if [ ! -d "$local_repo/.git" ]; then
-  git clone "$repo_src" "$local_repo"
-else
-  git -C "$local_repo" pull
-fi
-
+bash scripts/clone_if_not_found.sh "git@github.com:official-stockfish/Stockfish.git" "Stockfish"
 cd Stockfish/src
 
 file="misc.cpp"

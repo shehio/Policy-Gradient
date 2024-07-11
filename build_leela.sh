@@ -1,13 +1,5 @@
 #!/bin/bash
-repo_src="git@github.com:LeelaChessZero/lc0.git"
-local_repo="lc0"
-
-if [ ! -d "$local_repo/.git" ]; then
-  git clone "$repo_src" "$local_repo"
-else
-  git -C "$local_repo" pull
-fi
-
+bash scripts/clone_if_not_found.sh "git@github.com:LeelaChessZero/lc0.git" "lc0"
 bash scripts/install_homebrew.sh
 
 brew install meson ninja python3 zlib gcc
