@@ -1,5 +1,6 @@
 #!/bin/bash
 
+# todo: Reduce the i/p to only one argument. Extract the repo name from the link.
 if [ "$#" -ne 2 ]; then
   echo "Usage: $0 <repo_link> <local_repo_name>"
   exit 1
