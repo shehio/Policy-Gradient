@@ -22,6 +22,9 @@ class Lc0Client:
     def set_position(self, moves):
         self.__send_command(f'position startpos moves {" ".join(moves)}')
 
+    def set_fen_position(self, fen):
+        self.__send_command(f'position fen {fen}')
+
     def go(self, nodes=100):
         self.__send_command(f'go nodes {nodes}')
         return self.__read_response()
