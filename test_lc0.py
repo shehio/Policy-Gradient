@@ -13,4 +13,8 @@ if __name__ == "__main__":
     response = client.go(nodes=100)
     print(f"Engine response: {response}\n")
 
+    client.set_fen_position("rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 1")
+    response = client.go(nodes=100)
+    print(f"Engine response: {response}\n")
+
     client.stop_engine()
