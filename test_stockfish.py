@@ -7,23 +7,26 @@ positions = [
     {"fen": "r1bqkbnr/pppppppp/n7/8/8/N7/PPPPPPPP/R1BQKBNR w KQkq - 0 1", "expected_evaluation": {'type': 'cp', 'value': 16}}
 ]
 
+
 depth = 30
 stockfish = Stockfish(path="./Stockfish/src/stockfish")
 stockfish.set_depth(depth)
-print(f"The current major version of stockfish is: {stockfish.get_stockfish_major_version()}\n")
 
-for position in positions:
-    fen = position["fen"]
+if __name__ == "__main__":
+    print(f"The current major version of stockfish is: {stockfish.get_stockfish_major_version()}\n")
 
-    stockfish.set_fen_position(fen)
-    actual_evaluation = stockfish.get_evaluation()
-    best_move = stockfish.get_best_move()
-    
-    print(stockfish.get_board_visual())
-    print(f"The current best move is {best_move}.\n")
+    for position in positions:
+        fen = position["fen"]
 
-    expected_evaluation = position["expected_evaluation"]
-    if actual_evaluation == expected_evaluation:
-        print("The evaluation matches the known benchmark.\n")
-    else:
-        print("The evaluation does not match the known benchmark.\n")
+        stockfish.set_fen_position(fen)
+        actual_evaluation = stockfish.get_evaluation()
+        best_move = stockfish.get_best_move()
+        
+        print(stockfish.get_board_visual())
+        print(f"The current best move is {best_move}.\n")
+
+        expected_evaluation = position["expected_evaluation"]
+        if actual_evaluation == expected_evaluation:
+            print("The evaluation matches the known benchmark.\n")
+        else:
+            print("The evaluation does not match the known benchmark.\n")
