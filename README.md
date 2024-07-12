@@ -13,7 +13,7 @@
 - [UCI](https://en.wikipedia.org/wiki/Universal_Chess_Interface): An open communication protocol that enables chess engines to communicate with user interfaces.
 - [Chess Engine](https://en.wikipedia.org/wiki/Chess_engine)
 - [Stockfish](https://en.wikipedia.org/wiki/Stockfish_(chess)): A free and open-source chess engine, available for various desktop and mobile platforms. 
-
+- [Leela Chess Zero](https://en.wikipedia.org/wiki/Leela_Chess_Zero): A free, open-source, and deep neural network–based chess engine and volunteer computing project.
 ### Gameplay Algorithms
 - [Game Tree](https://en.wikipedia.org/wiki/Game_tree)
 - [Minimax](https://en.wikipedia.org/wiki/Minimax)
