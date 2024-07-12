@@ -14,6 +14,7 @@
 - [Chess Engine](https://en.wikipedia.org/wiki/Chess_engine)
 - [Stockfish](https://en.wikipedia.org/wiki/Stockfish_(chess)): A free and open-source chess engine, available for various desktop and mobile platforms. 
 - [Leela Chess Zero](https://en.wikipedia.org/wiki/Leela_Chess_Zero): A free, open-source, and deep neural network–based chess engine and volunteer computing project.
+- [Top Chess Engine Championship](https://en.wikipedia.org/wiki/Top_Chess_Engine_Championship): A computer chess tournament that has been run since 2010.
 ### Gameplay Algorithms
 - [Game Tree](https://en.wikipedia.org/wiki/Game_tree)
 - [Minimax](https://en.wikipedia.org/wiki/Minimax)
