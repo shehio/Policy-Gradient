@@ -8,4 +8,4 @@ meson setup --buildtype=release ..
 ninja
 
 # reference: https://lczero.org/dev/wiki/best-nets-for-lc0/
-wget  -nc --tries=10 -P lc0/build/ https://storage.lczero.org/files/networks-contrib/t1-512x15x8h-distilled-swa-3395000.pb.gz
+wget  -nc --tries=10 -P ./build https://storage.lczero.org/files/networks-contrib/t1-512x15x8h-distilled-swa-3395000.pb.gz
