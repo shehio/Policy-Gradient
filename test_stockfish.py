@@ -8,13 +8,13 @@ positions = [
 ]
 
 
-depth = 30
 stockfish = Stockfish(path="./Stockfish/src/stockfish")
+print(f"The current major version of stockfish is: {stockfish.get_stockfish_major_version()}\n")
+
+depth = 30
 stockfish.set_depth(depth)
 
 if __name__ == "__main__":
-    print(f"The current major version of stockfish is: {stockfish.get_stockfish_major_version()}\n")
-
     for position in positions:
         fen = position["fen"]
 
