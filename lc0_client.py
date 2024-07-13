@@ -28,6 +28,14 @@ class Lc0Client:
     def go(self, nodes=100):
         self.__send_command(f'go nodes {nodes}')
         return self.__read_response()
+    
+    def get_best_response(self, nodes=100):
+        response = self.go(nodes)
+        for line in response:
+            if line.startswith('bestmove'):
+                lc0_move = line.split()[1]
+                break
+        return lc0_move
 
     def stop_engine(self):
         self.__send_command('quit')
