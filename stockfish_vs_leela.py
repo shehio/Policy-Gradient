@@ -54,25 +54,28 @@ if __name__ == "__main__":
     moves = []
     wins = defaultdict(int)
 
-    board = chess.Board()
     agent0, agent1 = stockfish, lc0
     games = 5
     verbose = False
 
     for i in range(games):
+        board = chess.Board()
         turn = 0
+        
         while True:
             agent = get_agent(turn, agent0, agent1)
             play_move(agent, board, moves)
-            print(board.fen())
+
+            if verbose:
+                print(board.fen())
 
             if check_game_status(board):
                 break
 
             turn = 1 - turn
 
-        if verbose:
-            print(board)
+        
+        print(board)
 
         if board.turn:
             wins[agent1] += 1
