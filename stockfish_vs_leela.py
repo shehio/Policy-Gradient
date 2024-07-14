@@ -38,33 +38,35 @@ def check_game_status(board):
         return True
     return False
 
+def play_move(agent, board, moves):
+    agent.set_fen_position(board.fen())
+    move = agent.get_best_move()
+    board.push_san(move)
+    moves.append(move)
+
 
 if __name__ == "__main__":
     moves = []
 
     board = chess.Board()
-
+    agent0, agent1 = stockfish, lc0
+    turn = 0
+    
     while True:
-        stockfish.set_fen_position(board.fen())
-        white_move = stockfish.get_best_move()
-        board.push_san(white_move)
-        moves.append(white_move)
+        if turn == 0:
+            agent = agent0
+        else:
+            agent = agent1
         
-        if check_game_status(board):
-            break
-
-        lc0.set_fen_position(board.fen())
-        black_move = lc0.get_best_response(nodes=5)
-        board.push_san(black_move)
-        moves.append(black_move)
-
+        play_move(agent, board, moves)
         print(board.fen())
 
         if check_game_status(board):
             break
-    
+
+        turn = 1 - turn
+
     print(board)
-    print(board.move_stack)
-    
+
 lc0.stop_engine()
 exit(0)
