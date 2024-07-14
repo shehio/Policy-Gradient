@@ -13,11 +13,11 @@ lc0.start_engine()
 
 def check_game_status(board):
     if board.is_checkmate():
-        print("Game over: Checkmate")
+        print()
         if board.turn == chess.WHITE:
-            print("Black won!")
+            print("Game over: Checkmate: Black won!")
         else:
-            print("White won!")
+            print("Game over: Checkmate: White won!")
         return True
     if board.is_stalemate():
         print("Game over: Stalemate")
