@@ -1,12 +1,15 @@
+from collections import defaultdict
+import chess
 from stockfish import Stockfish
 from lc0_client import Lc0Client
-import chess
+
 
 stockfish = Stockfish(path="./Stockfish/src/stockfish")
 stockfish.set_depth(5)
 
 lc0 = Lc0Client(lc0_path='./lc0/build/lc0', weights_path='./lc0/build/t1-512x15x8h-distilled-swa-3395000.pb.gz')
 lc0.start_engine()
+
 
 def check_game_status(board):
     if board.is_checkmate():
@@ -49,6 +52,7 @@ def get_agent(turn, agent0, agent1):
 
 if __name__ == "__main__":
     moves = []
+    wins = defaultdict(int)
 
     board = chess.Board()
     agent0, agent1 = stockfish, lc0
@@ -65,6 +69,13 @@ if __name__ == "__main__":
         turn = 1 - turn
 
     print(board)
+
+    if board.turn:
+        wins[agent1] += 1
+    else:
+        wins[agent0] += 1
+    
+    print(wins)
 
 lc0.stop_engine()
 exit(0)
