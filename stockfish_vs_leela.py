@@ -56,24 +56,28 @@ if __name__ == "__main__":
 
     board = chess.Board()
     agent0, agent1 = stockfish, lc0
-    turn = 0
-    
-    while True:
-        agent = get_agent(turn, agent0, agent1)
-        play_move(agent, board, moves)
-        print(board.fen())
+    games = 5
+    verbose = False
 
-        if check_game_status(board):
-            break
+    for i in range(games):
+        turn = 0
+        while True:
+            agent = get_agent(turn, agent0, agent1)
+            play_move(agent, board, moves)
+            print(board.fen())
 
-        turn = 1 - turn
+            if check_game_status(board):
+                break
 
-    print(board)
+            turn = 1 - turn
 
-    if board.turn:
-        wins[agent1] += 1
-    else:
-        wins[agent0] += 1
+        if verbose:
+            print(board)
+
+        if board.turn:
+            wins[agent1] += 1
+        else:
+            wins[agent0] += 1
     
     print(wins)
 
