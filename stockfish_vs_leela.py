@@ -57,7 +57,7 @@ if __name__ == "__main__":
     turn = 0
     
     while True:
-        agent = get_agent(agent0, agent1)
+        agent = get_agent(turn, agent0, agent1)
         play_move(agent, board, moves)
         print(board.fen())
 
