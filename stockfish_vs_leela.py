@@ -8,8 +8,6 @@ stockfish.set_depth(5)
 lc0 = Lc0Client(lc0_path='./lc0/build/lc0', weights_path='./lc0/build/t1-512x15x8h-distilled-swa-3395000.pb.gz')
 lc0.start_engine()
 
-import chess
-
 def check_game_status(board):
     if board.is_checkmate():
         print("Game over: Checkmate")
