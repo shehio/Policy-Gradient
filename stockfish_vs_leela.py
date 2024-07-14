@@ -44,6 +44,10 @@ def play_move(agent, board, moves):
     board.push_san(move)
     moves.append(move)
 
+def get_agent(turn, agent0, agent1):
+    if turn == 0:
+        return agent0
+    return agent1
 
 if __name__ == "__main__":
     moves = []
@@ -53,11 +57,7 @@ if __name__ == "__main__":
     turn = 0
     
     while True:
-        if turn == 0:
-            agent = agent0
-        else:
-            agent = agent1
-        
+        agent = get_agent(agent0, agent1)
         play_move(agent, board, moves)
         print(board.fen())
 
