@@ -61,7 +61,7 @@ if __name__ == "__main__":
     for i in range(games):
         board = chess.Board()
         turn = 0
-        
+
         while True:
             agent = get_agent(turn, agent0, agent1)
             play_move(agent, board, moves)
@@ -76,6 +76,7 @@ if __name__ == "__main__":
 
         
         print(board)
+        print('\n')
 
         if board.turn:
             wins[agent1] += 1
