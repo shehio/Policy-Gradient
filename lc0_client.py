@@ -41,8 +41,9 @@ class Lc0Client:
         self.__send_command('quit')
         self.process.terminate()
 
-    def __send_command(self, command):
-        print(f"Sending command: {command}")
+    def __send_command(self, command, verbose=False):
+        if verbose:
+            print(f"Sending command: {command}")
         self.process.stdin.write(command + '\n')
         self.process.stdin.flush()
 
