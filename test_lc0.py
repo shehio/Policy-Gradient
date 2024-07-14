@@ -14,7 +14,7 @@ if __name__ == "__main__":
     print(f"Engine response: {response}\n")
 
     client.set_fen_position("rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 1")
-    response = client.get_best_response(nodes=100)
+    response = client.get_best_move(nodes=100)
     print(f"Engine response: {response}\n")
 
     client.stop_engine()
