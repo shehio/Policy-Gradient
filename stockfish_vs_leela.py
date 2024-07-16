@@ -55,7 +55,7 @@ if __name__ == "__main__":
     wins = defaultdict(int)
 
     agent0, agent1 = stockfish, lc0
-    games = 5
+    games = 10
     verbose = False
 
     for i in range(games):
@@ -73,7 +73,6 @@ if __name__ == "__main__":
                 break
 
             turn = 1 - turn
-
         
         print(board)
         print('\n')

@@ -29,7 +29,7 @@ class Lc0Client:
         self.__send_command(f'go nodes {nodes}')
         return self.__read_response()
     
-    def get_best_move(self, nodes=5):
+    def get_best_move(self, nodes=100):
         response = self.go(nodes)
         for line in response:
             if line.startswith('bestmove'):
