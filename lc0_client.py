@@ -26,10 +26,10 @@ class Lc0Client:
         self.__send_command(f'position fen {fen}')
 
     def go(self, nodes=100):
-        self.__send_command(f'go nodes {nodes}')
+        self.__send_command(f'go nodes {nodes}', verbose=True)
         return self.__read_response()
     
-    def get_best_move(self, nodes=100):
+    def get_best_move(self, nodes=10):
         response = self.go(nodes)
         for line in response:
             if line.startswith('bestmove'):
