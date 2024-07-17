@@ -77,10 +77,13 @@ if __name__ == "__main__":
         print(board)
         print('\n')
 
-        if board.turn:
-            wins[agent1] += 1
+        if board.is_checkmate():
+            if board.turn:
+                wins[agent1] += 1
+            else:
+                wins[agent0] += 1
         else:
-            wins[agent0] += 1
+            wins['neither'] += 1
     
     print(wins)
 
