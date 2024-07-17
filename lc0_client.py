@@ -26,7 +26,7 @@ class Lc0Client:
         self.__send_command(f'position fen {fen}')
 
     def go(self, nodes=100):
-        self.__send_command(f'go nodes {nodes}', verbose=True)
+        self.__send_command(f'go nodes {nodes}', verbose=False)
         return self.__read_response()
     
     def get_best_move(self, nodes=10):
