@@ -1,5 +1,6 @@
 # chessanalysis
 ### Why
+This is a repository to study AI in games.
 
 ### How
 - Clone and build Stockfish and lc0: `./build_engines.sh`
