@@ -1,6 +1,7 @@
 # chessanalysis
 ### Why
 This is a repository to study AI in games.
+Investigating tree-based methods and Reinforcement Learning with a policy network on different scale of action spaces.
 
 ### How
 - Clone and build Stockfish and lc0: `./build_engines.sh`
