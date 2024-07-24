@@ -2,6 +2,7 @@
 ### Why
 This is a repository to study AI in games.
 Investigating tree-based methods and Reinforcement Learning with a policy network on different scale of action spaces.
+The plan is to extend this repo to cover more of challenges in gameplay, not on the implemtation side, but on the scaling side.
 
 ### How
 - Clone and build Stockfish and lc0: `./build_engines.sh`
