@@ -29,3 +29,33 @@ class State:
     def __hash__(self):
         return hash((self.source, self.destination))
     
+
+    def move_entity(self, source, destination, entities):
+        new_source = set(source)
+        new_destination = set(destination)
+        for entity in entities:
+            new_source.remove(entity)
+            new_destination.add(entity)
+        return State(new_source, new_destination)
+
+    def next_states(self) -> list:
+        result = []
+
+        if 'boat' in self.destination:
+            source, destination = self.destination, self.source
+        else:
+            source, destination = self.source, self.destination
+
+        # Move boat with one person
+        for person in source:
+            if person != 'boat':
+                result.append(self.move_entity(source, destination, ['boat', person]))
+
+        # Move boat with two people
+        for first_person in source:
+            if first_person != 'boat':
+                for second_person in source:
+                    if second_person != 'boat' and first_person != second_person:
+                        result.append(self.move_entity(source, destination, ['boat', first_person, second_person]))
+
+        return result
