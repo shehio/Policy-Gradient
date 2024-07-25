@@ -61,9 +61,10 @@ class State:
         return hash((self.source, self.destination))
 
 
-source = {'AH', 'AW', 'BH', 'BW', 'CH', 'CW', 'boat'}
-destination = set()
+if __name__ == '__main__':
+    source = {'AH', 'AW', 'BH', 'BW', 'CH', 'CW', 'boat'}
+    destination = set()
 
-initial_state = State(source=source, destination=destination)
-print(initial_state)
+    initial_state = State(source=source, destination=destination)
+    print(initial_state)
 
