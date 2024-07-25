@@ -5,3 +5,6 @@ class State:
     
     def is_terminal_state(self) -> bool:
         return not self.source
+
+    def is_valid(self) -> bool:
+        return self.__check_side(self.source) and self.__check_side(self.destination)
