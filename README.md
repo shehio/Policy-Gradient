@@ -1,7 +1,7 @@
 # Game AI
-This is a repository to study AI in games.
-It investigates classical search methods, like graph-based and tree-based and classical Reinforcement Learning methods with tabular Q-function and more modern approaches relying on a policy network and temporal difference.
-The plan is to extend this repo to cover more of challenging game states and action spaces, focusing on sample efficiency and computational resources.
+This is a repository for studying AI in games.
+It investigates classical search methods, such as graph-based and tree-based methods, classical Reinforcement Learning methods with tabular Q-function, and more modern approaches relying on a policy network and temporal difference.
+The plan is to significantly expand this repository, covering more challenging game states and action spaces and focusing on sample efficiency and computational resources, offering exciting possibilities for AI in gaming.
 We start with having the two top chess engines play against each other.
 
 Games can be classified into many different dimensions based on
@@ -11,10 +11,13 @@ Games can be classified into many different dimensions based on
 <img width="458" alt="Games I" src="https://github.com/user-attachments/assets/6d388b66-1e0b-4657-9d17-e4603e21968a">
 
 
-Turing test for NPCs
+Turing test for NPCs.
 
 ### Glossary
 - [NPC](https://en.wikipedia.org/wiki/Non-player_character): A non-player character (NPC) is a character in a game that is not controlled by a player. 
+
+### References
+- [Artificial Intelligence and Games](https://gameaibook.org/book.pdf)
 
 ## chessanalysis
 ### Why
