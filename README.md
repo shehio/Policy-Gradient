@@ -10,6 +10,12 @@ Games can be classified into many different dimensions based on
  - Time Granularity
 <img width="458" alt="Games I" src="https://github.com/user-attachments/assets/6d388b66-1e0b-4657-9d17-e4603e21968a">
 
+
+Turing test for NPCs
+
+### Glossary
+- [NPC](https://en.wikipedia.org/wiki/Non-player_character): A non-player character (NPC) is a character in a game that is not controlled by a player. 
+
 ## chessanalysis
 ### Why
 
