@@ -46,7 +46,7 @@ Turing test for NPCs.
 - [Top Chess Engine Championship](https://en.wikipedia.org/wiki/Top_Chess_Engine_Championship): A computer chess tournament that has been run since 2010.
 ### Gameplay Algorithms
 - [Game Tree](https://en.wikipedia.org/wiki/Game_tree)
-- [Minimax](https://en.wikipedia.org/wiki/Minimax)
+- [Minimax](https://en.wikipedia.org/wiki/Minimax): Assumes no collusion from multiple players for more than two players.
 - [Alpha Beta Pruning](https://en.wikipedia.org/wiki/Alpha%E2%80%93beta_pruning)
 - [Monte Carlo Tree Search](https://github.com/shehio/monte-carlo-tree-search)
 
