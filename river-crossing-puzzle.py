@@ -68,3 +68,16 @@ if __name__ == '__main__':
     initial_state = State(source=source, destination=destination)
     print(initial_state)
 
+# Breadth-First Search (BFS)
+queue = [initial_state]
+visited = set()
+while queue:
+    current_state = queue.pop(0)
+    visited.add(current_state)
+    if current_state.is_terminal_state():
+        print("Made it!")
+        break
+
+    for state in current_state.next_states():
+        if state.is_valid() and state not in visited:
+            queue.append(state)
