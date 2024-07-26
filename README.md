@@ -24,13 +24,11 @@ Turing test for NPCs.
 ### Glossary
 - [NPC](https://en.wikipedia.org/wiki/Non-player_character): A non-player character (NPC) is a character in a game that is not controlled by a player. 
 
-### References
-- [Artificial Intelligence and Games](https://gameaibook.org/book.pdf)
-
 ### Gameplay Algorithms
 - [Game Tree](https://en.wikipedia.org/wiki/Game_tree)
 - [Minimax](https://en.wikipedia.org/wiki/Minimax): Assumes no collusion from multiple players for more than two players.
 - [Alpha Beta Pruning](https://en.wikipedia.org/wiki/Alpha%E2%80%93beta_pruning)
 - [Monte Carlo Tree Search](https://github.com/shehio/monte-carlo-tree-search)
 
-### Todos
+### References
+- [Artificial Intelligence and Games](https://gameaibook.org/book.pdf)
