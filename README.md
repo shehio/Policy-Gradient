@@ -4,6 +4,7 @@ It investigates classical search methods, like graph-based and tree-based and cl
 The plan is to extend this repo to cover more of challenging game states and action spaces, focusing on sample efficiency and computational resources.
 We start with having the two top chess engines play against each other.
 
+Games can be classified into many different dimensions.
 <img width="458" alt="Games I" src="https://github.com/user-attachments/assets/6d388b66-1e0b-4657-9d17-e4603e21968a">
 
 ## chessanalysis
