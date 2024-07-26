@@ -10,6 +10,7 @@ We start with having the two top chess engines play against each other.
 - Simulation-Based Testing: Test if the game is playable.
 
 
+## Games Classification
 Games can be classified into many different dimensions based on
  - Observability
  - Stochasticity
