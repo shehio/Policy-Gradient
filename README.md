@@ -1,7 +1,7 @@
 # Game AI
 This is a repository for studying AI in games. It investigates classical search methods, such as graph-based and tree-based methods, classical Reinforcement Learning methods with tabular Q-function, and more modern approaches relying on a policy network and temporal difference. The plan is to significantly expand this repository, covering more challenging game states and action spaces and focusing on sample efficiency and computational resources, offering exciting possibilities for AI in gaming. We start with having the two top chess engines play against each other.
 
-## Why?ß
+## Why?
 - AI benchmarking
 - Challenge Human Players
 - Simulation-Based Testing: Test if the game is playable.
