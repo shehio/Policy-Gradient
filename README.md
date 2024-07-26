@@ -8,6 +8,7 @@ We start with having the two top chess engines play against each other.
 - AI benchmarking
 - Challenge Human Players
 - Simulation-Based Testing: Test if the game is playable.
+- NPC Creation: Avoid highly efficient, yet predictable and boring gameplay.
 
 
 ## Games Classification
