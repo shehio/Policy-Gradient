@@ -24,6 +24,14 @@ Planning approaches include tree-search (both classical and stochastic), evoluti
 
 The choice of algorithm or category of algorithms usually rely on the nature of game (look at games classification section), action space (and branching factor), the game state representation, and the amount of time an agent has before making a decision.
 
+```mermaid
+xychart-beta
+    title "Chess"
+    x-axis "turn" [1, 10, 20, 30, 40, 50, 60, 70]
+    y-axis "Branching Factor" 1 --> 50
+    line [20, 20, 35,  35, 35, 35, 15, 15]
+```
+
 
 ### Glossary
 - [NPC](https://en.wikipedia.org/wiki/Non-player_character): A non-player character (NPC) is a character in a game that is not controlled by a player. 
