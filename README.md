@@ -14,7 +14,6 @@ Games can be classified into many different dimensions based on
  - Time Granularity
 <img width="458" alt="Games I" src="https://github.com/user-attachments/assets/6d388b66-1e0b-4657-9d17-e4603e21968a">
 
-
 ## Turing Test
 Turing test for NPCs.
 
