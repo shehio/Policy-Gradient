@@ -19,7 +19,8 @@ Turing test for NPCs.
 
 
 ### Gameplay Algorithms
-
+There are three main ways for gameplay: Planning-based approaches, Reinforcement Learning (RL), and Surpervised learning. Most agents employ one or a composite of these approaches.
+Planning approaches include tree-search (both classical and stochastic), evolutionary planning, and symbolic representation. RL algorithms can have different categorization based on employing a model and optimizing a value function or a policy. The most successful RL algorithms in game-play are generally model-free policy-based although they're sample inefficient and unstable.
 
 
 ### Glossary
