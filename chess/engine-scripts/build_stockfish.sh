@@ -1,5 +1,5 @@
 #!/bin/bash
-bash scripts/clone_if_not_found.sh "git@github.com:official-stockfish/Stockfish.git" "Stockfish"
+bash common-scripts/clone_if_not_found.sh "git@github.com:official-stockfish/Stockfish.git" "Stockfish"
 cd Stockfish/src
 
 file="misc.cpp"
