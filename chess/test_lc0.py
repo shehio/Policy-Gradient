@@ -1,4 +1,4 @@
-from lc0_client import Lc0Client
+from chess.lc0_client import Lc0Client
 
 if __name__ == "__main__":
     lc0_path = './lc0/build/lc0'

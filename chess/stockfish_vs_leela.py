@@ -1,7 +1,7 @@
 from collections import defaultdict
 import chess
 from stockfish import Stockfish
-from lc0_client import Lc0Client
+from chess.lc0_client import Lc0Client
 
 
 stockfish = Stockfish(path="./Stockfish/src/stockfish")
