@@ -14,11 +14,11 @@ Games can be classified into many different dimensions based on
  - Time Granularity
 <img width="458" alt="Games I" src="https://github.com/user-attachments/assets/6d388b66-1e0b-4657-9d17-e4603e21968a">
 
-## Turing Test
+### Turing Test
 Turing test for NPCs.
 
 
-### Gameplay Algorithms
+## Gameplay Algorithms
 There are three main ways for gameplay: Planning-based approaches, Reinforcement Learning (RL), and Surpervised learning. Most agents employ one or a composite of these approaches.
 Planning approaches include tree-search (both classical and stochastic), evolutionary planning, and symbolic representation. RL algorithms can have different categorization based on employing a model and optimizing a value function or a policy. The most successful RL algorithms in game-play are generally model-free policy-based although they're sample inefficient and unstable. Supervised learning algorithms include behavioral cloning, which is learning action from experienced players.
 
@@ -31,7 +31,7 @@ xychart-beta
     y-axis "Branching Factor" 1 --> 50
     line [20, 20, 35,  35, 35, 35, 15, 15]
 ```
-
+This graph is based on averages I found online. A better estimate is to analyze most famous games in the pgn format and get more concrete averages or simulate games between computer players and see the number of valid moves at every turn so the graph is more realistic.
 
 ### Glossary
 - [NPC](https://en.wikipedia.org/wiki/Non-player_character): A non-player character (NPC) is a character in a game that is not controlled by a player. 
