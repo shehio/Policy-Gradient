@@ -4,7 +4,7 @@ from stockfish import Stockfish
 stockfish = Stockfish(path="./Stockfish/src/stockfish")
 stockfish.set_depth(20)
 
-pgn = open("byrne_fischer_1956.pgn")
+pgn = open("famous-games/byrne_fischer_1956.pgn")
 game = chess.pgn.read_game(pgn)
 
 board = game.board()
