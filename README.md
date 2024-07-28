@@ -31,6 +31,7 @@ The choice of algorithm or category of algorithms usually rely on the nature of 
 - [Minimax](https://en.wikipedia.org/wiki/Minimax): Assumes no collusion from multiple players for more than two players.
 - [Alpha Beta Pruning](https://en.wikipedia.org/wiki/Alpha%E2%80%93beta_pruning)
 - [Monte Carlo Tree Search](https://github.com/shehio/monte-carlo-tree-search)
+- [Branching Factor](https://en.wikipedia.org/wiki/Branching_factor)
 
 ### References
 - [Artificial Intelligence and Games](https://gameaibook.org/book.pdf)
