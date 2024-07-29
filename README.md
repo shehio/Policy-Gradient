@@ -25,7 +25,7 @@ Planning approaches include tree-search (both classical and stochastic), evoluti
 
 The choice of algorithm or category of algorithms usually rely on the  [game's nature](#Games-Classification), action space (and branching factor), the game state representation, and the amount of time an agent has before making a decision.
 
-
+### Branching Factor
 ```mermaid
 xychart-beta
     title "Chess"
@@ -42,7 +42,7 @@ This graph is based on averages I found online. A better estimate is to analyze 
 | Pac-Man    | 4                        |
 | Checkers   | 8                        |
 
-### Glossary
+## Glossary
 - [NPC](https://en.wikipedia.org/wiki/Non-player_character): A non-player character (NPC) is a character in a game that is not controlled by a player. 
 - [Game Tree](https://en.wikipedia.org/wiki/Game_tree)
 - [Minimax](https://en.wikipedia.org/wiki/Minimax): Assumes no collusion from multiple players for more than two players.
@@ -50,5 +50,5 @@ This graph is based on averages I found online. A better estimate is to analyze 
 - [Monte Carlo Tree Search](https://github.com/shehio/monte-carlo-tree-search)
 - [Branching Factor](https://en.wikipedia.org/wiki/Branching_factor)
 
-### References
+## References
 - [Artificial Intelligence and Games](https://gameaibook.org/book.pdf)
