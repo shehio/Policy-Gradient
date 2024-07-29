@@ -5,7 +5,7 @@ This is a repository for studying AI in games. It investigates classical search 
 - AI benchmarking
 - Challenge Human Players
 - Simulation-Based Testing: Test if the game is playable.
-- NPC Creation: Avoid highly efficient, yet predictable and boring play style.
+- NPC Creation: Avoid highly efficient, yet predictable and boring play style. Acadamics have argued for Turing test for NPCs.
 
 ## Games Classification
 Games can be classified into many different dimensions based on
@@ -14,10 +14,6 @@ Games can be classified into many different dimensions based on
  - Time Granularity
  
 <img width="458" alt="Games I" src="https://github.com/user-attachments/assets/6d388b66-1e0b-4657-9d17-e4603e21968a">
-
-### Turing Test
-Turing test for NPCs.
-
 
 ## Gameplay Algorithms
 There are three main ways for gameplay: Planning-based approaches, Reinforcement Learning (RL), and Surpervised learning. Most agents employ one or a composite of these approaches.
