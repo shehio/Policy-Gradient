@@ -51,6 +51,10 @@ The bigger the action space, the longer it takes for a policy (approximated usin
 ### Game State Represenatation and Source Code
 Sometimes, the source code is present so an API exists (or could exist) to provide a richer state reprentation while other times, when source code is not present, raw pixels are used for example.
 
+### More Considerations
+- Training Time
+- Transferability of the trained policy from one game to another
+
 ## Glossary
 - [NPC](https://en.wikipedia.org/wiki/Non-player_character): A non-player character (NPC) is a character in a game that is not controlled by a player. 
 - [Game Tree](https://en.wikipedia.org/wiki/Game_tree)
