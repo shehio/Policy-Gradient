@@ -20,7 +20,11 @@ There are three main ways for gameplay: Planning-based approaches, Reinforcement
 
 Planning approaches include tree-search (both classical and stochastic), evolutionary planning, and symbolic representation. RL algorithms can have different categorization based on employing a model and optimizing a value function or a policy. The most successful RL algorithms in game-play are generally model-free policy-based although they're sample inefficient and unstable. Supervised learning algorithms include behavioral cloning, which is learning actions from experienced players.
 
-The choice of algorithm or category of algorithms usually rely on the [game's nature](#Games-Classification), action space (and branching factor), the game state representation, and the amount of time an agent has before making a decision.
+The choice of an algorithm or a category of algorithms usually rely on
+- [Game's Nature](#Games-Classification)
+- Action Space: Branching factor and Game State Representation
+- Time an agent has before making a decision
+- Presence of source code
 
 ### Branching Factor
 ```mermaid
