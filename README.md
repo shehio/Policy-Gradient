@@ -58,6 +58,13 @@ Sometimes, the source code is present so an API exists (or could exist) to provi
 ### Classical/Stochastic Tree Search
 Usually applied to games that feature full observability.
 
+### Evolutionary Planning
+A plan is a sequence on which mutation and crossover are applied.
+
+### Reinforcement Learning (Classical and Deep)
+Applicable to games when there's sufficient learning time. Since Q-values (state, action) couldn't be stored for billions of states for video games, academics used funcion approximators, thus neural networks were introduced.
+
+
 
 ## Glossary
 - [NPC](https://en.wikipedia.org/wiki/Non-player_character): A non-player character (NPC) is a character in a game that is not controlled by a player. 
