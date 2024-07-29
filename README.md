@@ -61,10 +61,16 @@ Usually applied to games that feature full observability.
 ### Evolutionary Planning
 A plan is a sequence on which mutation and crossover are applied.
 
-### Reinforcement Learning (Classical and Deep)
+### Reinforcement Learning (Classical, Deep, Evolutionary)
 Applicable to games when there's sufficient learning time. Since Q-values (state, action) couldn't be stored for billions of states for video games, academics used funcion approximators, thus neural networks were introduced.
 
 
+| Algorithm Family       | Pros | Cons |
+|------------------------|------|------|
+| Tree Search            |      |      |
+| Evolutionary Planning  |      |      |
+| RL                     |      |      |
+| Supervised Learning    |      |      |
 
 ## Glossary
 - [NPC](https://en.wikipedia.org/wiki/Non-player_character): A non-player character (NPC) is a character in a game that is not controlled by a player. 
