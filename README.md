@@ -25,6 +25,7 @@ Planning approaches include tree-search (both classical and stochastic), evoluti
 
 The choice of algorithm or category of algorithms usually rely on the  [game's nature](#Games-Classification), action space (and branching factor), the game state representation, and the amount of time an agent has before making a decision.
 
+
 ```mermaid
 xychart-beta
     title "Chess"
@@ -32,7 +33,14 @@ xychart-beta
     y-axis "Branching Factor" 1 --> 50
     line [20, 20, 35,  35, 35, 35, 15, 15]
 ```
-This graph is based on averages I found online. A better estimate is to analyze most famous games in the pgn format and get more concrete averages or simulate games between computer players and see the number of valid moves at every turn so the graph is more realistic.
+This graph is based on averages I found online. A better estimate is to analyze most famous games in the pgn format and get more concrete averages or simulate games between computer players and see the number of valid moves at every turn so the graph is more realistic. The branching factor of chess dwarfs when compared to Go!
+
+| Game       | Average Branching Factor |
+|------------|-----------------------------
+| Chess      | 33                       |
+| Go         | 250                      |
+| Pac-Man    | 4                        |
+| Checkers   | 8                        |
 
 ### Glossary
 - [NPC](https://en.wikipedia.org/wiki/Non-player_character): A non-player character (NPC) is a character in a game that is not controlled by a player. 
