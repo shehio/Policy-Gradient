@@ -64,6 +64,9 @@ A plan is a sequence on which mutation and crossover are applied.
 ### Reinforcement Learning (Classical, Deep, Evolutionary)
 Applicable to games when there's sufficient learning time. Since Q-values (state, action) couldn't be stored for billions of states for video games, academics used funcion approximators, thus neural networks were introduced.
 
+#### Catastrophic Forgetting
+Catastrophic forgetting, also known as catastrophic interference, is a phenomenon observed in artificial neural networks where the model abruptly and drastically forgets previously learned information upon learning new information.
+
 ### Suprevised Learning
 
 | Algorithm Family       | Pros | Cons |
