@@ -67,6 +67,10 @@ Applicable to games when there's sufficient learning time. Since Q-values (state
 #### Catastrophic Forgetting
 Catastrophic forgetting, also known as catastrophic interference, is a phenomenon observed in artificial neural networks where the model abruptly and drastically forgets previously learned information upon learning new information.
 
+#### Experience Replay
+Experience replay is a technique used to mitigate the problem of catastrophic forgetting in reinforcement learning. It involves storing the agent's past experiences in a replay buffer and then randomly sampling from this buffer to train the model.
+
+
 ### Suprevised Learning
 
 | Algorithm Family       | Pros | Cons |
