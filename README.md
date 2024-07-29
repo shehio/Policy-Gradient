@@ -48,6 +48,9 @@ Searching a game tree of depth `d` and branching factor `b` is $O(b^d)$.
 ### Action Space
 The bigger the action space, the longer it takes for a policy (approximated using a neural network) to stabilize. To counter the time requirement and sample inefficiency, `macro-actions` and different/sampled `game-state representation` could be used.
 
+### Game State Represenatation and Source Code
+Sometimes, the source code is present so an API exists (or could exist) to provide a richer state reprentation while other times, when source code is not present, raw pixels are used for example.
+
 ## Glossary
 - [NPC](https://en.wikipedia.org/wiki/Non-player_character): A non-player character (NPC) is a character in a game that is not controlled by a player. 
 - [Game Tree](https://en.wikipedia.org/wiki/Game_tree)
