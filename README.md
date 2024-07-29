@@ -55,6 +55,10 @@ Sometimes, the source code is present so an API exists (or could exist) to provi
 - Training Time
 - Transferability of the trained policy from one game to another
 
+### Classical/Stochastic Tree Search
+Usually applied to games that feature full observability.
+
+
 ## Glossary
 - [NPC](https://en.wikipedia.org/wiki/Non-player_character): A non-player character (NPC) is a character in a game that is not controlled by a player. 
 - [Game Tree](https://en.wikipedia.org/wiki/Game_tree)
