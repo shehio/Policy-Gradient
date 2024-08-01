@@ -1,3 +1,0 @@
-[submodule "rl-agents"]
-	path = rl-agents
-	url = https://github.com/eleurent/rl-agents.git
