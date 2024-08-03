@@ -2,3 +2,5 @@ venv/
 Stockfish/
 lc0/
 cleanrl/
+arcade/logs/
+arcade/models/
