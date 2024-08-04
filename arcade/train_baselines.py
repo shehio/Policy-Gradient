@@ -24,13 +24,3 @@ for i in range(10):
     model.save(f"{models_dir}/{timesteps * i}")
 
 model.save("final_ppo_lunar")
-model = PPO.load("final_ppo_lunar")
-
-obs = env.reset()
-
-for i in range(3000):
-    action, _states = model.predict(obs)
-    obs, rewards, dones, info = env.step(action)
-    if i % 30 == 0:
-        env.render()
-env.close()
