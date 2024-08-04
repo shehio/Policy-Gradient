@@ -4,3 +4,5 @@ lc0/
 cleanrl/
 arcade/logs/
 arcade/models/
+arcade/baselines/logs/
+arcade/baselines/models/
