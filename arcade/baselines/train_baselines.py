@@ -4,23 +4,35 @@ from stable_baselines3.common.vec_env import DummyVecEnv
 from stable_baselines3.common.monitor import Monitor
 import os
 
-env = gym.make('LunarLander-v2')
-env = Monitor(env)
-env = DummyVecEnv([lambda: env])
+def create_environment(name: str):
+    env = gym.make(name)
+    env = Monitor(env)
+    env = DummyVecEnv([lambda: env])
+    return env
 
-models_dir = "models/PPO"
-if not os.path.exists(models_dir):
-    os.makedirs(models_dir)
+def create_directory_if_not_exists(directory: str):
+    if not os.path.exists(directory):
+        os.makedirs(directory)
 
-logdir = "logs"
-if not os.path.exists(logdir):
-    os.makedirs(logdir)
+def train(model, timesteps, epochs, tensorboard_log_name, model_directory):
+    for i in range(epochs):
+        model.learn(total_timesteps=timesteps, reset_num_timesteps=False, tb_log_name=tensorboard_log_name)
+        model.save(f"{model_directory}/{timesteps * i}")
 
-model = PPO('MlpPolicy', env, verbose=1, tensorboard_log=logdir)
+    return model
+
+
+env_name = 'LunarLander-v2'
+log_directory = 'logs'
+model_directory = 'models/PPO'
+
+env = create_environment(env_name)
+create_directory_if_not_exists(model_directory)
+create_directory_if_not_exists(log_directory)
+
+model = PPO('MlpPolicy', env, verbose=1, tensorboard_log=log_directory)
 
 timesteps = 10000
-for i in range(10):
-    model.learn(total_timesteps=timesteps, reset_num_timesteps=False, tb_log_name="PPO")
-    model.save(f"{models_dir}/{timesteps * i}")
-
-model.save("final_ppo_lunar")
+epochs = 10
+model = train(model, timesteps, epochs, env_name,  model_directory)
+model.save('final_ppo_lunar')
