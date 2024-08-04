@@ -2,7 +2,6 @@ import gymnasium as gym
 from stable_baselines3 import PPO
 from stable_baselines3.common.vec_env import DummyVecEnv
 from stable_baselines3.common.monitor import Monitor
-import os
 
 env = gym.make('LunarLander-v2', render_mode='human')
 env = Monitor(env)
