@@ -6,3 +6,4 @@ arcade/logs/
 arcade/models/
 arcade/baselines/logs/
 arcade/baselines/models/
+arcade/baselines/__pycache__/
