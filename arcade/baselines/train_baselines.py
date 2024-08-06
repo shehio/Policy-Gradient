@@ -5,7 +5,7 @@ env_name = 'LunarLander-v2'
 log_directory = 'logs'
 model_directory = 'models/PPO'
 
-env = create_environment(env_name)
+env = create_environment(env_name, render=False)
 create_directory_if_not_exists(model_directory)
 create_directory_if_not_exists(log_directory)
 

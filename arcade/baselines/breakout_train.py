@@ -1,11 +1,11 @@
-from helpers import create_directory_if_not_exists, create_environment, train
+from helpers import create_directory_if_not_exists, create_atari_environment, train
 from stable_baselines3 import PPO
 
 env_name = 'Breakout-v4'
 log_directory = 'logs'
 model_directory = 'models/PPO'
 
-env = create_environment(env_name, render=False)
+env = create_atari_environment(env_name, render=False)
 create_directory_if_not_exists(model_directory)
 create_directory_if_not_exists(log_directory)
 

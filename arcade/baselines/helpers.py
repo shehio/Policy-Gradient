@@ -4,7 +4,18 @@ import gymnasium as gym
 from stable_baselines3 import PPO
 from stable_baselines3.common.vec_env import DummyVecEnv
 from stable_baselines3.common.monitor import Monitor
+from stable_baselines3.common.atari_wrappers import AtariWrapper
 import os
+
+def create_atari_environment(name: str, render: bool, render_fps = 60):
+    render_mode = 'human' if render else None
+    env = gym.make(name, render_mode=render_mode)
+    env = AtariWrapper(env)
+    if render:
+        env.metadata['render_fps'] = render_fps
+    env = Monitor(env)
+    env = DummyVecEnv([lambda: env])
+    return env
 
 def create_environment(name: str, render: bool, render_fps = 60):
     render_mode = 'human' if render else None
