@@ -13,6 +13,6 @@ create_directory_if_not_exists(log_directory)
 model = PPO('CnnPolicy', env, verbose=1, tensorboard_log=log_directory)
 
 timesteps = 10000
-epochs = 10
+epochs = 100
 model = train(model, timesteps, epochs, env_name, model_directory)
 model.save('final_ppo_breakout')
