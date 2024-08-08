@@ -83,7 +83,7 @@ Function approximators that behave like a skilled player.
 
 | Algorithm Family       | Pros | Cons |
 |------------------------|------|------|
-| Tree Search            |   Strong for games that require adversarial planning. | Sometimes can be very expensive to go deeper depending on branching factor. |
+| Tree Search            |   Strong for games that require adversarial planning. | Sometimes can be very expensive to go deeper depending on branching factor. Also, don't work well for hidden information games. |
 | Evolutionary Planning  |      |      |
 | RL                     | Strong with games that require perception, motor skills, and continuous movement. | Game state representation dictates how cheap or expensive training and evaluation is. Also, subject to the pifalls of function approximators. |
 | Supervised Learning    |      |      |
