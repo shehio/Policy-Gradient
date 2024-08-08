@@ -77,13 +77,22 @@ Experience replay is a technique used to mitigate the problem of catastrophic fo
 
 
 ### Suprevised Learning
+Function approximators that behave like a skilled player.
+
+### Comparison
 
 | Algorithm Family       | Pros | Cons |
 |------------------------|------|------|
-| Tree Search            |      |      |
+| Tree Search            |   Strong for games that require adversarial planning. | Sometimes can be very expensive to go deeper depending on branching factor. |
 | Evolutionary Planning  |      |      |
-| RL                     |      |      |
+| RL                     | Strong with games that require perception, motor skills, and continuous movement. | Game state representation dictates how cheap or expensive training and evaluation is. Also, subject to the pifalls of function approximators. |
 | Supervised Learning    |      |      |
+
+### Classical Games
+- Atari 2600
+- Nintendo NES
+- Commodore 64
+- ZX Spectrum
 
 ## Glossary
 - [NPC](https://en.wikipedia.org/wiki/Non-player_character): A non-player character (NPC) is a character in a game that is not controlled by a player. 
