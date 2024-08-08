@@ -94,6 +94,12 @@ Function approximators that behave like a skilled player.
 - Commodore 64
 - ZX Spectrum
 
+
+### Video Game Gameplay Conception
+- [Arcade Learning Environment](https://github.com/Farama-Foundation/Arcade-Learning-Environment)
+- [Microsoft vs Ms. Pac-Man](https://blogs.microsoft.com/ai/divide-conquer-microsoft-researchers-used-ai-master-ms-pac-man/)
+- [Berkeley's Pac-Man Projects](http://ai.berkeley.edu/project_overview) 
+
 ## Glossary
 - [NPC](https://en.wikipedia.org/wiki/Non-player_character): A non-player character (NPC) is a character in a game that is not controlled by a player. 
 - [Game Tree](https://en.wikipedia.org/wiki/Game_tree)
