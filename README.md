@@ -104,6 +104,17 @@ Function approximators that behave like a skilled player.
 ### Regret and Card Games
 Card games feature hidden information. When playing poker and similar games, Counterfactual Regret Minimization algorithms are used. Agents learn by self-play similar to how RL learns by playing checkers and backgammon. Regret is the difference between the action that was taken and the action that could have been taken.
 
+```python
+def get_action(self):
+    strategy = self.get_strategy()
+    return np.random.choice(self.num_actions, p=strategy)
+def train(self):
+    for _ in range(self.num_iterations):
+        action = self.get_action()
+        payoff = np.random.rand()  # Simulating the payoff randomly
+        self.update_regret(action, payoff)
+```
+
 ## Glossary
 - [NPC](https://en.wikipedia.org/wiki/Non-player_character): A non-player character (NPC) is a character in a game that is not controlled by a player. 
 - [Game Tree](https://en.wikipedia.org/wiki/Game_tree)
