@@ -98,7 +98,11 @@ Function approximators that behave like a skilled player.
 ### Video Game Gameplay Conception
 - [Arcade Learning Environment](https://github.com/Farama-Foundation/Arcade-Learning-Environment)
 - [Microsoft vs Ms. Pac-Man](https://blogs.microsoft.com/ai/divide-conquer-microsoft-researchers-used-ai-master-ms-pac-man/)
-- [Berkeley's Pac-Man Projects](http://ai.berkeley.edu/project_overview) 
+- [Berkeley's Pac-Man Projects](http://ai.berkeley.edu/project_overview)
+
+
+### Regret and Card Games
+Card games feature hidden information. When playing poker and similar games, Counterfactual Regret Minimization algorithms are used. Agents learn by self-play similar to how RL learns by playing checkers and backgammon. Regret is the difference between the action that was taken and the action that could have been taken.
 
 ## Glossary
 - [NPC](https://en.wikipedia.org/wiki/Non-player_character): A non-player character (NPC) is a character in a game that is not controlled by a player. 
