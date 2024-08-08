@@ -115,6 +115,15 @@ def train(self):
         self.update_regret(action, payoff)
 ```
 
+### Game Classification
+- Board Games
+- Card Games
+- Classic Arcade Games
+- Strategy Games
+- Racing Games
+- First Person Games
+- Interactive Games
+
 ## Glossary
 - [NPC](https://en.wikipedia.org/wiki/Non-player_character): A non-player character (NPC) is a character in a game that is not controlled by a player. 
 - [Game Tree](https://en.wikipedia.org/wiki/Game_tree)
