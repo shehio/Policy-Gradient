@@ -13,7 +13,7 @@ create_directory_if_not_exists(log_directory)
 model = DQN('CnnPolicy', env, verbose=1, tensorboard_log=log_directory)
 
 timesteps = 10000
-epochs = 10
+epochs = 1000
 model = train(model, timesteps, epochs, env_name, model_directory)
 model.save('pong_ppo')
 
