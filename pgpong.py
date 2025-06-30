@@ -33,8 +33,8 @@ def get_frame_difference():
 
 
 if __name__ == '__main__':
-    env = gym.make("Pong-v0")
-    observation = env.reset()
+    env = gym.make("ALE/Pong-v5")
+    observation, _ = env.reset()
     previous_frame, running_reward = None, None  # used in computing the difference frame
     reward_sum = 0
     episode_number = 0
@@ -44,7 +44,8 @@ if __name__ == '__main__':
         render_game()
         state, previous_frame = get_frame_difference()
         action = agent.get_action(state)
-        observation, reward, done, info = env.step(action)
+        observation, reward, terminated, truncated, info = env.step(action)
+        done = terminated or truncated
         agent.reap_reward(reward)
         reward_sum += reward
 
@@ -58,6 +59,6 @@ if __name__ == '__main__':
             running_reward = reward_sum if running_reward is None else running_reward * 0.99 + reward_sum * 0.01
             print('resetting env. episode reward total was %f. running mean: %f' % (reward_sum, running_reward))
 
-            observation = env.reset()
+            observation, _ = env.reset()
             reward_sum = 0
             previous_frame = None

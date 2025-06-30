@@ -14,7 +14,7 @@ class Helpers:
         image_frame[image_frame == 144] = 0  # erase background (background type 1)
         image_frame[image_frame == 109] = 0  # erase background (background type 2)
         image_frame[image_frame != 0] = 1  # everything else (paddles, ball) just set to 1
-        return image_frame.astype(np.float).ravel()
+        return image_frame.astype(float).ravel()
 
     @staticmethod
     def discount_and_normalize_rewards(r, gamma):
