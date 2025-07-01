@@ -12,7 +12,7 @@ learning_rate = 1e-4
 gamma = 0.99  # discount factor for reward
 decay_rate = 0.99  # decay factor for RMSProp leaky sum of grad^2
 
-render = True
+render = False
 sleep_for_rendering_in_seconds = 0.02
 
 pixels_count = 80 * 80  # input dimensionality: 80x80 grid
@@ -32,7 +32,10 @@ def get_frame_difference():
 
 
 if __name__ == '__main__':
-    env = gym.make("ALE/Pong-v5", render_mode="human")
+    if render:
+        env = gym.make("ALE/Pong-v5", render_mode="human")
+    else:
+        env = gym.make("ALE/Pong-v5")
     observation, _ = env.reset()
     previous_frame, running_reward = None, None  # used in computing the difference frame
     reward_sum = 0
@@ -52,10 +55,10 @@ if __name__ == '__main__':
 
         if reward == 1:
             points_scored += 1
-            print('ep %d: point scored, score: %f: %f' % (episode_number, points_conceeded, points_scored))
+            print('ep %d: point scored, score: %i: %i' % (episode_number, points_conceeded, points_scored))
         elif reward == -1:
             points_conceeded += 1
-            print('ep %d: point conceeded, score: %f: %f' % (episode_number, points_conceeded, points_scored))
+            print('ep %d: point conceeded, score: %i: %i' % (episode_number, points_conceeded, points_scored))
         # else:
         #     print(reward)
         #     print('ep %d: nothing happened, score: %f: %f' % (episode_number, points_conceeded, points_scored))
