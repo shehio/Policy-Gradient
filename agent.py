@@ -2,6 +2,7 @@ import numpy as np
 from helpers import Helpers
 from mlp import MLP
 from memory import Memory
+from hyperparameters import HyperParameters
 
 DOWN = 2
 UP = 3
@@ -9,12 +10,9 @@ UP = 3
 
 class Agent:
     # TODO: Dep-Inject the Network to the Agent.
-    def __init__(self, learning_rate, decay_rate, gamma=0.99, batch_size=5, load_network=True, network_file='save.p'):
+    def __init__(self, hyperparams, load_network=True, network_file='save.p'):
         self.memory = Memory()
-        self.learning_rate = learning_rate
-        self.decay_rate = decay_rate
-        self.gamma = gamma
-        self.batch_size = batch_size
+        self.hyperparams = hyperparams
         self.policy_network = MLP(input_count=6400, hidden_layers_count=200)
 
         if load_network:
@@ -55,14 +53,14 @@ class Agent:
         episode_rewards = np.vstack(self.memory.rewards)
 
         # compute the discounted reward backwards through time
-        episode_discounted_rewards = Helpers.discount_and_normalize_rewards(episode_rewards, self.gamma)
+        episode_discounted_rewards = Helpers.discount_and_normalize_rewards(episode_rewards, self.hyperparams.gamma)
         epdlogp *= episode_discounted_rewards  # modulate the gradient with advantage (PG magic happens right here.)
         self.policy_network.backward_pass(episode_hidden_layers, epdlogp, episode_states)
 
     def __train_policy_network(self, episode_number):
         # perform rmsprop parameter update every batch_size episodes
-        if episode_number % self.batch_size == 0:
-            self.policy_network.train(self.learning_rate, self.decay_rate)
+        if episode_number % self.hyperparams.batch_size == 0:
+            self.policy_network.train(self.hyperparams.learning_rate, self.hyperparams.decay_rate)
 
     def __save_policy_network(self, episode_number):
         if episode_number % 20 == 0:

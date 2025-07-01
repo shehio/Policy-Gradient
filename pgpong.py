@@ -3,16 +3,19 @@ import gym
 import time
 
 from agent import Agent
+from hyperparameters import HyperParameters
 from helpers import Helpers
 
 # hyper-parameters
 hidden_layers_count = 200  # number of hidden layer neurons
-batch_size = 10  # every how many episodes to do a param update?
-learning_rate = 1e-4
-gamma = 0.99  # discount factor for reward
-decay_rate = 0.99  # decay factor for RMSProp leaky sum of grad^2
+hyperparams = HyperParameters(
+    learning_rate=1e-4,
+    decay_rate=0.99,
+    gamma=0.99,
+    batch_size=10
+)
 
-render = False
+render = True
 sleep_for_rendering_in_seconds = 0.02
 
 pixels_count = 80 * 80  # input dimensionality: 80x80 grid
@@ -42,7 +45,8 @@ if __name__ == '__main__':
     episode_number = 0
     points_scored = 0
     points_conceeded = 0
-    agent = Agent(learning_rate, decay_rate, load_network=True)
+    
+    agent = Agent(hyperparams, load_network=True)
 
     while True:
         render_game()
