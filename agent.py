@@ -10,10 +10,10 @@ UP = 3
 
 class Agent:
     # TODO: Dep-Inject the Network to the Agent.
-    def __init__(self, hyperparams, load_network=True, network_file='save.p'):
+    def __init__(self, hyperparams, policy_network, load_network=True, network_file='save.p'):
         self.memory = Memory()
         self.hyperparams = hyperparams
-        self.policy_network = MLP(input_count=6400, hidden_layers_count=200)
+        self.policy_network = policy_network
 
         if load_network:
             print("Loading Network")

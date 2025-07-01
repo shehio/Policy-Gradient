@@ -5,8 +5,10 @@ import time
 from agent import Agent
 from hyperparameters import HyperParameters
 from helpers import Helpers
+from mlp import MLP
 
 # hyper-parameters
+pixels_count = 80 * 80
 hidden_layers_count = 200  # number of hidden layer neurons
 hyperparams = HyperParameters(
     learning_rate=1e-4,
@@ -18,7 +20,7 @@ hyperparams = HyperParameters(
 render = True
 sleep_for_rendering_in_seconds = 0.02
 
-pixels_count = 80 * 80  # input dimensionality: 80x80 grid
+
 
 
 def render_game():
@@ -46,7 +48,8 @@ if __name__ == '__main__':
     points_scored = 0
     points_conceeded = 0
     
-    agent = Agent(hyperparams, load_network=True)
+    policy_network = MLP(input_count=pixels_count, hidden_layers_count=hidden_layers_count)
+    agent = Agent(hyperparams, policy_network, load_network=True)
 
     while True:
         render_game()
