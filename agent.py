@@ -18,9 +18,10 @@ class Agent:
         self.policy_network = MLP(input_count=6400, hidden_layers_count=200)
 
         if load_network:
+            print("Loading Network")
             self.policy_network.load_network(network_file)
 
-    def get_action(self, state):
+    def sample_and_record_action(self, state):
         # forward the policy network and sample an action from the returned probability
         action_probability_space, hidden_layer = self.policy_network.forward_pass(state)
         action = DOWN if np.random.uniform() < action_probability_space else UP  # roll the dice!
@@ -39,6 +40,7 @@ class Agent:
         self.memory.rewards.append(reward)
 
     def make_episode_end_updates(self, episode_number):
+        print(self.memory)
         self.__accumalate_gradient()
         self.__train_policy_network(episode_number)
         self.__save_policy_network(episode_number)
@@ -63,5 +65,5 @@ class Agent:
             self.policy_network.train(self.learning_rate, self.decay_rate)
 
     def __save_policy_network(self, episode_number):
-        if episode_number % 100 == 0:
+        if episode_number % 20 == 0:
             self.policy_network.save_network()
