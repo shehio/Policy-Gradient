@@ -61,12 +61,14 @@ if __name__ == '__main__':
         #     print('ep %d: nothing happened, score: %f: %f' % (episode_number, points_conceeded, points_scored))
 
         if done:
-            episode_number += 1
             agent.make_episode_end_updates(episode_number)
 
-            running_reward = reward_sum if running_reward is None else running_reward * 0.99 + reward_sum * 0.01
+            running_reward = reward_sum if running_reward is None else running_reward * (episode_number - 1) / episode_number + reward_sum / episode_number
             print('resetting env. episode reward total was %f. running mean: %f' % (reward_sum, running_reward))
 
             observation, _ = env.reset()
             reward_sum = 0
+            points_scored = 0
+            points_conceeded = 0
+            episode_number += 1
             previous_frame = None
