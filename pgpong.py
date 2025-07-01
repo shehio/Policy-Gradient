@@ -1,6 +1,5 @@
 from agent import Agent
 from hyperparameters import HyperParameters
-from helpers import Helpers
 from mlp import MLP
 from game import Game
 

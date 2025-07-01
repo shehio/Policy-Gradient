@@ -1,7 +1,6 @@
 import gym
 import time
 import numpy as np
-from helpers import Helpers
 
 class Game:
     def __init__(self, game_name, render, sleep_for_rendering_in_seconds, pixels_count):
@@ -48,8 +47,17 @@ class Game:
         done = terminated or truncated
         return self.observation, reward, done, info
 
+    def preprocess_frame(self, image_frame):
+        """ prepro 210x160x3 uint8 frame into 6400 (80x80) 1D float vector """
+        image_frame = image_frame[35:195]  # crop
+        image_frame = image_frame[::2, ::2, 0]  # downsample by factor of 2
+        image_frame[image_frame == 144] = 0  # erase background (background type 1)
+        image_frame[image_frame == 109] = 0  # erase background (background type 2)
+        image_frame[image_frame != 0] = 1  # everything else (paddles, ball) just set to 1
+        return image_frame.astype(float).ravel()
+
     def get_frame_difference(self):
-        current_frame = Helpers.preprocess_frame(self.observation)
+        current_frame = self.preprocess_frame(self.observation)
         state = current_frame - self.previous_frame if self.previous_frame is not None else np.zeros(self.pixels_count)
         self.previous_frame = current_frame
         return state
@@ -59,4 +67,15 @@ class Game:
         if reward == 1:
             self.points_scored += 1
         elif reward == -1:
-            self.points_conceeded += 1 
+            self.points_conceeded += 1
+
+def discount_and_normalize_rewards(r, gamma):
+    discounted_rewards = np.zeros_like(r)
+    running_add = 0
+    for t in reversed(range(0, r.size)):
+        if r[t] != 0: running_add = 0  # reset the sum, since this was a game boundary (pong specific!)
+        running_add = running_add * gamma + r[t]
+        discounted_rewards[t] = running_add
+    discounted_rewards -= np.mean(discounted_rewards)
+    discounted_rewards /= np.std(discounted_rewards)
+    return discounted_rewards 

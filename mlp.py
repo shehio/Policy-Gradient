@@ -1,8 +1,9 @@
 import numpy as np
 import pickle
 
-from helpers import Helpers
-
+# Sigmoid function (moved from helpers.py)
+def sigmoid(number):
+    return 1.0 / (1.0 + np.exp(-number))  # sigmoid "squashing" function to interval [0,1]
 
 class MLP:
     def __init__(self, input_count, hidden_layers_count, output_count=1):
@@ -17,7 +18,7 @@ class MLP:
         hidden_layer = np.dot(self.model['W1'], input)
         hidden_layer[hidden_layer < 0] = 0  # ReLU non-linearity
         logp = np.dot(self.model['W2'], hidden_layer)
-        output = Helpers.sigmoid(logp)
+        output = sigmoid(logp)
         return output, hidden_layer  # return probability of taking action 2, and hidden state
 
     def backward_pass(self, eph, epdlogp, epx):
