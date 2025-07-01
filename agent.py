@@ -1,6 +1,5 @@
 import numpy as np
 from helpers import Helpers
-from mlp import MLP
 from memory import Memory
 from hyperparameters import HyperParameters
 
@@ -9,7 +8,6 @@ UP = 3
 
 
 class Agent:
-    # TODO: Dep-Inject the Network to the Agent.
     def __init__(self, hyperparams, policy_network, load_network=True, network_file='save.p'):
         self.memory = Memory()
         self.hyperparams = hyperparams
@@ -63,5 +61,5 @@ class Agent:
             self.policy_network.train(self.hyperparams.learning_rate, self.hyperparams.decay_rate)
 
     def __save_policy_network(self, episode_number):
-        if episode_number % 20 == 0:
+        if episode_number % self.hyperparams.save_interval == 0:
             self.policy_network.save_network()
