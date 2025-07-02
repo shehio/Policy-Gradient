@@ -28,7 +28,7 @@ hyperparams = HyperParameters(
 if __name__ == '__main__':
     game = Game(GAME_NAME, render, sleep_for_rendering_in_seconds, pixels_count)
     policy_network = MLP(input_count=pixels_count, hidden_layers_count=hidden_layers_count)
-    agent = Agent(hyperparams, policy_network, load_network=True)
+    agent = Agent(hyperparams, policy_network, load_network=False)
 
     while True:
         game.render()

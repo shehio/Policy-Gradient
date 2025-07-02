@@ -1,7 +1,5 @@
 import numpy as np
-from helpers import Helpers
 from memory import Memory
-from hyperparameters import HyperParameters
 
 DOWN = 2
 UP = 3
@@ -20,8 +18,13 @@ class Agent:
     def sample_and_record_action(self, state):
         # forward the policy network and sample an action from the returned probability
         action_probability_space, hidden_layer = self.policy_network.forward_pass(state)
-        action = DOWN if np.random.uniform() < action_probability_space else UP  # roll the dice!
-        y = 1 if action == DOWN else 0  # a "fake label"
+
+        if np.random.uniform() < action_probability_space: # roll the dice!
+            action = DOWN
+            y = 1 # a "fake label"
+        else:
+            action = UP
+            y = 0
 
         self.memory.states.append(state)
         self.memory.hidden_layers.append(hidden_layer)
@@ -41,19 +44,19 @@ class Agent:
         self.__train_policy_network(episode_number)
         self.__save_policy_network(episode_number)
 
-        memory = Memory()
+        self.memory = Memory()
 
     def __accumalate_gradient(self):
         # stack together all inputs, hidden states, action gradients, and rewards for this episode
         episode_states = np.vstack(self.memory.states)
         episode_hidden_layers = np.vstack(self.memory.hidden_layers)
-        epdlogp = np.vstack(self.memory.dlogps)
+        episode_dlogps = np.vstack(self.memory.dlogps)
         episode_rewards = np.vstack(self.memory.rewards)
 
         # compute the discounted reward backwards through time
-        episode_discounted_rewards = Helpers.discount_and_normalize_rewards(episode_rewards, self.hyperparams.gamma)
-        epdlogp *= episode_discounted_rewards  # modulate the gradient with advantage (PG magic happens right here.)
-        self.policy_network.backward_pass(episode_hidden_layers, epdlogp, episode_states)
+        episode_discounted_rewards = self.__discount_and_normalize_rewards(episode_rewards, self.hyperparams.gamma)
+        episode_dlogps *= episode_discounted_rewards  # modulate the gradient with advantage (PG magic happens right here.)
+        self.policy_network.backward_pass(episode_hidden_layers, episode_dlogps, episode_states)
 
     def __train_policy_network(self, episode_number):
         # perform rmsprop parameter update every batch_size episodes
@@ -63,3 +66,16 @@ class Agent:
     def __save_policy_network(self, episode_number):
         if episode_number % self.hyperparams.save_interval == 0:
             self.policy_network.save_network()
+
+    def __discount_and_normalize_rewards(self, r, gamma):
+        discounted_rewards = np.zeros_like(r)
+        running_add = 0
+        for t in reversed(range(0, r.size)):
+            if r[t] != 0: running_add = 0  # reset the sum, since this was a game boundary (pong specific!)
+            running_add = running_add * gamma + r[t]
+            discounted_rewards[t] = running_add
+
+        # standardize the rewards to be unit normal (helps control the gradient estimator variance)
+        discounted_rewards -= np.mean(discounted_rewards)
+        discounted_rewards /= np.std(discounted_rewards)
+        return discounted_rewards

@@ -1,10 +1,6 @@
 import numpy as np
 import pickle
 
-# Sigmoid function (moved from helpers.py)
-def sigmoid(number):
-    return 1.0 / (1.0 + np.exp(-number))  # sigmoid "squashing" function to interval [0,1]
-
 class MLP:
     def __init__(self, input_count, hidden_layers_count, output_count=1):
         self.model = {'W1': np.random.randn(hidden_layers_count, input_count) / np.sqrt(input_count),
@@ -18,7 +14,7 @@ class MLP:
         hidden_layer = np.dot(self.model['W1'], input)
         hidden_layer[hidden_layer < 0] = 0  # ReLU non-linearity
         logp = np.dot(self.model['W2'], hidden_layer)
-        output = sigmoid(logp)
+        output = self.__sigmoid(logp)
         return output, hidden_layer  # return probability of taking action 2, and hidden state
 
     def backward_pass(self, eph, epdlogp, epx):
@@ -31,10 +27,10 @@ class MLP:
         for k in self.model:
             self.gradient_buffer[k] += current_gradient[k]  # accumulate grad over batch
 
-    def load_network(self, file_name='save.p'):
+    def load_network(self, file_name='native_mlp.p'):
         self.model = pickle.load(open(file_name, 'rb'))
 
-    def save_network(self, file_name='save.p'):
+    def save_network(self, file_name='native_mlp.p'):
         pickle.dump(self.model, open(file_name, 'wb'))
 
     def train(self, learning_rate, decay_rate):
@@ -43,3 +39,6 @@ class MLP:
             self.rmsprop_cache[k] = decay_rate * self.rmsprop_cache[k] + (1 - decay_rate) * g ** 2
             self.model[k] += learning_rate * g / (np.sqrt(self.rmsprop_cache[k]) + 1e-5)
             self.gradient_buffer[k] = np.zeros_like(v)  # reset batch gradient buffer
+
+    def __sigmoid(self, number):
+        return 1.0 / (1.0 + np.exp(-number))  # sigmoid "squashing" function to interval [0,1]
