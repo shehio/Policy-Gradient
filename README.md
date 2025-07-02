@@ -1,4 +1,4 @@
-# Karpathy-Pong
+# RL: Policy Gradient Methods
 
 ## Network Architecture
 
