@@ -5,12 +5,6 @@ from game import Game
 
 # Game params
 GAME_NAME = "ALE/Pong-v5"
-
-reward_sum = 0
-episode_number = 0
-points_scored = 0
-points_conceeded = 0
-
 render = False
 sleep_for_rendering_in_seconds = 0.001
 

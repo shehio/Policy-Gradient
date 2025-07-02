@@ -1,4 +1,6 @@
+from typing import Any
 import numpy as np
+from hyperparameters import HyperParameters
 from memory import Memory
 
 DOWN = 2
@@ -6,7 +8,7 @@ UP = 3
 
 
 class Agent:
-    def __init__(self, hyperparams, policy_network, load_network=True, network_file='save.p'):
+    def __init__(self, hyperparams: HyperParameters, policy_network: Any, load_network: bool = True, network_file: str = 'save.p') -> None:
         self.memory = Memory()
         self.hyperparams = hyperparams
         self.policy_network = policy_network
@@ -15,7 +17,7 @@ class Agent:
             print("Loading Network")
             self.policy_network.load_network(network_file)
 
-    def sample_and_record_action(self, state):
+    def sample_and_record_action(self, state: np.ndarray) -> int:
         # forward the policy network and sample an action from the returned probability
         action_probability_space, hidden_layer = self.policy_network.forward_pass(state)
 
@@ -35,10 +37,10 @@ class Agent:
 
         return action
 
-    def reap_reward(self, reward):
+    def reap_reward(self, reward: float) -> None:
         self.memory.rewards.append(reward)
 
-    def make_episode_end_updates(self, episode_number):
+    def make_episode_end_updates(self, episode_number: int) -> None:
         print(self.memory)
         self.__accumalate_gradient()
         self.__train_policy_network(episode_number)
@@ -46,7 +48,7 @@ class Agent:
 
         self.memory = Memory()
 
-    def __accumalate_gradient(self):
+    def __accumalate_gradient(self) -> None:
         # stack together all inputs, hidden states, action gradients, and rewards for this episode
         episode_states = np.vstack(self.memory.states)
         episode_hidden_layers = np.vstack(self.memory.hidden_layers)
@@ -58,12 +60,12 @@ class Agent:
         episode_dlogps *= episode_discounted_rewards  # modulate the gradient with advantage (PG magic happens right here.)
         self.policy_network.backward_pass(episode_hidden_layers, episode_dlogps, episode_states)
 
-    def __train_policy_network(self, episode_number):
+    def __train_policy_network(self, episode_number: int) -> None:
         # perform rmsprop parameter update every batch_size episodes
         if episode_number % self.hyperparams.batch_size == 0:
             self.policy_network.train(self.hyperparams.learning_rate, self.hyperparams.decay_rate)
 
-    def __save_policy_network(self, episode_number):
+    def __save_policy_network(self, episode_number: int) -> None:
         if episode_number % self.hyperparams.save_interval == 0:
             self.policy_network.save_network()
 
