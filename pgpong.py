@@ -22,11 +22,11 @@ hyperparams = HyperParameters(
 
 # Load network from file
 load_network = True
-load_episode_number = 11500
+load_episode_number = 12500
 network_file = "torch_mlp.p"
 
 if __name__ == '__main__':
-    game = Game(GAME_NAME, render, sleep_for_rendering_in_seconds, pixels_count)
+    game = Game(GAME_NAME, render, sleep_for_rendering_in_seconds, pixels_count, load_episode_number)
     policy_network = MLP(pixels_count, hidden_layers_count, output_count, network_file)
     if load_network:
         policy_network.load_network(load_episode_number)

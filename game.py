@@ -4,7 +4,7 @@ import numpy as np
 from typing import Optional
 
 class Game:
-    def __init__(self, game_name: str, render: bool, sleep_for_rendering_in_seconds: float, pixels_count: int) -> None:
+    def __init__(self, game_name: str, render: bool, sleep_for_rendering_in_seconds: float, pixels_count: int, episode_number: int) -> None:
         self.game_name = game_name
         self.render_flag = render
         self.sleep_for_rendering_in_seconds = sleep_for_rendering_in_seconds
