@@ -17,12 +17,12 @@ hyperparams = HyperParameters(
     decay_rate=0.99,
     gamma=0.99,
     batch_size=10,
-    save_interval=500
+    save_interval=1000
 )
 
 # Load network from file
 load_network = True
-load_episode_number = 0
+load_episode_number = 11500
 network_file = "torch_mlp.p"
 
 if __name__ == '__main__':
