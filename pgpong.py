@@ -1,6 +1,6 @@
 from agent import Agent
 from hyperparameters import HyperParameters
-from mlp import MLP
+from mlp_torch import MLP
 from game import Game
 
 # Game params
@@ -12,21 +12,24 @@ sleep_for_rendering_in_seconds = 0.001
 pixels_count = 80 * 80  # input dimensionality: 80x80 grid
 hidden_layers_count = 200  # number of hidden layer neurons
 output_count = 1
-load_network = True
-network_file = "native_mlp.p"
 hyperparams = HyperParameters(
     learning_rate=1e-4,
     decay_rate=0.99,
     gamma=0.99,
     batch_size=10,
-    save_interval=20
+    save_interval=500
 )
+
+# Load network from file
+load_network = True
+load_episode_number = 0
+network_file = "torch_mlp.p"
 
 if __name__ == '__main__':
     game = Game(GAME_NAME, render, sleep_for_rendering_in_seconds, pixels_count)
     policy_network = MLP(pixels_count, hidden_layers_count, output_count, network_file)
     if load_network:
-        policy_network.load_network()
+        policy_network.load_network(load_episode_number)
 
     agent = Agent(policy_network, hyperparams)
 

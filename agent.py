@@ -61,7 +61,7 @@ class Agent:
 
     def __save_policy_network(self, episode_number: int) -> None:
         if episode_number % self.hyperparams.save_interval == 0:
-            self.policy_network.save_network()
+            self.policy_network.save_network(episode_number)
 
     def __discount_and_normalize_rewards(self, r, gamma):
         discounted_rewards = np.zeros_like(r)

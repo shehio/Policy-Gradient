@@ -30,13 +30,16 @@ class MLP:
         for k in self.model:
             self.gradient_buffer[k] += current_gradient[k]  # accumulate grad over batch
 
-    def load_network(self) -> None:
-        print("Loading Network from file: ", self.network_file)
-        self.model = pickle.load(open(self.network_file, 'rb'))
+    def load_network(self, episode_number: int) -> None:
+        if episode_number > 0:
+            file_name = self.network_file + str(episode_number)
+            print("Loading network from file: ", file_name)
+            self.model = pickle.load(open(file_name, 'rb'))
 
-    def save_network(self) -> None:
-        print("Saving Network to file: ", self.network_file)
-        pickle.dump(self.model, open(self.network_file, 'wb'))
+    def save_network(self, episode_number: int) -> None:
+        file_name = self.network_file + str(episode_number)
+        print("Saving network to file: ", file_name)
+        pickle.dump(self.model, open(file_name, 'wb'))
 
     def train(self, learning_rate: float, decay_rate: float) -> None:
         for k, v in self.model.items():
