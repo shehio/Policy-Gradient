@@ -8,26 +8,20 @@ UP = 3
 
 
 class Agent:
-    def __init__(self, hyperparams: HyperParameters, policy_network: Any, load_network: bool = True, network_file: str = 'save.p') -> None:
+    def __init__(self, policy_network: Any, hyperparams: HyperParameters) -> None:
         self.memory = Memory()
         self.hyperparams = hyperparams
         self.policy_network = policy_network
 
-        if load_network:
-            print("Loading Network")
-            self.policy_network.load_network(network_file)
+    def sample_action(self, state: np.ndarray) -> int:
+        action_probability_space, _ = self.policy_network.forward_pass(state)
+        action = 2 if np.random.uniform() < action_probability_space else 3  # DOWN or UP
+        return action
 
     def sample_and_record_action(self, state: np.ndarray) -> int:
-        # forward the policy network and sample an action from the returned probability
         action_probability_space, hidden_layer = self.policy_network.forward_pass(state)
-
-        if np.random.uniform() < action_probability_space: # roll the dice!
-            action = DOWN
-            y = 1 # a "fake label"
-        else:
-            action = UP
-            y = 0
-
+        action = self.sample_action(state)
+        y = 1 if action == 2 else 0
         self.memory.states.append(state)
         self.memory.hidden_layers.append(hidden_layer)
 

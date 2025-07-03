@@ -3,13 +3,15 @@ import pickle
 from typing import Tuple
 
 class MLP:
-    def __init__(self, input_count: int, hidden_layers_count: int, output_count: int = 1) -> None:
+    def __init__(self, input_count: int, hidden_layers_count: int, output_count: int, network_file: str) -> None:
         self.model = {'W1': np.random.randn(hidden_layers_count, input_count) / np.sqrt(input_count),
                       'W2': np.random.randn(hidden_layers_count) / np.sqrt(hidden_layers_count)}
 
         # update buffers that add up gradients over a batch
         self.gradient_buffer = {k: np.zeros_like(v) for k, v in self.model.items()}
         self.rmsprop_cache = {k: np.zeros_like(v) for k, v in self.model.items()} # rmsprop memory
+
+        self.network_file = network_file
 
     def forward_pass(self, input: np.ndarray) -> Tuple[float, np.ndarray]:
         hidden_layer = np.dot(self.model['W1'], input)
@@ -28,11 +30,13 @@ class MLP:
         for k in self.model:
             self.gradient_buffer[k] += current_gradient[k]  # accumulate grad over batch
 
-    def load_network(self, file_name: str = 'save.p') -> None:
-        self.model = pickle.load(open(file_name, 'rb'))
+    def load_network(self) -> None:
+        print("Loading Network from file: ", self.network_file)
+        self.model = pickle.load(open(self.network_file, 'rb'))
 
-    def save_network(self, file_name: str = 'save.p') -> None:
-        pickle.dump(self.model, open(file_name, 'wb'))
+    def save_network(self) -> None:
+        print("Saving Network to file: ", self.network_file)
+        pickle.dump(self.model, open(self.network_file, 'wb'))
 
     def train(self, learning_rate: float, decay_rate: float) -> None:
         for k, v in self.model.items():
