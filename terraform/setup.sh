@@ -35,4 +35,5 @@ if grep -q AutoROM requirements.txt; then
   AutoROM --accept-license
 fi
 
-python pgpong.py 
+# Run the main script from the scripts directory
+python scripts/pgpong.py 

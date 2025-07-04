@@ -147,5 +147,34 @@ override.tf.json
 .terraformrc
 terraform.rc
 
+# Python cache files
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+
+# Virtual environments
+venv/
+env/
+.venv/
+ENV/
+
+# Model files (large binary files)
+models/*.p
+models/*.pkl
+models/*.h5
+models/*.pt
+models/*.pth
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS files
+.DS_Store
+Thumbs.db
+
 # secrets
 *.pem

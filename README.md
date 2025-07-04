@@ -12,17 +12,29 @@ This project implements a minimal, educational version of policy gradient reinfo
 
 ## Directory Structure
 ```
-pong/
-├── agent.py           # Agent logic and policy gradient updates
-├── game.py            # Game environment and episode management
-├── hyperparameters.py # Hyperparameter container
-├── memory.py          # Memory buffer for episode data
-├── mlp.py             # Minimal MLP (NumPy)
-├── mlp_torch.py       # MLP (PyTorch)
-├── assets/            # Images and diagrams
-│   └── reinforce.png  # REINFORCE algorithm diagram
-├── README.md          # This file
-└── ppgong.py          # Main training script
+Policy-Gradient/
+├── src/                    # Source code modules
+│   ├── agent.py           # Agent logic and policy gradient updates
+│   ├── game.py            # Game environment and episode management
+│   ├── hyperparameters.py # Hyperparameter container
+│   ├── memory.py          # Memory buffer for episode data
+│   ├── mlp.py             # Minimal MLP (NumPy)
+│   └── mlp_torch.py       # MLP (PyTorch)
+├── scripts/               # Executable scripts
+│   ├── pgpong.py          # Main training script
+│   └── run_in_cloud.sh    # Cloud deployment script
+├── models/                # Trained model files
+│   ├── torch_mlp.p*       # PyTorch model checkpoints
+│   └── native_mlp.p       # NumPy model checkpoint
+├── terraform/             # Infrastructure as Code
+│   ├── main.tf            # Main Terraform configuration
+│   ├── variables.tf       # Variable definitions
+│   ├── outputs.tf         # Output definitions
+│   └── setup.sh           # Instance setup script
+├── assets/                # Images and diagrams
+│   └── reinforce.png      # REINFORCE algorithm diagram
+├── requirements.txt       # Python dependencies
+└── README.md             # This file
 ```
 
 ## Setup
@@ -40,10 +52,10 @@ pong/
 ## Usage
 To train the agent on Pong:
 ```sh
-python ppgong.py
+python scripts/pgpong.py
 ```
 - By default, the script will train the agent and periodically save the model.
-- To watch the agent play, set `render = True` in `ppgong.py`.
+- To watch the agent play, set `render = True` in `scripts/pgpong.py`.
 
 ## Network Architecture
 The policy network (MLP) used in this project has the following architecture:
