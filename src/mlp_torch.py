@@ -3,6 +3,7 @@ import torch.nn as nn
 import torch.optim as optim
 import pickle
 import numpy as np
+import os
 from typing import Tuple
 
 class MLP(nn.Module):
@@ -55,10 +56,15 @@ class MLP(nn.Module):
         if episode_number > 0:
             file_name = self.network_file + str(episode_number)
             print("Loading network from file: ", file_name)
-            state_dict = torch.load(file_name, map_location=self.device)
-            self.load_state_dict(state_dict)
+            if os.path.exists(file_name):
+                state_dict = torch.load(file_name, map_location=self.device)
+                self.load_state_dict(state_dict)
+            else:
+                print(f"Warning: Network file {file_name} not found. Starting with random weights.")
 
     def save_network(self, episode_number: int) -> None:
         file_name = self.network_file + str(episode_number)
+        # Ensure the directory exists
+        os.makedirs(os.path.dirname(file_name), exist_ok=True)
         print("Saving network to file: ", file_name)
         torch.save(self.state_dict(), file_name)

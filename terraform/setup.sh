@@ -22,6 +22,9 @@ if [ ! -d "$REPO_NAME" ]; then
 fi
 cd "$REPO_NAME"
 
+# Create necessary directories
+mkdir -p models
+
 # Create venv if not exists
 if [ ! -d "venv" ]; then
   python3.10 -m venv venv

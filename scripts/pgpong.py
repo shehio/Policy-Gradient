@@ -27,7 +27,7 @@ hyperparams = HyperParameters(
 # Load network from file
 load_network = True
 load_episode_number = 58000
-network_file = "torch_mlp.p"
+network_file = os.path.join(os.path.dirname(__file__), '..', 'models', 'torch_mlp.p')
 
 if __name__ == '__main__':
     game = Game(GAME_NAME, render, sleep_for_rendering_in_seconds, pixels_count, load_episode_number)
