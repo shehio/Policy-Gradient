@@ -14,7 +14,8 @@ class Game:
         self.previous_frame: Optional[np.ndarray] = None
         self.running_reward: float = 0.0
         self.reward_sum: float = 0.0
-        self.episode_number: int = 0
+        self.starting_episode_number = episode_number
+        self.episode_number: int = episode_number
         self.points_scored: int = 0
         self.points_conceeded: int = 0
 
@@ -30,7 +31,8 @@ class Game:
             time.sleep(self.sleep_for_rendering_in_seconds)
 
     def end_episode(self) -> None:
-        self.running_reward = self.running_reward * (self.episode_number - 1) / self.episode_number + self.reward_sum / self.episode_number if self.episode_number > 0 else self.reward_sum
+        normalized_episode_number = self.episode_number - self.starting_episode_number
+        self.running_reward = self.running_reward * (normalized_episode_number - 1) / normalized_episode_number + self.reward_sum / normalized_episode_number if normalized_episode_number > 0 else self.reward_sum
         print('Resetting env. Episode: %i, episode reward: %i, running mean: %f.' % (self.episode_number, self.reward_sum, self.running_reward))
         self.episode_number += 1
         self.reset()
