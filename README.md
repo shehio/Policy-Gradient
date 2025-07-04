@@ -63,3 +63,20 @@ graph TD
 - [REINFORCE: Reinforcement Learning Most Fundamental Algorithm](https://youtu.be/5eSh5F8gjWU?si=b1lRf6Ks_q_0dekA)
 - [Karpathy's blog post: "Pong from Pixels"](http://karpathy.github.io/2016/05/31/rl/)
 - [OpenAI Gym documentation](https://www.gymlibrary.dev/)
+
+
+## Run in the cloud
+### Request a vCPU Limit Increase from AWS
+- Go to the AWS Service Quotas Console.
+- Search for the instance family you want (e.g., "g4dn", "p3", "p2", etc.).
+- Find the quota for "Running On-Demand G and VT instances" (or the relevant family).
+- Click "Request quota increase" and ask for at least 4 vCPUs (for g4dn.xlarge).
+
+
+### AWS GPU Instance Types Comparison
+
+| Instance | GPU Type      | CUDA Capability | Typical Use                | Age/Performance        |
+|----------|---------------|-----------------|----------------------------|------------------------|
+| g4dn     | NVIDIA T4     | 7.5             | Inference, graphics, VDI   | Newest, cost-effective |
+| p3       | NVIDIA V100   | 7.0             | Training, HPC, research    | High-end, very fast    |
+| p2       | NVIDIA K80    | 3.7             | Legacy ML, general compute | Oldest, slowest, cheap |
