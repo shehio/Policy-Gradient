@@ -8,6 +8,7 @@ from typing import Tuple
 class MLP(nn.Module):
     def __init__(self, input_count: int, hidden_layers_count: int, output_count: int, network_file: str) -> None:
         super().__init__()
+        self.device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
         self.fc1 = nn.Linear(input_count, hidden_layers_count)
         self.fc2 = nn.Linear(hidden_layers_count, output_count)
         self.relu = nn.ReLU()
@@ -17,6 +18,7 @@ class MLP(nn.Module):
         self.saved_log_probs = []
         self.rewards = []
         self.network_file = network_file
+        self.to(self.device)
 
     def forward(self, x: torch.Tensor) -> torch.Tensor:
         x = self.fc1(x)
@@ -26,9 +28,9 @@ class MLP(nn.Module):
         return x
 
     def forward_pass(self, input: np.ndarray) -> Tuple[float, np.ndarray]:
-        input_tensor = torch.from_numpy(input).float()
+        input_tensor = torch.from_numpy(input).float().to(self.device)
         output = self.forward(input_tensor)
-        hidden_layer = self.relu(self.fc1(input_tensor)).detach().numpy()
+        hidden_layer = self.relu(self.fc1(input_tensor)).detach().cpu().numpy()
         return output.item(), hidden_layer
 
     def backward_pass(self, eph: np.ndarray, epdlogp: np.ndarray, epx: np.ndarray) -> None:
@@ -40,9 +42,9 @@ class MLP(nn.Module):
         self.optimizer.param_groups[0]['alpha'] = decay_rate
         self.optimizer.zero_grad()
         for epx, eph, epdlogp in self.gradient_buffer:
-            inputs = torch.from_numpy(epx).float()
-            hidden = torch.from_numpy(eph).float()
-            advantages = torch.from_numpy(epdlogp).float()
+            inputs = torch.from_numpy(epx).float().to(self.device)
+            hidden = torch.from_numpy(eph).float().to(self.device)
+            advantages = torch.from_numpy(epdlogp).float().to(self.device)
             output = self.forward(inputs)
             loss = -torch.sum(torch.log(output) * advantages)
             loss.backward()
@@ -53,7 +55,7 @@ class MLP(nn.Module):
         if episode_number > 0:
             file_name = self.network_file + str(episode_number)
             print("Loading network from file: ", file_name)
-            state_dict = torch.load(file_name, map_location='cpu')
+            state_dict = torch.load(file_name, map_location=self.device)
             self.load_state_dict(state_dict)
 
     def save_network(self, episode_number: int) -> None:
