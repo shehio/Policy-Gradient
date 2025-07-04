@@ -9,7 +9,7 @@ from game import Game
 
 # Game params
 GAME_NAME = "ALE/Pong-v5"
-render = False
+render = True
 sleep_for_rendering_in_seconds = 0.001
 
 # Hyperparameters
@@ -26,7 +26,7 @@ hyperparams = HyperParameters(
 
 # Load network from file
 load_network = True
-load_episode_number = 58000
+load_episode_number = 71000
 network_file = os.path.join(os.path.dirname(__file__), '..', 'models', 'torch_mlp.p')
 
 if __name__ == '__main__':
