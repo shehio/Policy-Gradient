@@ -22,7 +22,7 @@ hyperparams = HyperParameters(
 
 # Load network from file
 load_network = True
-load_episode_number = 12500
+load_episode_number = 58000
 network_file = "torch_mlp.p"
 
 if __name__ == '__main__':
