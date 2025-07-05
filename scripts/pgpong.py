@@ -27,7 +27,7 @@ hyperparams = HyperParameters(
 
 # Load network from file
 load_network = True
-load_episode_number = 71000
+load_episode_number = 0
 network_file = os.path.join(os.path.dirname(__file__), '..', 'models', 'torch_mlp.p')
 
 if __name__ == '__main__':
