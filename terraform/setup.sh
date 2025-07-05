@@ -1,6 +1,10 @@
 #!/bin/bash
 set -e
 
+echo "Starting setup script..."
+echo "Current directory: $(pwd)"
+echo "Current user: $(whoami)"
+
 REPO_URL="https://github.com/shehio/Policy-Gradient.git"
 REPO_NAME=$(basename -s .git "$REPO_URL")
 
@@ -18,25 +22,35 @@ fi
 
 # Clone the repo
 if [ ! -d "$REPO_NAME" ]; then
+  echo "Cloning repository..."
   git clone "$REPO_URL"
 fi
+echo "Changing to repository directory..."
 cd "$REPO_NAME"
+echo "Repository directory: $(pwd)"
 
 # Create necessary directories
 mkdir -p models
 
 # Create venv if not exists
 if [ ! -d "venv" ]; then
+  echo "Creating virtual environment..."
   python3.10 -m venv venv
 fi
 
+echo "Activating virtual environment..."
 source venv/bin/activate
+echo "Installing requirements..."
 pip install -r requirements.txt
 
 # Download ROMs for gym (if needed)
 if grep -q AutoROM requirements.txt; then
+  echo "Downloading ROMs for gym..."
   AutoROM --accept-license
 fi
 
 # Run the main script from the scripts directory
-python scripts/pgpong.py 
+echo "Setup complete! Running the main script..."
+echo "Script will run in the background and continue even if it fails..."
+nohup python scripts/pgpong.py > training.log 2>&1 &
+echo "Training started in background. Check training.log for output." 

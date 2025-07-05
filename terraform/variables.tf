@@ -5,7 +5,7 @@ variable "aws_region" {
 
 variable "ami_id" {
   description = "AMI ID for Deep Learning AMI (Ubuntu) with GPU support"
-  default     = "ami-002fc6cff50ca7d51"
+  default     = "ami-05ee60afff9d0a480"
 }
 
 variable "instance_type" {

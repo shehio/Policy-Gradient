@@ -9,7 +9,8 @@ from game import Game
 
 # Game params
 GAME_NAME = "ALE/Pong-v5"
-render = True
+# Disable rendering on headless servers (like EC2)
+render = False
 sleep_for_rendering_in_seconds = 0.001
 
 # Hyperparameters
@@ -30,26 +31,41 @@ load_episode_number = 71000
 network_file = os.path.join(os.path.dirname(__file__), '..', 'models', 'torch_mlp.p')
 
 if __name__ == '__main__':
-    game = Game(GAME_NAME, render, sleep_for_rendering_in_seconds, pixels_count, load_episode_number)
-    policy_network = MLP(pixels_count, hidden_layers_count, output_count, network_file)
-    if load_network:
-        policy_network.load_network(load_episode_number)
+    try:
+        print("Initializing game...")
+        game = Game(GAME_NAME, render, sleep_for_rendering_in_seconds, pixels_count, load_episode_number)
+        print("Creating policy network...")
+        policy_network = MLP(pixels_count, hidden_layers_count, output_count, network_file)
+        if load_network:
+            print(f"Loading network from episode {load_episode_number}...")
+            policy_network.load_network(load_episode_number)
 
-    agent = Agent(policy_network, hyperparams)
+        print("Creating agent...")
+        agent = Agent(policy_network, hyperparams)
+        print("Starting training loop...")
+    except Exception as e:
+        print(f"Error during initialization: {e}")
+        raise
 
-    while True:
-        game.render()
-        state = game.get_frame_difference()
-        action = agent.sample_and_record_action(state)
-        observation, reward, done, info = game.step(action)
-        agent.reap_reward(reward)
-        game.update_episode_stats(reward)
+    try:
+        while True:
+            game.render()
+            state = game.get_frame_difference()
+            action = agent.sample_and_record_action(state)
+            observation, reward, done, info = game.step(action)
+            agent.reap_reward(reward)
+            game.update_episode_stats(reward)
 
-        # if reward == 1:
-        #     print('ep %d: point scored, score: %i: %i' % (game.episode_number, game.points_conceeded, game.points_scored))
-        # elif reward == -1:
-        #     print('ep %d: point conceeded, score: %i: %i' % (game.episode_number, game.points_conceeded, game.points_scored))
+            # if reward == 1:
+            #     print('ep %d: point scored, score: %i: %i' % (game.episode_number, game.points_conceeded, game.points_scored))
+            # elif reward == -1:
+            #     print('ep %d: point conceeded, score: %i: %i' % (game.episode_number, game.points_conceeded, game.points_scored))
 
-        if done:
-            agent.make_episode_end_updates(game.episode_number)
-            game.end_episode()
+            if done:
+                agent.make_episode_end_updates(game.episode_number)
+                game.end_episode()
+    except KeyboardInterrupt:
+        print("Training interrupted by user")
+    except Exception as e:
+        print(f"Error during training: {e}")
+        raise

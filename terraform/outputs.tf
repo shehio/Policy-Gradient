@@ -1,3 +1,8 @@
+output "instance_id" {
+  description = "Instance ID of the GPU EC2 instance"
+  value       = aws_instance.gpu_runner.id
+}
+
 output "public_ip" {
   description = "Public IP address of the GPU EC2 instance"
   value       = aws_instance.gpu_runner.public_ip
