@@ -18,15 +18,13 @@ if ! command -v python3.10 &> /dev/null; then
   sudo apt-get install -y python3.10 python3.10-venv python3.10-distutils
   # Ensure pip for python3.10
   curl -sS https://bootstrap.pypa.io/get-pip.py | sudo python3.10
+else
+  echo "Python 3.10 found, ensuring venv package is installed..."
+  sudo apt-get update
+  sudo apt-get install -y python3.10-venv
 fi
 
-# Clone the repo
-if [ ! -d "$REPO_NAME" ]; then
-  echo "Cloning repository..."
-  git clone "$REPO_URL"
-fi
-echo "Changing to repository directory..."
-cd "$REPO_NAME"
+echo "Repository already cloned by user_data script, continuing with setup..."
 echo "Repository directory: $(pwd)"
 
 # Create necessary directories
