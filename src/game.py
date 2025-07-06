@@ -1,23 +1,18 @@
-import gym
+import gymnasium as gym
+import ale_py  # This registers the ALE environments
 import time
 import numpy as np
 from typing import Optional
 
 class Game:
-    def __init__(self, game_name: str, render: bool, sleep_for_rendering_in_seconds: float, pixels_count: int, episode_number: int) -> None:
+    def __init__(self, game_name: str, render: bool, pixels_count: int, episode_number: int) -> None:
         self.game_name = game_name
         self.render_flag = render
-        self.sleep_for_rendering_in_seconds = sleep_for_rendering_in_seconds
         self.pixels_count = pixels_count
         self.env = self.get_environment()
-        self.observation, _ = self.env.reset()
-        self.previous_frame: Optional[np.ndarray] = None
-        self.running_reward: float = 0.0
-        self.reward_sum: float = 0.0
         self.starting_episode_number = episode_number
         self.episode_number: int = episode_number
-        self.points_scored: int = 0
-        self.points_conceeded: int = 0
+        self.reset()
 
     def get_environment(self) -> gym.Env:
         if self.render_flag:
@@ -25,10 +20,13 @@ class Game:
         else:
             return gym.make(self.game_name)
 
-    def render(self) -> None:
-        if self.render_flag:
-            self.env.render()
-            time.sleep(self.sleep_for_rendering_in_seconds)
+    def reset(self) -> None:
+        self.observation, _ = self.env.reset()
+        self.previous_frame: Optional[np.ndarray] = None
+        self.running_reward: float = 0.0
+        self.reward_sum: float = 0.0
+        self.points_scored: int = 0
+        self.points_conceeded: int = 0
 
     def end_episode(self) -> None:
         normalized_episode_number = self.episode_number - self.starting_episode_number
@@ -36,14 +34,6 @@ class Game:
         print('Resetting env. Episode: %i, episode reward: %i, running mean: %f.' % (self.episode_number, self.reward_sum, self.running_reward))
         self.episode_number += 1
         self.reset()
-
-    def reset(self) -> np.ndarray:
-        self.observation, _ = self.env.reset()
-        self.previous_frame = None
-        self.reward_sum = 0.0
-        self.points_scored = 0
-        self.points_conceeded = 0
-        return self.observation
 
     def step(self, action: int) -> tuple[np.ndarray, float, bool, dict]:
         self.observation, reward, terminated, truncated, info = self.env.step(action)
