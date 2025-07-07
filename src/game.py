@@ -23,9 +23,7 @@ class Game:
         # Configure Atari environment to prevent frame skipping
         # This ensures we capture every frame and don't miss any game state
         try:
-            # Access the unwrapped Atari environment
             atari_env = env.unwrapped
-            # Use setattr to avoid type checking issues
             if hasattr(atari_env, 'frameskip'):
                 setattr(atari_env, 'frameskip', 1)  # Set frame skip to 1 (no skipping)
 

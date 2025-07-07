@@ -54,18 +54,23 @@ if __name__ == '__main__':
         raise
 
     try:
+        # Track previous lives to detect life loss
+        previous_lives = 5
+        
         while True:
             state = game.get_frame_difference()
 
-            # If there's no difference in the frame, click the fire button
-            if ((np.sum(state)) == 0):
-                click_fire(game)
-            
             action = agent.sample_and_record_action(state)
             observation, reward, done, info = game.step(action)
             agent.reap_reward(reward)
             game.update_episode_stats(reward)
-
+            
+            # Check if lives decreased (indicating life loss) and click the fire button
+            current_lives = info.get('lives', None)
+            if current_lives is not None and current_lives < previous_lives:
+                click_fire(game)
+                previous_lives = current_lives
+            
             # if reward == 1:
             #     print('ep %i: point scored, score: %i' % (game.episode_number, game.points_scored))
             
@@ -74,7 +79,9 @@ if __name__ == '__main__':
                 game.end_episode()
                 game.reset()
                 print("Resetting game...")
-                click_fire(game)
+                click_fire(game) 
+                previous_lives = 5
+
     except KeyboardInterrupt:
         print("Training interrupted by user")
     except Exception as e:
