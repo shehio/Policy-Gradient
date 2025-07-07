@@ -16,9 +16,31 @@ class Game:
 
     def get_environment(self) -> gym.Env:
         if self.render_flag:
-            return gym.make(self.game_name, render_mode="human")
+            env = gym.make(self.game_name, render_mode="human")
         else:
-            return gym.make(self.game_name)
+            env = gym.make(self.game_name)
+        
+        # Configure Atari environment to prevent frame skipping
+        # This ensures we capture every frame and don't miss any game state
+        try:
+            # Access the unwrapped Atari environment
+            atari_env = env.unwrapped
+            # Use setattr to avoid type checking issues
+            if hasattr(atari_env, 'frameskip'):
+                setattr(atari_env, 'frameskip', 1)  # Set frame skip to 1 (no skipping)
+
+            # Access ALE directly if available
+            if hasattr(atari_env, 'ale'):
+                ale = getattr(atari_env, 'ale')
+                ale.setInt('frame_skip', 1)  # Ensure ALE frame skip is also 1
+                # Disable action repeat to ensure every action is processed
+                ale.setInt('repeat_action_probability', 0.0)
+                # Set deterministic mode for consistent behavior
+                ale.setBool('deterministic', True)
+        except Exception as e:
+            print(f"Warning: Could not configure Atari environment settings: {e}")
+        
+        return env
 
     def reset(self) -> None:
         self.observation, _ = self.env.reset()
