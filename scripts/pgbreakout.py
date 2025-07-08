@@ -71,19 +71,20 @@ if __name__ == '__main__':
                 click_fire(game)
                 previous_lives = current_lives
             
-            # if reward == 1:
-            #     print('ep %i: point scored, score: %i' % (game.episode_number, game.points_scored))
-            
             if done:
+                # print(f"Episode {game.episode_number}: reward={game.reward_sum:.1f}, running mean={game.running_reward:.3f}")
+                
                 agent.make_episode_end_updates(game.episode_number)
                 game.end_episode()
                 game.reset()
-                print("Resetting game...")
-                click_fire(game) 
+
                 previous_lives = 5
+                click_fire(game)
 
     except KeyboardInterrupt:
-        print("Training interrupted by user")
+        print("\nTraining interrupted by user")
+        print(f"Final episode: {game.episode_number}")
+        print(f"Final running reward: {game.running_reward:.3f}")
     except Exception as e:
         print(f"Error during training: {e}")
         raise
