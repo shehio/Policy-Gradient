@@ -43,6 +43,11 @@ class Agent:
         self.memory = Memory()
 
     def __accumalate_gradient(self) -> None:
+        # Check if there are any rewards - if not, skip training entirely
+        if np.sum(self.memory.rewards) == 0:
+            print("⚠️  WARNING: No rewards received - skipping training (no learning signal)")
+            return
+
         # stack together all inputs, hidden states, action gradients, and rewards for this episode
         episode_states = np.vstack(self.memory.states)
         episode_hidden_layers = np.vstack(self.memory.hidden_layers)
@@ -52,6 +57,17 @@ class Agent:
         # compute the discounted reward backwards through time
         episode_discounted_rewards = self.__discount_and_normalize_rewards(episode_rewards, self.hyperparams.gamma)
         episode_dlogps *= episode_discounted_rewards  # modulate the gradient with advantage (PG magic happens right here.)
+        
+        # Check for NaN or infinite values
+        if np.any(np.isnan(episode_dlogps)) or np.any(np.isinf(episode_dlogps)):
+            print("🚨 CRITICAL: NaN or infinite gradients detected! Skipping update.")
+            return
+        
+        # Check for vanishing gradient
+        gradient_magnitude = np.mean(np.abs(episode_dlogps))
+        if gradient_magnitude < 1e-6:
+            print("⚠️  WARNING: Very small gradients detected!")
+        
         self.policy_network.backward_pass(episode_hidden_layers, episode_dlogps, episode_states)
 
     def __train_policy_network(self, episode_number: int) -> None:
@@ -63,15 +79,17 @@ class Agent:
         if episode_number % self.hyperparams.save_interval == 0:
             self.policy_network.save_network(episode_number)
 
-    def __discount_and_normalize_rewards(self, r, gamma):
-        discounted_rewards = np.zeros_like(r)
+    def __discount_and_normalize_rewards(self, rewards, gamma):
+        discounted_rewards = np.zeros_like(rewards)
         running_add = 0
-        for t in reversed(range(0, r.size)):
-            if r[t] != 0: running_add = 0  # reset the sum, since this was a game boundary (pong specific!)
-            running_add = running_add * gamma + r[t]
+        for t in reversed(range(0, rewards.size)):
+            if rewards[t] != 0: running_add = 0  # reset the sum, since this was a game boundary (pong specific!)
+            running_add = running_add * gamma + rewards[t]
             discounted_rewards[t] = running_add
 
         # standardize the rewards to be unit normal (helps control the gradient estimator variance)
-        discounted_rewards -= np.mean(discounted_rewards)
-        discounted_rewards /= np.std(discounted_rewards)
+        if np.std(discounted_rewards) > 1e-8:  # Avoid division by zero
+            discounted_rewards -= np.mean(discounted_rewards)
+            discounted_rewards /= np.std(discounted_rewards)
+        
         return discounted_rewards
