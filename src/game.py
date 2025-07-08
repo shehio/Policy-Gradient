@@ -3,6 +3,7 @@ import ale_py  # This registers the ALE environments
 import time
 import numpy as np
 from typing import Optional
+from collections import deque
 
 class Game:
     def __init__(self, game_name: str, render: bool, pixels_count: int, episode_number: int) -> None:
@@ -12,6 +13,7 @@ class Game:
         self.env = self.get_environment()
         self.starting_episode_number = episode_number
         self.episode_number: int = episode_number
+        self.recent_rewards = deque(maxlen=100)
         self.reset()
 
     def get_environment(self) -> gym.Env:
@@ -51,7 +53,7 @@ class Game:
     def end_episode(self) -> None:
         self.__update_running_reward()
         if self.episode_number % 100 == 0:
-            print('Resetting env. Episode: %i, episode reward: %i, running mean: %f.' % (self.episode_number, self.reward_sum, self.running_reward))
+            print('Resetting env. Episode: %i, episode reward: %i, running mean(last 100 episodes): %f.' % (self.episode_number, self.reward_sum, self.running_reward))
         self.episode_number += 1
         self.reset()
 
@@ -83,12 +85,8 @@ class Game:
             self.points_conceeded += 1
 
     def __update_running_reward(self) -> None:
-        normalized_episode_number = self.episode_number - self.starting_episode_number
+        # Add current episode reward to the rolling window
+        self.recent_rewards.append(self.reward_sum)
         
-        if normalized_episode_number == 0:
-            # First episode: just use the current reward
-            self.running_reward = self.reward_sum
-        else:
-            # Exponential moving average with alpha = 0.99
-            alpha = 0.99
-            self.running_reward = alpha * self.running_reward + (1 - alpha) * self.reward_sum
+        # Calculate average of last 100 episodes (or fewer if we haven't reached 100 yet)
+        self.running_reward = float(np.mean(self.recent_rewards))
