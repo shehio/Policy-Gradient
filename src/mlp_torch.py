@@ -3,18 +3,17 @@ import torch.nn as nn
 import torch.optim as optim
 import numpy as np
 import os
-import time
 from typing import Tuple
 
 class MLP(nn.Module):
-    def __init__(self, input_count: int, hidden_layers_count: int, output_count: int, network_file: str, game_name: str = "unknown") -> None:
+    def __init__(self, input_count: int, hidden_layers_count: int, output_count: int, network_file: str, game_name: str) -> None:
         super().__init__()
         
         # Store model parameters for unique file naming
         self.input_count = input_count
         self.hidden_layers_count = hidden_layers_count
         self.output_count = output_count
-        self.game_name = game_name.replace("/", "_").replace("-", "_")  # Sanitize game name for filename
+        self.game_name = game_name.replace("/", "_").replace("-", "_")  # todo(shehio): This shouldn't live here.
         
         # Device selection
         self.device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
