@@ -1,7 +1,7 @@
 import sys
 import os
 import numpy as np
-sys.path.append(os.path.join(os.path.dirname(__file__), '..', 'src'))
+sys.path.append(os.path.join(os.path.dirname(__file__), '../..', 'src'))
 
 from agent import Agent
 from hyperparameters import HyperParameters
@@ -27,7 +27,7 @@ hyperparams = HyperParameters(
 # Load network from file
 load_network = True
 load_episode_number = 10_000
-network_file = os.path.join(os.path.dirname(__file__), '..', 'models', 'torch_mlp.p')
+network_file = os.path.join(os.path.dirname(__file__), '../..', 'models', 'torch_mlp.p')
 
 def click_fire(game: Game):
     ## After the game is initialized, we need to click the fire button to start the game
