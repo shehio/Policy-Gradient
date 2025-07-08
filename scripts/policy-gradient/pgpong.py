@@ -27,7 +27,7 @@ hyperparams = HyperParameters(
 
 # Load network from file
 load_network = True
-load_episode_number = 0
+load_episode_number = 10_000
 network_file = os.path.join(os.path.dirname(__file__), '../..', 'models', 'torch_mlp.p')
 
 if __name__ == '__main__':
@@ -35,7 +35,7 @@ if __name__ == '__main__':
         print("Initializing game...")
         game = Game(GAME_NAME, render, pixels_count, load_episode_number)
         print("Creating policy network...")
-        policy_network = MLP(pixels_count, hidden_layers_count, output_count, network_file)
+        policy_network = MLP(pixels_count, hidden_layers_count, output_count, network_file, GAME_NAME)
         if load_network:
             print(f"Loading network from episode {load_episode_number}...")
             policy_network.load_network(load_episode_number)

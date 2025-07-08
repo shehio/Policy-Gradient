@@ -10,7 +10,7 @@ from game import Game
 
 # Game params
 GAME_NAME = "ALE/Breakout-v5"
-render = False
+render = True
 
 # Hyperparameters
 pixels_count = 80 * 80  # input dimensionality: 80x80 grid
@@ -21,12 +21,12 @@ hyperparams = HyperParameters(
     decay_rate=0.99,
     gamma=0.99,
     batch_size=10,
-    save_interval=10_000
+    save_interval=5_000
 )
 
 # Load network from file
 load_network = True
-load_episode_number = 10_000
+load_episode_number = 50_000
 network_file = os.path.join(os.path.dirname(__file__), '../..', 'models', 'torch_mlp.p')
 
 def click_fire(game: Game):
