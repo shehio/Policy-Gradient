@@ -49,8 +49,7 @@ class Game:
         self.points_conceeded: int = 0
 
     def end_episode(self) -> None:
-        normalized_episode_number = self.episode_number - self.starting_episode_number
-        self.running_reward = self.running_reward * (normalized_episode_number - 1) / normalized_episode_number + self.reward_sum / normalized_episode_number if normalized_episode_number > 0 else self.reward_sum
+        self.__update_running_reward()
         print('Resetting env. Episode: %i, episode reward: %i, running mean: %f.' % (self.episode_number, self.reward_sum, self.running_reward))
         self.episode_number += 1
         self.reset()
@@ -58,7 +57,7 @@ class Game:
     def step(self, action: int) -> tuple[np.ndarray, float, bool, dict]:
         self.observation, reward, terminated, truncated, info = self.env.step(action)
         done = terminated or truncated
-        return self.observation, reward, done, info
+        return self.observation, float(reward), done, info
 
     def preprocess_frame(self, image_frame: np.ndarray) -> np.ndarray:
         """ prepro 210x160x3 uint8 frame into 6400 (80x80) 1D float vector """
@@ -82,13 +81,13 @@ class Game:
         elif reward == -1:
             self.points_conceeded += 1
 
-def discount_and_normalize_rewards(r: np.ndarray, gamma: float) -> np.ndarray:
-    discounted_rewards = np.zeros_like(r)
-    running_add = 0
-    for t in reversed(range(0, r.size)):
-        if r[t] != 0: running_add = 0  # reset the sum, since this was a game boundary (pong specific!)
-        running_add = running_add * gamma + r[t]
-        discounted_rewards[t] = running_add
-    discounted_rewards -= np.mean(discounted_rewards)
-    discounted_rewards /= np.std(discounted_rewards)
-    return discounted_rewards 
+    def __update_running_reward(self) -> None:
+        normalized_episode_number = self.episode_number - self.starting_episode_number
+        
+        if normalized_episode_number == 0:
+            # First episode: just use the current reward
+            self.running_reward = self.reward_sum
+        else:
+            # Exponential moving average with alpha = 0.99
+            alpha = 0.99
+            self.running_reward = alpha * self.running_reward + (1 - alpha) * self.reward_sum
