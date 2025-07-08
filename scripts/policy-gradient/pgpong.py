@@ -1,6 +1,6 @@
 import sys
 import os
-sys.path.append(os.path.join(os.path.dirname(__file__), '..', 'src'))
+sys.path.append(os.path.join(os.path.dirname(__file__), '../..', 'src'))
 
 from agent import Agent
 from hyperparameters import HyperParameters
@@ -22,7 +22,7 @@ hyperparams = HyperParameters(
     decay_rate=0.99,
     gamma=0.99,
     batch_size=10,
-    save_interval=1000
+    save_interval=10_000
 )
 
 # Load network from file
@@ -33,7 +33,7 @@ network_file = os.path.join(os.path.dirname(__file__), '..', 'models', 'torch_ml
 if __name__ == '__main__':
     try:
         print("Initializing game...")
-        game = Game(GAME_NAME, render, sleep_for_rendering_in_seconds, pixels_count, load_episode_number)
+        game = Game(GAME_NAME, render, pixels_count, load_episode_number)
         print("Creating policy network...")
         policy_network = MLP(pixels_count, hidden_layers_count, output_count, network_file)
         if load_network:
@@ -49,7 +49,6 @@ if __name__ == '__main__':
 
     try:
         while True:
-            game.render()
             state = game.get_frame_difference()
             action = agent.sample_and_record_action(state)
             observation, reward, done, info = game.step(action)
