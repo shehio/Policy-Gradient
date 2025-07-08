@@ -16,13 +16,9 @@ class MLP(nn.Module):
         self.output_count = output_count
         self.game_name = game_name.replace("/", "_").replace("-", "_")  # Sanitize game name for filename
         
-        # Device selection with detailed logging
+        # Device selection
         self.device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
         print(f"MLP initialized on device: {self.device}")
-        
-        if torch.cuda.is_available():
-            print(f"GPU: {torch.cuda.get_device_name()}")
-            print(f"GPU Memory: {torch.cuda.get_device_properties(0).total_memory / 1e9:.2f} GB")
         
         # Network architecture
         self.fc1 = nn.Linear(input_count, hidden_layers_count)
@@ -31,20 +27,10 @@ class MLP(nn.Module):
         self.sigmoid = nn.Sigmoid()
         self.optimizer = optim.RMSprop(self.parameters(), lr=1e-4, alpha=0.99)
         self.gradient_buffer = []
-        self.saved_log_probs = []
-        self.rewards = []
         self.network_file = network_file
         self.to(self.device)
         
-        # Performance tracking
-        self.forward_times = []
-        self.backward_times = []
-        self.episode_count = 0
-        
-        print(f"Model parameters: {sum(p.numel() for p in self.parameters()):,}")
-        print(f"Model size: {sum(p.numel() * p.element_size() for p in self.parameters()) / 1e6:.2f} MB")
-        print(f"Game: {self.game_name}")
-        print(f"Architecture: {input_count}->{hidden_layers_count}->{output_count}")
+        print(f"Model: {input_count}->{hidden_layers_count}->{output_count}")
 
     def forward(self, x: torch.Tensor) -> torch.Tensor:
         x = self.fc1(x)
@@ -54,9 +40,6 @@ class MLP(nn.Module):
         return x
 
     def forward_pass(self, input: np.ndarray) -> Tuple[float, np.ndarray]:
-        start_time = time.time()
-        
-
         input_tensor = torch.from_numpy(input).float().to(self.device)
         with torch.no_grad():  # No gradients needed for inference
             output = self.forward(input_tensor)
@@ -65,10 +48,6 @@ class MLP(nn.Module):
         # Move back to CPU for environment interaction
         output_cpu = output.cpu().numpy()
         hidden_cpu = hidden_layer.cpu().numpy()
-        
-        # Track performance
-        forward_time = time.time() - start_time
-        self.forward_times.append(forward_time)
         
         return output_cpu.item(), hidden_cpu
 
@@ -80,8 +59,6 @@ class MLP(nn.Module):
         if not self.gradient_buffer:
             return
             
-        start_time = time.time()
-        
         # Update optimizer parameters
         self.optimizer.param_groups[0]['lr'] = learning_rate
         self.optimizer.param_groups[0]['alpha'] = decay_rate
@@ -102,51 +79,55 @@ class MLP(nn.Module):
         hidden = torch.from_numpy(np.vstack(all_hidden)).float().to(self.device)
         advantages = torch.from_numpy(np.concatenate(all_advantages)).float().to(self.device)
         
-        output = self.forward(inputs)
-        loss = -torch.sum(torch.log(output) * advantages)
-        loss.backward()
-        self.optimizer.step()
-    
-
-        self.gradient_buffer = []
-        train_time = time.time() - start_time
-        self.backward_times.append(train_time)
-        
-        # Increment episode count
-        self.episode_count += 1
-        
-        # Log performance every 1000 episodes
-        if self.episode_count % 1000 == 0:
-            avg_time = np.mean(self.backward_times[-100:]) if self.backward_times else 0
-            print(f"Episode {self.episode_count}: Average training step time: {avg_time*1000:.2f} ms")
-            print(f"Episode {self.episode_count}: Loss: {loss.item():.6f}")
+        # Check for NaN or infinite values before training
+        if torch.isnan(inputs).any() or torch.isinf(inputs).any():
+            print("🚨 CRITICAL: NaN or infinite inputs detected! Skipping training.")
+            self.gradient_buffer = []
+            return
             
-            if torch.cuda.is_available():
-                gpu_memory = torch.cuda.memory_allocated() / 1e6
-                print(f"Episode {self.episode_count}: GPU memory used: {gpu_memory:.1f} MB")
+        if torch.isnan(advantages).any() or torch.isinf(advantages).any():
+            print("🚨 CRITICAL: NaN or infinite advantages detected! Skipping training.")
+            self.gradient_buffer = []
+            return
+        
+        output = self.forward(inputs)
+        
+        # Clamp output to avoid log(0) or log(1)
+        output = torch.clamp(output, 1e-7, 1.0 - 1e-7)
+        
+        loss = -torch.sum(torch.log(output) * advantages)
+        
+        # Check for NaN loss
+        if torch.isnan(loss) or torch.isinf(loss):
+            print("🚨 CRITICAL: NaN or infinite loss detected! Skipping training.")
+            self.gradient_buffer = []
+            return
+            
+        loss.backward()
+        
+        # Gradient clipping to prevent exploding gradients
+        torch.nn.utils.clip_grad_norm_(self.parameters(), max_norm=1.0)
+        
+        self.optimizer.step()
+        self.gradient_buffer = []
 
     def load_network(self, episode_number: int) -> None:
         if episode_number > 0:
             base_name = os.path.splitext(self.network_file)[0]
             file_name = f"{base_name}_{self.game_name}_i{self.input_count}_h{self.hidden_layers_count}_o{self.output_count}_{episode_number}"
-            print("Loading network from file: ", file_name)
             
             if os.path.exists(file_name):
                 state_dict = torch.load(file_name, map_location=self.device)
                 self.load_state_dict(state_dict)
-                print(f"Successfully loaded model for {self.game_name} with architecture {self.input_count}->{self.hidden_layers_count}->{self.output_count}")
+                print(f"Loaded model: {file_name}")
             else:
-                print(f"Warning: Network file {file_name} not found. Starting with random weights.")
-                print(f"Expected game: {self.game_name}, architecture: {self.input_count}->{self.hidden_layers_count}->{self.output_count}")
+                print(f"Model file not found: {file_name}")
 
     def save_network(self, episode_number: int) -> None:
         base_name = os.path.splitext(self.network_file)[0] 
         file_name = f"{base_name}_{self.game_name}_i{self.input_count}_h{self.hidden_layers_count}_o{self.output_count}_{episode_number}"
         
-
         os.makedirs(os.path.dirname(file_name), exist_ok=True)
-        print("Saving network to file: ", file_name)
-        print(f"Game: {self.game_name}, Architecture: {self.input_count}->{self.hidden_layers_count}->{self.output_count}")
         torch.save(self.state_dict(), file_name)
 
     
