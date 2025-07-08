@@ -35,7 +35,6 @@ class Agent:
         self.memory.rewards.append(reward)
 
     def make_episode_end_updates(self, episode_number: int) -> None:
-        print(self.memory)
         self.__accumalate_gradient()
         self.__train_policy_network(episode_number)
         self.__save_policy_network(episode_number)
