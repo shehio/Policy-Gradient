@@ -2,16 +2,14 @@ import sys
 import os
 sys.path.append(os.path.join(os.path.dirname(__file__), '../..', 'src'))
 
-from agent import Agent
-from hyperparameters import HyperParameters
-from mlp_torch import MLP
-from game import Game
+from pg.agent import Agent  # type: ignore
+from pg.hyperparameters import HyperParameters  # type: ignore
+from pg.mlp_torch import MLP  # type: ignore
+from pg.game import Game  # type: ignore
 
 # Game params
 GAME_NAME = "ALE/Pong-v5"
-# Disable rendering on headless servers (like EC2)
-render = False
-sleep_for_rendering_in_seconds = 0.001
+render = True
 
 # Hyperparameters
 pixels_count = 80 * 80  # input dimensionality: 80x80 grid
@@ -27,7 +25,7 @@ hyperparams = HyperParameters(
 
 # Load network from file
 load_network = True
-load_episode_number = 10_000
+load_episode_number = 70_000
 network_file = os.path.join(os.path.dirname(__file__), '../..', 'models', 'torch_mlp.p')
 
 if __name__ == '__main__':
