@@ -1,7 +1,7 @@
 from typing import Any
 import numpy as np
-from hyperparameters import HyperParameters
-from memory import Memory
+from .hyperparameters import HyperParameters
+from .memory import Memory
 
 DOWN = 2
 UP = 3
