@@ -3,14 +3,14 @@ import os
 import numpy as np
 sys.path.append(os.path.join(os.path.dirname(__file__), '../..', 'src'))
 
-from agent import Agent
-from hyperparameters import HyperParameters
-from mlp_torch import MLP
-from game import Game
+from pg.agent import Agent  # type: ignore
+from pg.hyperparameters import HyperParameters  # type: ignore
+from pg.mlp_torch import MLP  # type: ignore
+from pg.game import Game  # type: ignore
 
 # Game params
 GAME_NAME = "ALE/Breakout-v5"
-render = True
+render = False
 
 # Hyperparameters
 pixels_count = 80 * 80  # input dimensionality: 80x80 grid
