@@ -1,9 +1,10 @@
-# RL: Policy Gradient Methods
+# RL: Policy Gradient Methods & Deep Q-Learning
 
 ## Project Overview
-This project implements a minimal, educational version of policy gradient reinforcement learning (REINFORCE) to train an agent to play Atari games including Pong and Breakout. The code is modular, easy to follow, and inspired by classic deep RL tutorials. The project has been significantly upgraded with modern Python, PyTorch, and cloud infrastructure.
+This project implements both Policy Gradient (REINFORCE) and Deep Q-Network (DQN) reinforcement learning algorithms to train agents to play Atari games including Pong and Breakout. The code is modular, easy to follow, and inspired by classic deep RL tutorials. The project has been significantly uses modern Python, PyTorch, and cloud infrastructure.
 
 ## Features
+- **Dual Algorithm Support**: Both Policy Gradient (REINFORCE) and Deep Q-Network (DQN) implementations
 - **Multi-Game Support**: Train on Pong, Breakout, and other Atari games with proper game-specific handling
 - **Modern Gymnasium**: Upgraded from deprecated `gym` to modern `gymnasium` library
 - **Python 3.13 Support**: Updated to work with the latest Python versions
@@ -17,25 +18,55 @@ This project implements a minimal, educational version of policy gradient reinfo
 - **Frame Preprocessing**: Optimized image processing for neural network input
 - **Type Annotations**: Full type safety for robust development
 
+## Policy Gradients vs DQN: A Comparison
+
+| Aspect | Policy Gradients (REINFORCE) | Deep Q-Network (DQN) |
+|--------|------------------------------|----------------------|
+| **Approach** | Policy-based (learns π(s) → a) | Value-based (learns Q(s,a)) |
+| **Learning Type** | On-policy | Off-policy |
+| **Action Spaces** | Continuous & Discrete | Discrete only |
+| **Policy Type** | Stochastic | Deterministic |
+| **Sample Efficiency** | Lower (requires more samples) | Higher (experience replay) |
+| **Training Stability** | Less stable (high variance) | More stable (target networks) |
+| **Implementation** | Simpler | More complex |
+| **Best For** | Continuous actions, stochastic policies | Discrete actions, large state spaces |
+| **Key Features** | Direct policy optimization | Experience replay, target networks |
+
 ## Directory Structure
 ```
 Policy-Gradient/
 ├── src/                   # Source code modules
-│   ├── agent.py           # Agent logic and policy gradient updates
-│   ├── game.py            # Game environment with gymnasium support
-│   ├── hyperparameters.py # Hyperparameter container
-│   ├── memory.py          # Memory buffer for episode data
-│   ├── mlp.py             # Legacy MLP (NumPy)
-│   └── mlp_torch.py       # Modern MLP (PyTorch) with GPU support
+│   ├── pg/                # Policy Gradient implementation
+│   │   ├── agent.py       # PG agent logic
+│   │   ├── game.py        # Game environment
+│   │   ├── hyperparameters.py # PG hyperparameters
+│   │   ├── memory.py      # Episode memory buffer
+│   │   ├── mlp.py         # Legacy MLP (NumPy)
+│   │   └── mlp_torch.py   # Modern MLP (PyTorch)
+│   └── dqn/               # DQN implementation
+│       ├── agent.py       # DQN agent logic
+│       ├── model.py       # Dueling CNN model
+│       └── config/        # DQN configuration classes
+│           ├── environment_config.py
+│           ├── model_config.py
+│           ├── training_config.py
+│           ├── learning_config.py
+│           ├── exploration_config.py
+│           ├── image_config.py
+│           └── hyperparameters.py
 ├── scripts/               # Executable scripts
-│   ├── pgpong.py          # Pong training script
-│   ├── pgbreakout.py      # Breakout training script
+│   ├── policy-gradient/   # PG training scripts
+│   │   ├── pgpong.py      # Pong PG training
+│   │   └── pgbreakout.py  # Breakout PG training
+│   ├── dqn/               # DQN training scripts
+│   │   ├── pong-dqn.py    # DQN Pong training
+│   │   └── models/        # DQN model files
+│   │       └── pong-cnn-* # DQN Pong models
 │   ├── game_model_manager.py # Model management utilities
 │   └── run_in_cloud.sh    # Cloud deployment script
 ├── models/                # Trained model files
-│   ├── torch_mlp_ALE_Pong_v5_* # Pong model checkpoints|
-│   ├── torch_mlp_ALE_Breakout_v5_* # Breakout model checkpoints|
-│   ├── torch_mlp_i*       # Pong model checkpoints with episode numbers
+│   ├── torch_mlp_ALE_Pong_v5_* # PG Pong models
+│   ├── torch_mlp_ALE_Breakout_v5_* # PG Breakout models
 ├── terraform/             # Infrastructure as Code
 │   ├── main.tf            # Main Terraform configuration
 │   ├── variables.tf       # Variable definitions
@@ -44,7 +75,7 @@ Policy-Gradient/
 │   └── check_status.sh    # Status monitoring script
 ├── assets/                # Images and diagrams
 │   └── reinforce.png      # REINFORCE algorithm diagram
-├── requirements.txt       # Python dependencies (gymnasium, torch, etc.)
+├── requirements.txt       # Python dependencies
 └── README.md              # This file
 ```
 
@@ -62,15 +93,21 @@ Policy-Gradient/
 
 ## Usage
 
-### Local Training
+### Policy Gradient Training
 **Train on Pong:**
 ```sh
-python scripts/pgpong.py
+python scripts/policy-gradient/pgpong.py
 ```
 
 **Train on Breakout:**
 ```sh
-python scripts/pgbreakout.py
+python scripts/policy-gradient/pgbreakout.py
+```
+
+### DQN Training
+**Train on Pong:**
+```sh
+python scripts/dqn/pong-dqn.py
 ```
 
 ### Model Management
