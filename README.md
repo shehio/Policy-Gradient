@@ -140,7 +140,13 @@ load_episode_number = 20000  # Load model from episode 20000
    scp -i your-key.pem ubuntu@your-instance:~/Policy-Gradient/models/ ./models/
    ```
 
-## Network Architecture
+## Policy Gradient Implementation
+
+### REINFORCE Algorithm
+
+![REINFORCE Algorithm](assets/reinforce.png)
+
+### Network Architecture
 The PyTorch policy network features:
 - **Input Layer**: 6400 units (80x80 preprocessed frames)
 - **Hidden Layer**: 200 units with ReLU activation
@@ -154,9 +160,24 @@ graph TD
     B --> C["Output Layer (1 unit, Sigmoid)"]
 ```
 
-## REINFORCE Algorithm
 
-![REINFORCE Algorithm](assets/reinforce.png)
+
+## DQN Implementation
+
+### Network Architecture
+The DQN uses a Dueling CNN architecture:
+- **Input Layer**: Preprocessed game frames (80x64 grayscale)
+- **Convolutional Layers**: Feature extraction from game pixels
+- **Dueling Architecture**: Separate value and advantage streams
+- **Output Layer**: Q-values for each action
+- **Experience Replay**: Stores and samples past experiences
+- **Target Network**: Stabilizes training with separate target network
+
+### Key Features
+- **Experience Replay Buffer**: Stores (state, action, reward, next_state, done) tuples
+- **Target Network**: Separate network for computing target Q-values
+- **Epsilon-Greedy Exploration**: Balances exploration vs exploitation
+- **Frame Stacking**: Uses 4 consecutive frames as state representation
 
 ## Resources
 - [Policy Gradients Revisited: Pong from Pixels](https://youtu.be/tqrcjHuNdmQ?si=XElMeYhPr7vCBb1b)
