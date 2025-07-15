@@ -37,7 +37,7 @@ def main():
             save_model_interval=10,
             train_model=True,
             load_model_from_file=True,
-            load_file_episode=850
+            load_file_episode=1560
         ),
         training_config=TrainingConfig(
             batch_size=64,
