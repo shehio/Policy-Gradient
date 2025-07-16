@@ -1,7 +1,7 @@
 # RL: Policy Gradient Methods & Deep Q-Learning
 
 ## Project Overview
-This project implements both Policy Gradient (REINFORCE) and Deep Q-Network (DQN) reinforcement learning algorithms to train agents to play Atari games including Pong and Breakout. The code is modular, easy to follow, and inspired by classic deep RL tutorials. The project has been significantly uses modern Python, PyTorch, and cloud infrastructure.
+This project implements both Policy Gradient (REINFORCE) and Deep Q-Network (DQN) reinforcement learning algorithms to train agents to play Atari games including Pong and Breakout. The code is modular, easy to follow, and inspired by classic deep RL tutorials. The project uses modern Python, PyTorch, and cloud infrastructure.
 
 ## Features
 - **Dual Algorithm Support**: Both Policy Gradient (REINFORCE) and Deep Q-Network (DQN) implementations
@@ -79,15 +79,12 @@ Policy-Gradient/
 └── README.md              # This file
 ```
 
-## Setup
+## Quick Start
 1. **Install Python 3.11+** (recommended: 3.13)
-2. **Create and activate a virtual environment:**
+2. **Setup environment:**
    ```sh
    python3.13 -m venv venv
    source venv/bin/activate
-   ```
-3. **Install dependencies:**
-   ```sh
    pip install -r requirements.txt
    ```
 
@@ -111,10 +108,9 @@ python scripts/dqn/pong-dqn.py
 ```
 
 ### Model Management
-The system automatically saves models every 1000 episodes with episode numbers:
+Models are automatically saved with episode numbers:
 - `torch_mlp_i1000` - Model after 1000 episodes
 - `torch_mlp_i2000` - Model after 2000 episodes
-- etc.
 
 **Load a specific model:**
 ```python
@@ -180,19 +176,17 @@ The DQN uses a Dueling CNN architecture:
 - **Frame Stacking**: Uses 4 consecutive frames as state representation
 
 ## Resources
-- [Policy Gradients Revisited: Pong from Pixels](https://youtu.be/tqrcjHuNdmQ?si=XElMeYhPr7vCBb1b)
-- [REINFORCE: Reinforcement Learning Most Fundamental Algorithm](https://youtu.be/5eSh5F8gjWU?si=b1lRf6Ks_q_0dekA)
-- [Karpathy's blog post: "Pong from Pixels"](http://karpathy.github.io/2016/05/31/rl/)
-- [Gymnasium Documentation](https://gymnasium.farama.org/)
-- [PyTorch Documentation](https://pytorch.org/docs/)
-- [Terraform AWS Provider](https://registry.terraform.io/providers/hashicorp/aws/latest/docs)
+- [Policy Gradients: Pong from Pixels](https://youtu.be/tqrcjHuNdmQ?si=XElMeYhPr7vCBb1b)
+- [REINFORCE Algorithm](https://youtu.be/5eSh5F8gjWU?si=b1lRf6Ks_q_0dekA)
+- [Karpathy's "Pong from Pixels"](http://karpathy.github.io/2016/05/31/rl/)
+- [Gymnasium](https://gymnasium.farama.org/) | [PyTorch](https://pytorch.org/docs/)
 
 ## Contributing
 This project is designed for educational purposes. Feel free to:
-- Add support for more Atari games
+- Add more Atari games
 - Implement additional RL algorithms
-- Improve the cloud infrastructure
-- Add more sophisticated monitoring tools
+- Improve cloud infrastructure
+- Add monitoring tools
 
 ## License
 This project is open source and available under the MIT License.
