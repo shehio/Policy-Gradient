@@ -76,7 +76,6 @@ if __name__ == '__main__':
                 
                 agent.make_episode_end_updates(game.episode_number)
                 game.end_episode()
-                game.reset()
 
                 previous_lives = 5
                 click_fire(game)

@@ -14,6 +14,7 @@ class Game:
         self.starting_episode_number = episode_number
         self.episode_number: int = episode_number
         self.recent_rewards = deque(maxlen=100)
+        self.running_reward: float = 0.0
         self.reset()
 
     def get_environment(self) -> gym.Env:
@@ -45,7 +46,6 @@ class Game:
     def reset(self) -> None:
         self.observation, _ = self.env.reset()
         self.previous_frame: Optional[np.ndarray] = None
-        self.running_reward: float = 0.0
         self.reward_sum: float = 0.0
         self.points_scored: int = 0
         self.points_conceeded: int = 0
@@ -87,6 +87,6 @@ class Game:
     def __update_running_reward(self) -> None:
         # Add current episode reward to the rolling window
         self.recent_rewards.append(self.reward_sum)
-        
+
         # Calculate average of last 100 episodes (or fewer if we haven't reached 100 yet)
         self.running_reward = float(np.mean(self.recent_rewards))
