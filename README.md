@@ -1,11 +1,11 @@
 # RL: Policy Gradient Methods & Deep Q-Learning
 
 ## Project Overview
-This project implements both Policy Gradient (REINFORCE) and Deep Q-Network (DQN) reinforcement learning algorithms to train agents to play Atari games including Pong and Breakout. The code is modular, easy to follow, and inspired by classic deep RL tutorials. The project uses modern Python, PyTorch, and cloud infrastructure.
+This project implements both Policy Gradient (REINFORCE) and Deep Q-Network (DQN) reinforcement learning algorithms to train agents to play Atari games including Pong, Breakout, and Ms. Pacman. The code is modular, easy to follow, and inspired by classic deep RL tutorials. The project uses modern Python, PyTorch, and cloud infrastructure.
 
 ## Features
 - **Dual Algorithm Support**: Both Policy Gradient (REINFORCE) and Deep Q-Network (DQN) implementations
-- **Multi-Game Support**: Train on Pong, Breakout, and other Atari games with proper game-specific handling
+- **Multi-Game Support**: Train on Pong, Breakout, Ms. Pacman, and other Atari games with proper game-specific handling
 - **Modern Gymnasium**: Upgraded from deprecated `gym` to modern `gymnasium` library
 - **Python 3.13 Support**: Updated to work with the latest Python versions
 - **PyTorch Optimization**: Enhanced MLP implementation with batch processing and GPU support
@@ -156,7 +156,38 @@ graph TD
     B --> C["Output Layer (1 unit, Sigmoid)"]
 ```
 
+### Ms. Pacman Action Space
 
+In the Gym environment for Pac-Man (specifically Ms. Pacman on Atari 2600), there are 9 discrete actions available by default instead of just 4 because the action space is designed to allow for both the four primary cardinal movements—up, down, left, and right—and the four diagonals (up-right, up-left, down-right, down-left), as well as a NOOP (no operation) action.
+
+Here's a table summarizing the 9 actions:
+
+| Value | Meaning |
+|-------|---------|
+| 0 | NOOP |
+| 1 | UP |
+| 2 | RIGHT |
+| 3 | LEFT |
+| 4 | DOWN |
+| 5 | UPRIGHT |
+| 6 | UPLEFT |
+| 7 | DOWNRIGHT |
+| 8 | DOWNLEFT |
+
+**Reason for this design:**
+The Atari 2600 joystick allows for both cardinal and diagonal inputs, so the action space in Gym replicates this full set of available moves. This provides the agent with more granular control over movement, which can be crucial for navigating the maze and avoiding ghosts effectively.
+
+### CNN Architecture for Ms. Pacman
+For Ms. Pacman, we use a Convolutional Neural Network (CNN) to better process the spatial information:
+
+- **Input**: 7 channels (6 color masks + grayscale) at 80×80 resolution
+- **Conv1**: 32 filters, 8×8 kernel, stride 4 → Learns large spatial patterns
+- **Conv2**: 64 filters, 4×4 kernel, stride 2 → Learns medium patterns
+- **Conv3**: 64 filters, 3×3 kernel, stride 1 → Learns fine details
+- **Fully Connected**: 200 hidden units → Final action probabilities
+- **Output**: 9 action probabilities (one for each possible move)
+
+This architecture allows the agent to understand spatial relationships between Pacman, ghosts, pellets, and the maze structure.
 
 ## DQN Implementation
 
