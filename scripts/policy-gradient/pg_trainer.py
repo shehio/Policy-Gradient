@@ -18,6 +18,33 @@ from pg.game import Game
 sys.path.append(os.path.dirname(__file__))
 from game_configs import get_game_config, get_input_size, get_output_size, get_network_file, get_pacman_final_stats
 
+import re
+
+def find_latest_model_episode(game_name: str, model_dir: str = "models") -> int:
+    """Find the latest episode number for the given game by scanning the model directory."""
+    import os
+    pattern_map = {
+        'pong': r'torch_mlp_ALE_Pong_v5.*_(\d+)$',
+        'breakout': r'torch_mlp_ALE_Breakout_v5.*_(\d+)$',
+        'pacman': r'torch_mlp_pacman_ALE_MsPacman_v5.*_(\d+)$',
+    }
+    pattern = pattern_map.get(game_name)
+    if not pattern:
+        return 0
+    max_episode = 0
+    if not os.path.exists(model_dir):
+        return 0
+    for fname in os.listdir(model_dir):
+        match = re.search(pattern, fname)
+        if match:
+            try:
+                ep = int(match.group(1))
+                if ep > max_episode:
+                    max_episode = ep
+            except Exception:
+                continue
+    return max_episode
+
 class PolicyGradientTrainer:
     """Unified trainer for policy gradient algorithms."""
     
@@ -150,17 +177,13 @@ def main():
     
     args = parser.parse_args()
     
-    # Set default episode numbers for each game
-    default_episodes = {
-        'pong': 70000,
-        'breakout': 50000,
-        'pacman': 0  # Start fresh for Pacman since it's newer
-    }
+    # Dynamically find the latest episode for the game
+    latest_episode = find_latest_model_episode(args.game)
     
     config = {
         'render': args.render,
         'load_network': not args.no_load_network,  # Default to loading
-        'load_episode_number': args.load_episode if args.load_episode is not None else default_episodes[args.game],
+        'load_episode_number': args.load_episode if args.load_episode is not None else latest_episode,
         'learning_rate': args.learning_rate,
         'batch_size': args.batch_size,
         'save_interval': args.save_interval,

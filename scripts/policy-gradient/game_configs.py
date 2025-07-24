@@ -65,7 +65,7 @@ GAME_CONFIGS = {
         preprocess_func=lambda game, prev_frame: game.get_frame_difference(),
         input_size=80*80,
         output_size=1,
-        network_file="torch_mlp.p"
+        network_file="torch_mlp"
     ),
     
     'breakout': GameConfig(
@@ -78,7 +78,7 @@ GAME_CONFIGS = {
         post_episode_func=handle_breakout_episode_end,
         input_size=80*80,
         output_size=1,
-        network_file="torch_mlp.p"
+        network_file="torch_mlp"
     ),
     
     'pacman': GameConfig(
@@ -90,7 +90,7 @@ GAME_CONFIGS = {
         post_episode_func=handle_pacman_episode_end,
         input_size=80*80*7,
         output_size=None,  # Will be set dynamically from env.action_space.n
-        network_file="torch_mlp_pacman.p"
+        network_file="torch_mlp_pacman"
     )
 }
 
@@ -113,6 +113,48 @@ def get_output_size(game_name: str, game_env=None) -> int:
     return config.output_size or 1
 
 def get_network_file(game_name: str) -> str:
-    """Get default network file for a game."""
-    config = get_game_config(game_name)
-    return config.network_file 
+    """Get default network file for a game by finding the most recent model."""
+    import os
+    import re
+    
+    model_dir = "models"
+    if not os.path.exists(model_dir):
+        # Return base path if no models directory exists
+        config = get_game_config(game_name)
+        return config.network_file
+    
+    # Pattern mapping for each game
+    pattern_map = {
+        'pong': r'torch_mlp_ALE_Pong_v5.*_(\d+)$',
+        'breakout': r'torch_mlp_ALE_Breakout_v5.*_(\d+)$',
+        'pacman': r'torch_mlp_pacman_ALE_MsPacman_v5.*_(\d+)$',
+    }
+    
+    pattern = pattern_map.get(game_name)
+    if not pattern:
+        config = get_game_config(game_name)
+        return config.network_file
+    
+    max_episode = 0
+    latest_file = None
+    
+    for fname in os.listdir(model_dir):
+        match = re.search(pattern, fname)
+        if match:
+            try:
+                ep = int(match.group(1))
+                if ep > max_episode:
+                    max_episode = ep
+                    latest_file = fname
+            except Exception:
+                continue
+    
+    if latest_file:
+        # For MLP class, we need to return just the base name without the full path
+        # The MLP class will construct the full filename itself
+        config = get_game_config(game_name)
+        return config.network_file
+    else:
+        # Return base path if no existing models found
+        config = get_game_config(game_name)
+        return config.network_file 
