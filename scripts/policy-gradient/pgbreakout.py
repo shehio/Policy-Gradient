@@ -24,7 +24,6 @@ hyperparams = HyperParameters(
     save_interval=5_000
 )
 
-# Load network from file
 load_network = True
 load_episode_number = 50_000
 network_file = os.path.join(os.path.dirname(__file__), '../..', 'models', 'torch_mlp.p')
