@@ -9,6 +9,7 @@ This project implements both Policy Gradient (REINFORCE) and Deep Q-Network (DQN
 - **Modern Gymnasium**: Upgraded from deprecated `gym` to modern `gymnasium` library
 - **Python 3.13 Support**: Updated to work with the latest Python versions
 - **PyTorch Optimization**: Enhanced MLP implementation with batch processing and GPU support
+- **CNN Support**: Convolutional Neural Networks for spatial feature learning in games like Ms. Pacman
 - **AWS GPU Hosting**: Complete cloud infrastructure with Terraform for GPU training
 - **Advanced Model Management**: Sophisticated save/load system with episode tracking and versioning
 - **Performance Tracking**: Real-time training metrics and episode statistics
@@ -90,27 +91,133 @@ Policy-Gradient/
 
 ## Usage
 
-### Policy Gradient Training
-**Train on Pong:**
+### Policy Gradient Training (3 Scripts)
+
+**1. Train on Pong (Binary Actions):**
 ```sh
 python scripts/policy-gradient/pgpong.py
 ```
+- Uses MLP with binary action space (UP/DOWN)
+- Optimized for Pong's simple mechanics
+- Fast training with 2-action policy
 
-**Train on Breakout:**
+**2. Train on Breakout (Binary Actions):**
 ```sh
 python scripts/policy-gradient/pgbreakout.py
 ```
+- Uses MLP with binary action space (LEFT/RIGHT)
+- Handles Breakout's paddle movement and ball physics
+- Includes FIRE action for ball release
 
-### DQN Training
-**Train on Pong:**
+**3. Train on Ms. Pacman (Multi-Action CNN):**
+```sh
+python scripts/policy-gradient/pgpacman.py
+```
+- Uses CNN with 9-action space (all directions + NOOP)
+- Color-aware preprocessing for ghost detection
+- Advanced exploration with temperature scheduling
+- Best for complex spatial reasoning
+
+### Unified Policy Gradient Trainer
+
+**Single script for all games:**
+```sh
+# Train Pong (loads latest model by default)
+python scripts/policy-gradient/pg_trainer.py pong --render
+
+# Train Breakout with custom parameters
+python scripts/policy-gradient/pg_trainer.py breakout --learning-rate 2e-4 --batch-size 5
+
+# Train Pacman from scratch (no pre-trained model)
+python scripts/policy-gradient/pg_trainer.py pacman --no-load-network
+
+# Train with specific episode number
+python scripts/policy-gradient/pg_trainer.py pong --load-episode 50000
+```
+
+**Unified Trainer Options:**
+- `game`: Choose from `pong`, `breakout`, `pacman`
+- `--render`: Enable visual training
+- `--no-load-network`: Don't load pre-trained network (defaults to loading)
+- `--load-episode N`: Load from specific episode (defaults to latest for each game)
+- `--learning-rate F`: Set learning rate
+- `--batch-size N`: Set batch size
+- `--save-interval N`: Set save interval
+- `--network-file PATH`: Custom network file
+
+**Default Behavior:**
+- **Pong**: Loads from episode 70,000
+- **Breakout**: Loads from episode 50,000  
+- **Pacman**: Starts fresh (episode 0)
+- **All games**: Automatically load latest available model unless `--no-load-network` is specified
+
+**Modular Architecture:**
+- `pg_trainer.py`: Main training logic (clean and focused)
+- `game_configs.py`: Game-specific configurations and logic
+- Easy to add new games by updating `game_configs.py`
+
+**Benefits:**
+- Single command for all games
+- Consistent interface
+- Easy parameter tuning
+- Automatic game-specific handling
+- Clean separation of concerns
+
+### DQN Training (2 Scripts)
+
+**4. Train on Pong (DQN):**
 ```sh
 python scripts/dqn/pong-dqn.py
 ```
+- Uses Dueling CNN architecture
+- Experience replay and target networks
+- Optimized hyperparameters for Pong
+
+**5. Train on Ms. Pacman (DQN):**
+```sh
+python scripts/dqn/pacman-dqn.py
+```
+- Uses Dueling CNN with frame stacking
+- Advanced exploration strategies
+- Optimized for complex maze navigation
+
+### Automated Training with Recording
+
+**Run all scripts with recording:**
+```sh
+python scripts/run_all_with_recording.py
+```
+This script will:
+- Train all 5 agents sequentially
+- Record gameplay videos
+- Save training metrics
+- Generate performance reports
+
+**Run individual script with recording:**
+```sh
+# Record Pong training
+python scripts/run_with_recording.py scripts/policy-gradient/pgpong.py --max-episodes 500
+
+# Record Pacman training with custom output
+python scripts/run_with_recording.py scripts/policy-gradient/pgpacman.py --output-dir my_recordings
+```
+
+**Recording Script Options:**
+- `--no-recording`: Disable video recording
+- `--max-episodes N`: Limit episodes per script
+- `--output-dir DIR`: Custom output directory
+
+### Individual Script Options
+
+Each script supports these common options:
+- **Load pre-trained model**: Set `load_network = True` and `load_episode_number`
+- **Enable rendering**: Set `render = True` for visual training
+- **Custom hyperparameters**: Modify learning rates, batch sizes, etc.
 
 ### Model Management
 Models are automatically saved with episode numbers:
-- `torch_mlp_i1000` - Model after 1000 episodes
-- `torch_mlp_i2000` - Model after 2000 episodes
+- Policy Gradient: `torch_mlp_[game]_[episode]`
+- DQN: `[game]-cnn-[episode].pkl`
 
 **Load a specific model:**
 ```python
