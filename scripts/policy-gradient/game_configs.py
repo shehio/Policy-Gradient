@@ -138,7 +138,7 @@ def get_network_file(game_name: str) -> str:
     pattern_map = {
         'pong': r'torch_mlp_ALE_Pong_v5.*_(\d+)$',
         'breakout': r'torch_mlp_ALE_Breakout_v5.*_(\d+)$',
-        'pacman': r'torch_mlp_pacman_ALE_MsPacman_v5.*_(\d+)$',
+        'pacman': r'torch_mlp_pacman_ALE_MsPacman_v5_cnn.*_(\d+)$',  # Prioritize CNN models
     }
     
     pattern = pattern_map.get(game_name)

@@ -26,7 +26,7 @@ def find_latest_model_episode(game_name: str, model_dir: str = "models") -> int:
     pattern_map = {
         'pong': r'torch_mlp_ALE_Pong_v5.*_(\d+)$',
         'breakout': r'torch_mlp_ALE_Breakout_v5.*_(\d+)$',
-        'pacman': r'torch_mlp_pacman_ALE_MsPacman_v5.*_(\d+)$',
+        'pacman': r'torch_mlp_pacman_ALE_MsPacman_v5_cnn.*_(\d+)$',  # Prioritize CNN models
     }
     pattern = pattern_map.get(game_name)
     if not pattern:
@@ -66,13 +66,17 @@ class PolicyGradientTrainer:
         if self.game_name == 'pacman':
             print(f"Creating CNN policy network with {output_size} actions...")
             print(f"Input: 7 channels (80x80x7 color features)")
+            # For CNN, pass input_channels (7) instead of total input_size
+            return self.game_config.network_class(
+                7, hidden_layers_count, output_size, 
+                network_file, self.game_config.game_id
+            )
         else:
             print(f"Creating MLP policy network...")
-            
-        return self.game_config.network_class(
-            input_size, hidden_layers_count, output_size, 
-            network_file, self.game_config.game_id
-        )
+            return self.game_config.network_class(
+                input_size, hidden_layers_count, output_size, 
+                network_file, self.game_config.game_id
+            )
     
     def setup_agent(self, policy_network: Any, hyperparams: HyperParameters) -> Any:
         """Setup the appropriate agent."""
