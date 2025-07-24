@@ -127,6 +127,11 @@ class PolicyGradientTrainer:
             )
             
             agent = self.setup_agent(policy_network, hyperparams)
+            
+            # Call game-specific initialization if needed
+            if self.game_config.init_func:
+                self.game_config.init_func(game)
+            
             print("Starting training loop...")
             
         except Exception as e:

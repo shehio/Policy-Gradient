@@ -15,6 +15,7 @@ class Game:
         self.episode_number: int = episode_number
         self.recent_rewards = deque(maxlen=100)
         self.running_reward: float = 0.0
+        self.previous_lives = 5  # Initialize for Breakout fire logic
         self.reset()
 
     def get_environment(self) -> gym.Env:

@@ -17,7 +17,7 @@ class GameConfig:
     
     def __init__(self, name: str, game_id: str, agent_class, network_class, 
                  preprocess_func=None, post_step_func=None, post_episode_func=None,
-                 input_size=None, output_size=None, network_file=None):
+                 init_func=None, input_size=None, output_size=None, network_file=None):
         self.name = name
         self.game_id = game_id
         self.agent_class = agent_class
@@ -25,6 +25,7 @@ class GameConfig:
         self.preprocess_func = preprocess_func
         self.post_step_func = post_step_func
         self.post_episode_func = post_episode_func
+        self.init_func = init_func
         self.input_size = input_size
         self.output_size = output_size
         self.network_file = network_file
@@ -33,13 +34,22 @@ def handle_breakout_fire(game: Game, info: Dict[str, Any]) -> None:
     """Handle Breakout's fire button logic."""
     current_lives = info.get('lives', None)
     if hasattr(game, 'previous_lives') and current_lives is not None and current_lives < game.previous_lives:
+        print(f"🔥 Life lost! Clicking fire. Lives: {game.previous_lives} -> {current_lives}")
         game.step(1)  # Click fire
     game.previous_lives = current_lives
 
-def handle_breakout_episode_end(game: Game) -> None:
+def handle_breakout_episode_end(game: Game, agent: Any) -> None:
     """Handle Breakout episode end logic."""
+    print("🔥 Episode ended, clicking fire for new episode...")
     game.previous_lives = 5
     game.step(1)  # Click fire to start new episode
+    print("🔥 Fire clicked for new episode!")
+
+def handle_breakout_init(game: Game) -> None:
+    """Handle Breakout initialization - click fire to start the ball."""
+    print("🔥 Clicking fire to start Breakout...")
+    game.step(1)  # Click fire to start the game
+    print("🔥 Fire clicked!")
 
 def handle_pacman_episode_end(game: Game, agent: Any) -> None:
     """Handle Pacman episode end logic."""
@@ -76,6 +86,7 @@ GAME_CONFIGS = {
         preprocess_func=lambda game, prev_frame: game.get_frame_difference(),
         post_step_func=handle_breakout_fire,
         post_episode_func=handle_breakout_episode_end,
+        init_func=handle_breakout_init,
         input_size=80*80,
         output_size=1,
         network_file="torch_mlp"
