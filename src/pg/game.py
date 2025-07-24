@@ -35,9 +35,7 @@ class Game:
                 ale = getattr(atari_env, 'ale')
                 ale.setInt('frame_skip', 1)  # Ensure ALE frame skip is also 1
                 # Disable action repeat to ensure every action is processed
-                ale.setInt('repeat_action_probability', 0.0)
-                # Set deterministic mode for consistent behavior
-                ale.setBool('deterministic', True)
+                ale.setFloat('repeat_action_probability', 0.0)
         except Exception as e:
             print(f"Warning: Could not configure Atari environment settings: {e}")
         
