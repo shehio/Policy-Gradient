@@ -178,3 +178,17 @@ Thumbs.db
 
 # secrets
 *.pem
+
+# Chess engines
+Stockfish/
+lc0/
+
+# CleanRL
+cleanrl/
+
+# Arcade specific
+arcade/logs/
+arcade/models/
+arcade/baselines/logs/
+arcade/baselines/models/
+arcade/baselines/__pycache__/

@@ -1,7 +1,19 @@
-# RL: Policy Gradient Methods & Deep Q-Learning
+# Game AI: Policy Gradient Methods, Deep Q-Learning & Classical Approaches
 
 ## Project Overview
-This project implements both Policy Gradient (REINFORCE) and Deep Q-Network (DQN) reinforcement learning algorithms to train agents to play Atari games including Pong, Breakout, and Ms. Pacman. The code is modular, easy to follow, and inspired by classic deep RL tutorials. The project uses modern Python, PyTorch, and cloud infrastructure.
+This repository studies AI in games through multiple approaches: classical search methods (graph-based and tree-based), classical Reinforcement Learning with tabular Q-functions, and modern deep learning approaches using policy networks and temporal difference methods. The project implements both Policy Gradient (REINFORCE) and Deep Q-Network (DQN) reinforcement learning algorithms to train agents to play Atari games including Pong, Breakout, and Ms. Pacman. The code is modular, easy to follow, and inspired by classic deep RL tutorials.
+
+## Repo's Objectives
+1. Learn about the theory behind AI in games and the taxonomy of algorithms
+2. Run pre-built models
+3. Learn about training such models using different algorithms
+4. Implement and compare different RL approaches
+
+## Why Game AI?
+- **AI benchmarking**: Compare different algorithms and approaches
+- **Challenge Human Players**: Create agents that can compete with humans
+- **Simulation-Based Testing**: Test if games are playable and balanced
+- **NPC Creation**: Avoid highly efficient, yet predictable and boring play styles. Academics have argued for Turing test for NPCs
 
 ## Features
 - **Dual Algorithm Support**: Both Policy Gradient (REINFORCE) and Deep Q-Network (DQN) implementations
@@ -18,6 +30,35 @@ This project implements both Policy Gradient (REINFORCE) and Deep Q-Network (DQN
 - **Modular Architecture**: Clean separation of agent, memory, hyperparameters, and game environment
 - **Frame Preprocessing**: Optimized image processing for neural network input
 - **Type Annotations**: Full type safety for robust development
+- **Chess Engine Integration**: Stockfish and Leela Chess Zero for classical game analysis
+
+## Games Classification
+Games can be classified into many different dimensions based on:
+- **Observability**: Full vs partial information
+- **Stochasticity**: Deterministic vs random elements
+- **Time Granularity**: Turn-based vs real-time
+
+<img width="458" alt="Games I" src="https://github.com/user-attachments/assets/6d388b66-1e0b-4657-9d17-e4603e21968a">
+
+## Gameplay Algorithms
+There are three main approaches to gameplay: Planning-based approaches, Reinforcement Learning (RL), and Supervised Learning. Most agents employ one or a composite of these approaches.
+
+### Planning Approaches
+- **Tree Search**: Both classical (minimax, alpha-beta) and stochastic (Monte Carlo Tree Search)
+- **Evolutionary Planning**: Plans as sequences with mutation and crossover
+- **Symbolic Representation**: Rule-based systems
+
+### Reinforcement Learning
+RL algorithms can be categorized based on:
+- **Model-based vs Model-free**: Whether they learn a model of the environment
+- **Value-based vs Policy-based**: Whether they learn Q-values or direct policies
+- **On-policy vs Off-policy**: Whether they use the same policy for acting and learning
+
+The most successful RL algorithms in gameplay are generally model-free policy-based, although they're sample inefficient and unstable.
+
+### Supervised Learning
+- **Behavioral Cloning**: Learning actions from experienced players
+- **Function Approximators**: Neural networks that behave like skilled players
 
 ## Policy Gradients vs DQN: A Comparison
 
@@ -32,6 +73,50 @@ This project implements both Policy Gradient (REINFORCE) and Deep Q-Network (DQN
 | **Implementation** | Simpler | More complex |
 | **Best For** | Continuous actions, stochastic policies | Discrete actions, large state spaces |
 | **Key Features** | Direct policy optimization | Experience replay, target networks |
+
+## Algorithm Selection Factors
+The choice of an algorithm or category of algorithms usually depends on:
+- **Game's Nature**: Observability, stochasticity, time granularity
+- **Action Space**: Branching factor and game state representation
+- **Time Constraints**: How much time an agent has before making a decision
+- **Source Code Availability**: Whether we have access to the game's internals
+
+### Branching Factor
+```mermaid
+xychart-beta
+    title "Chess"
+    x-axis "turn" [1, 10, 20, 30, 40, 50, 60, 70]
+    y-axis "Branching Factor" 1 --> 50
+    line [20, 20, 35,  35, 35, 35, 15, 15]
+```
+
+| Game       | Average Branching Factor |
+|------------|-----------------------------
+| Chess      | 33                       |
+| Go         | 250                      |
+| Pac-Man    | 4                        |
+| Checkers   | 8                        |
+
+Searching a game tree of depth `d` and branching factor `b` is $O(b^d)$.
+
+### Action Space Considerations
+The bigger the action space, the longer it takes for a policy (approximated using a neural network) to stabilize. To counter the time requirement and sample inefficiency, `macro-actions` and different/sampled `game-state representation` could be used.
+
+### Game State Representation and Source Code
+Sometimes, the source code is present so an API exists (or could exist) to provide a richer state representation while other times, when source code is not present, raw pixels are used for example.
+
+### Additional Considerations
+- **Training Time**: How long it takes to train the agent
+- **Transferability**: Whether the trained policy can transfer from one game to another
+
+## Algorithm Comparison
+
+| Algorithm Family       | Pros | Cons |
+|------------------------|------|------|
+| Tree Search            | Strong for games that require adversarial planning | Sometimes can be very expensive to go deeper depending on branching factor. Also, don't work well for hidden information games |
+| Evolutionary Planning  | Good for complex optimization problems | Can be computationally expensive |
+| RL                     | Strong with games that require perception, motor skills, and continuous movement | Game state representation dictates how cheap or expensive training and evaluation is. Also, subject to the pitfalls of function approximators |
+| Supervised Learning    | Fast to implement, good for imitation learning | Requires expert demonstrations, may not generalize well |
 
 ## Directory Structure
 ```
@@ -48,36 +133,21 @@ Policy-Gradient/
 │       ├── agent.py       # DQN agent logic
 │       ├── model.py       # Dueling CNN model
 │       └── config/        # DQN configuration classes
-│           ├── environment_config.py
-│           ├── model_config.py
-│           ├── training_config.py
-│           ├── learning_config.py
-│           ├── exploration_config.py
-│           ├── image_config.py
-│           └── hyperparameters.py
 ├── scripts/               # Executable scripts
 │   ├── policy-gradient/   # PG training scripts
-│   │   ├── pgpong.py      # Pong PG training
-│   │   └── pgbreakout.py  # Breakout PG training
 │   ├── dqn/               # DQN training scripts
-│   │   ├── pong-dqn.py    # DQN Pong training
-│   │   └── models/        # DQN model files
-│   │       └── pong-cnn-* # DQN Pong models
-│   ├── game_model_manager.py # Model management utilities
-│   └── run_in_cloud.sh    # Cloud deployment script
+│   └── game_model_manager.py # Model management utilities
+├── arcade/                # Atari game implementations
+│   ├── baselines/         # Stable Baselines3 implementations
+│   └── main.py            # Basic ALE interface
+├── chess/                 # Chess engine integration
+│   ├── engine-scripts/    # Build scripts for Stockfish and Leela
+│   └── game-analysis.py   # Chess game analysis tools
+├── graph-search/          # Classical search algorithms
 ├── models/                # Trained model files
-│   ├── torch_mlp_ALE_Pong_v5_* # PG Pong models
-│   ├── torch_mlp_ALE_Breakout_v5_* # PG Breakout models
 ├── terraform/             # Infrastructure as Code
-│   ├── main.tf            # Main Terraform configuration
-│   ├── variables.tf       # Variable definitions
-│   ├── outputs.tf         # Output definitions
-│   ├── setup.sh           # Instance setup script
-│   └── check_status.sh    # Status monitoring script
 ├── assets/                # Images and diagrams
-│   └── reinforce.png      # REINFORCE algorithm diagram
-├── requirements.txt       # Python dependencies
-└── README.md              # This file
+└── requirements.txt       # Python dependencies
 ```
 
 ## Quick Start
@@ -130,42 +200,11 @@ python scripts/policy-gradient/pg_trainer.py breakout --learning-rate 2e-4 --bat
 
 # Train Pacman from scratch (no pre-trained model)
 python scripts/policy-gradient/pg_trainer.py pacman --no-load-network
-
-# Train with specific episode number
-python scripts/policy-gradient/pg_trainer.py pong --load-episode 50000
 ```
 
-**Unified Trainer Options:**
-- `game`: Choose from `pong`, `breakout`, `pacman`
-- `--render`: Enable visual training
-- `--no-load-network`: Don't load pre-trained network (defaults to loading)
-- `--load-episode N`: Load from specific episode (defaults to latest for each game)
-- `--learning-rate F`: Set learning rate
-- `--batch-size N`: Set batch size
-- `--save-interval N`: Set save interval
-- `--network-file PATH`: Custom network file
+### DQN Training
 
-**Default Behavior:**
-- **Pong**: Loads from episode 70,000
-- **Breakout**: Loads from episode 50,000  
-- **Pacman**: Starts fresh (episode 0)
-- **All games**: Automatically load latest available model unless `--no-load-network` is specified
-
-**Modular Architecture:**
-- `pg_trainer.py`: Main training logic (clean and focused)
-- `game_configs.py`: Game-specific configurations and logic
-- Easy to add new games by updating `game_configs.py`
-
-**Benefits:**
-- Single command for all games
-- Consistent interface
-- Easy parameter tuning
-- Automatic game-specific handling
-- Clean separation of concerns
-
-### DQN Training (2 Scripts)
-
-**4. Train on Pong (DQN):**
+**Train on Pong (DQN):**
 ```sh
 python scripts/dqn/pong-dqn.py
 ```
@@ -173,7 +212,7 @@ python scripts/dqn/pong-dqn.py
 - Experience replay and target networks
 - Optimized hyperparameters for Pong
 
-**5. Train on Ms. Pacman (DQN):**
+**Train on Ms. Pacman (DQN):**
 ```sh
 python scripts/dqn/pacman-dqn.py
 ```
@@ -181,67 +220,31 @@ python scripts/dqn/pacman-dqn.py
 - Advanced exploration strategies
 - Optimized for complex maze navigation
 
-### Automated Training with Recording
+### Stable Baselines3 (Arcade)
 
-**Run all scripts with recording:**
+**Train Breakout with PPO:**
 ```sh
-python scripts/run_all_with_recording.py
+cd arcade/baselines
+python breakout_train.py
 ```
-This script will:
-- Train all 5 agents sequentially
-- Record gameplay videos
-- Save training metrics
-- Generate performance reports
 
-**Run individual script with recording:**
+**Test trained model:**
 ```sh
-# Record Pong training
-python scripts/run_with_recording.py scripts/policy-gradient/pgpong.py --max-episodes 500
-
-# Record Pacman training with custom output
-python scripts/run_with_recording.py scripts/policy-gradient/pgpacman.py --output-dir my_recordings
+python breakout_test.py
 ```
 
-**Recording Script Options:**
-- `--no-recording`: Disable video recording
-- `--max-episodes N`: Limit episodes per script
-- `--output-dir DIR`: Custom output directory
+### Chess Engine Integration
 
-### Individual Script Options
-
-Each script supports these common options:
-- **Load pre-trained model**: Set `load_network = True` and `load_episode_number`
-- **Enable rendering**: Set `render = True` for visual training
-- **Custom hyperparameters**: Modify learning rates, batch sizes, etc.
-
-### Model Management
-Models are automatically saved with episode numbers:
-- Policy Gradient: `torch_mlp_[game]_[episode]`
-- DQN: `[game]-cnn-[episode].pkl`
-
-**Load a specific model:**
-```python
-load_episode_number = 20000  # Load model from episode 20000
+**Build chess engines:**
+```sh
+cd chess
+./build_chess_engines.sh
 ```
 
-### Cloud GPU Training
-1. **Deploy to AWS:**
-   ```sh
-   cd terraform
-   terraform init
-   terraform apply
-   terraform destroy
-   ```
-
-2. **Monitor training:**
-   ```sh
-   ./check_status.sh
-   ```
-
-3. **Download results:**
-   ```sh
-   scp -i your-key.pem ubuntu@your-instance:~/Policy-Gradient/models/ ./models/
-   ```
+**Test Stockfish integration:**
+```sh
+python test_stockfish.py
+```
 
 ## Policy Gradient Implementation
 
@@ -256,12 +259,6 @@ The PyTorch policy network features:
 - **Output Layer**: 1 unit with Sigmoid activation
 - **GPU Acceleration**: Automatic CUDA support when available
 - **Batch Processing**: Optimized for efficient training
-
-```mermaid
-graph TD
-    A["Input Layer (6400 units, 80x80)"] --> B["Hidden Layer (200 units, ReLU)"]
-    B --> C["Output Layer (1 unit, Sigmoid)"]
-```
 
 ### Ms. Pacman Action Space
 
@@ -281,9 +278,6 @@ Here's a table summarizing the 9 actions:
 | 7 | DOWNRIGHT |
 | 8 | DOWNLEFT |
 
-**Reason for this design:**
-The Atari 2600 joystick allows for both cardinal and diagonal inputs, so the action space in Gym replicates this full set of available moves. This provides the agent with more granular control over movement, which can be crucial for navigating the maze and avoiding ghosts effectively.
-
 ### CNN Architecture for Ms. Pacman
 For Ms. Pacman, we use a Convolutional Neural Network (CNN) to better process the spatial information:
 
@@ -293,8 +287,6 @@ For Ms. Pacman, we use a Convolutional Neural Network (CNN) to better process th
 - **Conv3**: 64 filters, 3×3 kernel, stride 1 → Learns fine details
 - **Fully Connected**: 200 hidden units → Final action probabilities
 - **Output**: 9 action probabilities (one for each possible move)
-
-This architecture allows the agent to understand spatial relationships between Pacman, ghosts, pellets, and the maze structure.
 
 ## DQN Implementation
 
@@ -313,11 +305,72 @@ The DQN uses a Dueling CNN architecture:
 - **Epsilon-Greedy Exploration**: Balances exploration vs exploitation
 - **Frame Stacking**: Uses 4 consecutive frames as state representation
 
+## Classical Games Support
+- **Atari 2600**: Through Arcade Learning Environment (ALE)
+- **Nintendo NES**: Through various emulators
+- **Commodore 64**: Through emulation
+- **ZX Spectrum**: Through emulation
+
+## Regret and Card Games
+Card games feature hidden information. When playing poker and similar games, Counterfactual Regret Minimization algorithms are used. Agents learn by self-play similar to how RL learns by playing checkers and backgammon. Regret is the difference between the action that was taken and the action that could have been taken.
+
+```python
+def get_action(self):
+    strategy = self.get_strategy()
+    return np.random.choice(self.num_actions, p=strategy)
+
+def train(self):
+    for _ in range(self.num_iterations):
+        action = self.get_action()
+        payoff = np.random.rand()  # Simulating the payoff randomly
+        self.update_regret(action, payoff)
+```
+
+## Game Classification
+- **Board Games**: Chess, Go, Checkers
+- **Card Games**: Poker, Bridge
+- **Classic Arcade Games**: Pac-Man, Pong, Breakout
+- **Strategy Games**: Civilization, StarCraft
+- **Racing Games**: Need for Speed, Mario Kart
+- **First Person Games**: Doom, Quake
+- **Interactive Games**: Minecraft, Roblox
+
+## Cloud GPU Training
+1. **Deploy to AWS:**
+   ```sh
+   cd terraform
+   terraform init
+   terraform apply
+   terraform destroy
+   ```
+
+2. **Monitor training:**
+   ```sh
+   ./check_status.sh
+   ```
+
+3. **Download results:**
+   ```sh
+   scp -i your-key.pem ubuntu@your-instance:~/Policy-Gradient/models/ ./models/
+   ```
+
+## Glossary
+- **[NPC](https://en.wikipedia.org/wiki/Non-player_character)**: A non-player character (NPC) is a character in a game that is not controlled by a player
+- **[Game Tree](https://en.wikipedia.org/wiki/Game_tree)**: A tree representing all possible game states
+- **[Minimax](https://en.wikipedia.org/wiki/Minimax)**: Assumes no collusion from multiple players for more than two players
+- **[Alpha Beta Pruning](https://en.wikipedia.org/wiki/Alpha%E2%80%93beta_pruning)**: Optimization technique for minimax algorithm
+- **[Monte Carlo Tree Search](https://github.com/shehio/monte-carlo-tree-search)**: Stochastic tree search algorithm
+- **[Branching Factor](https://en.wikipedia.org/wiki/Branching_factor)**: Average number of possible moves at each position
+
 ## Resources
 - [Policy Gradients: Pong from Pixels](https://youtu.be/tqrcjHuNdmQ?si=XElMeYhPr7vCBb1b)
 - [REINFORCE Algorithm](https://youtu.be/5eSh5F8gjWU?si=b1lRf6Ks_q_0dekA)
 - [Karpathy's "Pong from Pixels"](http://karpathy.github.io/2016/05/31/rl/)
 - [Gymnasium](https://gymnasium.farama.org/) | [PyTorch](https://pytorch.org/docs/)
+- [Arcade Learning Environment](https://github.com/Farama-Foundation/Arcade-Learning-Environment)
+- [Microsoft vs Ms. Pac-Man](https://blogs.microsoft.com/ai/divide-conquer-microsoft-researchers-used-ai-master-ms-pac-man/)
+- [Berkeley's Pac-Man Projects](http://ai.berkeley.edu/project_overview)
+- [Artificial Intelligence and Games](https://gameaibook.org/book.pdf)
 
 ## Contributing
 This project is designed for educational purposes. Feel free to:
@@ -325,6 +378,8 @@ This project is designed for educational purposes. Feel free to:
 - Implement additional RL algorithms
 - Improve cloud infrastructure
 - Add monitoring tools
+- Implement classical search algorithms
+- Add support for more game types
 
 ## License
 This project is open source and available under the MIT License.
