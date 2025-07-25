@@ -1,23 +1,33 @@
+# Core ML and RL libraries
+torch==2.7.1
+numpy==2.3.1
+gymnasium==1.2.0
+gymnasium[atari]==1.2.0
+stable_baselines3==2.3.2
+tensorboard==2.17.0
+
+# Atari and game environment
 ale-py==0.11.1
 autorom==0.6.1
+
+# Computer vision and image processing
+opencv-python==4.10.0.84
+matplotlib==3.9.1
+
+# Chess engine integration
+chess==1.10.0
+stockfish==3.28.0
+
+# Utilities and dependencies
 cloudpickle==3.1.1
 Farama-Notifications==0.0.4
 filelock==3.18.0
 fsspec==2025.5.1
-gymnasium==1.2.0
-gymnasium[atari]==1.2.0
 Jinja2==3.1.6
 MarkupSafe==3.0.2
-matplotlib==3.9.1
 mpmath==1.3.0
 networkx==3.5
-numpy==2.3.1
-opencv-python==4.10.0.84
 pipreqs==0.5.0
 setuptools==80.9.0
-stable_baselines3==2.3.2
-stockfish==3.28.0
 sympy==1.14.0
-tensorboard==2.17.0
-torch==2.7.1
 typing_extensions==4.14.1
