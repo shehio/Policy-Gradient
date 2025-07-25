@@ -1,6 +1,7 @@
 # helpers.py
 
 import gymnasium as gym
+import ale_py  # This registers the ALE environments
 from stable_baselines3 import PPO
 from stable_baselines3.common.vec_env import DummyVecEnv
 from stable_baselines3.common.monitor import Monitor
@@ -12,8 +13,8 @@ def create_atari_environment(name: str, render: bool, render_fps = 60):
     render_mode = 'human' if render else None
     env = gym.make(name, render_mode=render_mode)
     env = AtariWrapper(env)
-    if render:
-        env.metadata['render_fps'] = render_fps
+    # if render:
+    #     env.metadata['render_fps'] = render_fps
     env = Monitor(env)
     env = DummyVecEnv([lambda: env])
     return env
