@@ -116,7 +116,7 @@ class MLP(nn.Module):
             file_name = f"{base_name}_{self.game_name}_i{self.input_count}_h{self.hidden_layers_count}_o{self.output_count}_{episode_number}"
             
             # Look in models directory
-            models_dir = "models"
+            models_dir = "arcade/scripts/policy-gradient/models"
             file_path = os.path.join(models_dir, file_name)
             
             if os.path.exists(file_path):
@@ -131,7 +131,7 @@ class MLP(nn.Module):
         file_name = f"{base_name}_{self.game_name}_i{self.input_count}_h{self.hidden_layers_count}_o{self.output_count}_{episode_number}"
         
         # Ensure the models directory exists
-        models_dir = "models"
+        models_dir = "arcade/scripts/policy-gradient/models"
         if not os.path.exists(models_dir):
             os.makedirs(models_dir, exist_ok=True)
         

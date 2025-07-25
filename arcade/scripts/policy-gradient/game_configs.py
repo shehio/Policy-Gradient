@@ -128,7 +128,7 @@ def get_network_file(game_name: str) -> str:
     import os
     import re
     
-    model_dir = "models"
+    model_dir = "arcade/scripts/policy-gradient/models"
     if not os.path.exists(model_dir):
         # Return base path if no models directory exists
         config = get_game_config(game_name)

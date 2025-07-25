@@ -9,7 +9,7 @@ import os
 import numpy as np
 import argparse
 from typing import Dict, Any
-sys.path.append(os.path.join(os.path.dirname(__file__), '../..', 'src'))
+sys.path.append(os.path.join(os.path.dirname(__file__), '../../..', 'arcade', 'src'))
 
 from pg.hyperparameters import HyperParameters
 from pg.game import Game
@@ -20,7 +20,7 @@ from game_configs import get_game_config, get_input_size, get_output_size, get_n
 
 import re
 
-def find_latest_model_episode(game_name: str, model_dir: str = "models") -> int:
+def find_latest_model_episode(game_name: str, model_dir: str = "arcade/scripts/policy-gradient/models") -> int:
     """Find the latest episode number for the given game by scanning the model directory."""
     import os
     pattern_map = {

@@ -13,7 +13,7 @@ from mlp_torch import MLP
 
 def list_models_for_game(game_name):
     """List all models for a specific game."""
-    models_dir = os.path.join(os.path.dirname(__file__), '..', 'models')
+    models_dir = os.path.join(os.path.dirname(__file__), 'policy-gradient', 'models')
     base_name = "torch_mlp"
     sanitized_game = game_name.replace("/", "_").replace("-", "_")
     
@@ -48,7 +48,7 @@ def main():
     pixels_count = 80 * 80
     hidden_layers_count = 200
     output_count = 1
-    network_file = os.path.join(os.path.dirname(__file__), '..', 'models', 'torch_mlp.p')
+    network_file = os.path.join(os.path.dirname(__file__), 'policy-gradient', 'models', 'torch_mlp.p')
     
     print(f"Architecture: {pixels_count}->{hidden_layers_count}->{output_count}")
     print(f"Network file base: {network_file}")

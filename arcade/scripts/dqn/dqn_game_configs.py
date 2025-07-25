@@ -36,7 +36,7 @@ class DQNGameConfig:
         self.exploration_config = exploration_config
         self.image_config = image_config
 
-def find_latest_dqn_model_episode(game_name: str, model_dir: str = "scripts/dqn/models") -> int:
+def find_latest_dqn_model_episode(game_name: str, model_dir: str = "arcade/scripts/dqn/models") -> int:
     """Find the latest episode number for the given DQN game by scanning the model directory."""
     import os
     import re
@@ -79,7 +79,7 @@ DQN_GAME_CONFIGS = {
         ),
         model_config=ModelConfig(
             save_models=True,
-            model_path="./scripts/dqn/models/pong-cnn-",
+                            model_path="./arcade/scripts/dqn/models/pong-cnn-",
             save_model_interval=10,
             train_model=True,
             load_model_from_file=True,
@@ -119,7 +119,7 @@ DQN_GAME_CONFIGS = {
         ),
         model_config=ModelConfig(
             save_models=True,
-            model_path="./scripts/dqn/models/pacman-cnn-improved-",
+                            model_path="./arcade/scripts/dqn/models/pacman-cnn-improved-",
             save_model_interval=10,
             train_model=True,
             load_model_from_file=True,

@@ -52,7 +52,7 @@ class Game:
     def end_episode(self) -> None:
         self.__update_running_reward()
         if self.episode_number % 10 == 0:
-            print('Resetting env. Episode: %i, episode reward: %i, running mean(last 100 episodes): %f.' % (self.episode_number, self.reward_sum, self.running_reward))
+            print('Resetting env. Episode: %i, episode reward: %.1f, running mean(last 100 episodes): %.3f.' % (self.episode_number, self.reward_sum, self.running_reward))
         self.episode_number += 1
         self.reset()
 
