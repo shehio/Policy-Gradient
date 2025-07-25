@@ -159,6 +159,7 @@ class PolicyGradientTester:
                 
                 observation, reward, done, info = game.step(action)
                 total_reward += reward
+                game.update_episode_stats(reward)  # Update game's episode stats
                 
                 # Call game-specific post-step logic
                 if self.game_config.post_step_func:
