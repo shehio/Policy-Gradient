@@ -19,7 +19,7 @@ def run_game_with_recording(game_name, max_episodes=None, output_dir="recordings
     print(f"📹 Videos: {video_dir}")
     
     # Build command for pg_trainer.py
-    cmd = [sys.executable, "arcade/scripts/policy-gradient/pg_trainer.py", game_name, "--render"]
+    cmd = [sys.executable, "atari/scripts/policy-gradient/pg_trainer.py", game_name, "--render"]
     
     # Add additional arguments
     for key, value in kwargs.items():

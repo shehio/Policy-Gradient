@@ -18,42 +18,40 @@ from dqn.config.learning_config import LearningConfig # type: ignore
 from dqn.config.model_config import ModelConfig # type: ignore
 from dqn.config.training_config import TrainingConfig # type: ignore
 
-from dqn.agent import Agent # type: ignore
+from dqn.pacman.agent import AgentImproved # type: ignore
 from dqn.config.hyperparameters import HyperParameters # type: ignore
 
 
 def main():
-
-    # Create hyperparameters using the HyperParameters class
     hyperparams = HyperParameters(
         environment_config=EnvironmentConfig(
-            environment="ALE/Pong-v5",
+            environment="ALE/MsPacman-v5",
             device=torch.device("cuda" if torch.cuda.is_available() else "cpu"),
             render_game_window=True
         ),
         model_config=ModelConfig(
             save_models=True,
-            model_path="./arcade/scripts/dqn/models/pong-cnn-",
+            model_path="./atari/scripts/dqn/models/pacman-cnn-improved-",
             save_model_interval=10,
             train_model=True,
             load_model_from_file=True,
-            load_file_episode=1560
+            load_file_episode=2450
         ),
         training_config=TrainingConfig(
-            batch_size=64,
+            batch_size=32,  # Smaller batch size for better learning
             max_episode=100000,
             max_step=100000,
-            max_memory_len=50000,
-            min_memory_len=40000
+            max_memory_len=100000,  # Larger memory for better experience diversity
+            min_memory_len=10000   # Start training earlier
         ),
         learning_config=LearningConfig(
-            gamma=0.97,
-            alpha=0.00025
+            gamma=0.99,  # Slightly higher gamma for Pacman (longer-term planning)
+            alpha=0.0001  # Slightly lower learning rate for stability
         ),
         exploration_config=ExplorationConfig(
             epsilon_start=1.0,
-            epsilon_decay=0.99,
-            epsilon_minimum=0.05
+            epsilon_decay=0.9995,  # Much slower decay for better exploration
+            epsilon_minimum=0.01   # Lower minimum for better exploitation
         ),
         image_config=ImageConfig(
             target_h=80,
@@ -71,8 +69,8 @@ def main():
     else:
         env = gym.make(hyperparams.environment.environment, render_mode="rgb_array")
     
-    # Create agent
-    agent = Agent(env, hyperparams)
+    # Create improved agent
+    agent = AgentImproved(env, hyperparams)
     
     # Load model if specified
     if hyperparams.model.load_model_from_file:
@@ -103,6 +101,13 @@ def main():
     # Training loop
     last_100_ep_reward = deque(maxlen=100)  # Last 100 episode rewards
     total_step = 1  # Cumulative sum of all steps in episodes
+    
+    print("Starting improved DQN training with:")
+    print(f"- 512 hidden units in FC layers")
+    print(f"- LayerNorm on FC layers (for stability)")
+    print(f"- Gradient clipping (max_norm=10)")
+    print(f"- Target network updates every 10,000 steps")
+    print(f"- Improved exploration strategy")
     
     for episode in range(start_episode, hyperparams.training.max_episode):
         start_time = time.time()  # Keep time
@@ -143,16 +148,14 @@ def main():
             total_reward += float(reward)
             total_step += 1
             
-            # Should this be based on episode or step?
-            if total_step % 1000 == 0:
+            # Update epsilon more frequently for better exploration control
+            if total_step % 100 == 0:
                 agent.adaptiveEpsilon()
             
             if done or truncated:
                 break
         
-        # Update target network periodically
-        if episode % 100 == 0:
-            agent.target_model.load_state_dict(agent.online_model.state_dict())
+        # Target network is now updated automatically every 10,000 training steps in the agent
         
         # Episode completed - detailed logging like original pong-dqn.py
         current_time = time.time()  # Keep current time

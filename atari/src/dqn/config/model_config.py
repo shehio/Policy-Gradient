@@ -1,6 +1,6 @@
 class ModelConfig:
     def __init__(self, save_models: bool = True,
-                 model_path: str = "./arcade/scripts/dqn/models/pong-cnn-",
+                 model_path: str = "./atari/scripts/dqn/models/pong-cnn-",
                  save_model_interval: int = 10,
                  train_model: bool = True,
                  load_model_from_file: bool = True,

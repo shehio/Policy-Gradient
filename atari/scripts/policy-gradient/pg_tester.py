@@ -12,7 +12,7 @@ from typing import Dict, Any
 
 # Add project root to path
 project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..', '..'))
-sys.path.insert(0, os.path.join(project_root, 'arcade', 'src'))
+sys.path.insert(0, os.path.join(project_root, 'atari', 'src'))
 
 from pg.hyperparameters import HyperParameters
 from pg.game import Game
@@ -79,7 +79,7 @@ class PolicyGradientTester:
             if load_episode is None:
                 # Find the latest episode automatically
                 import re
-                model_dir = "arcade/scripts/policy-gradient/models"
+                model_dir = "atari/scripts/policy-gradient/models"
                 
                 pattern_map = {
                     'pong': r'torch_mlp_ALE_Pong_v5.*_(\d+)$',
