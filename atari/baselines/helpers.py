@@ -8,6 +8,19 @@ from stable_baselines3.common.monitor import Monitor
 from stable_baselines3.common.atari_wrappers import AtariWrapper
 import os
 import time
+from stable_baselines3.common.callbacks import BaseCallback
+
+class SaveEveryStepCallback(BaseCallback):
+    def __init__(self, save_freq, save_path, game_name, verbose=0):
+        super().__init__(verbose)
+        self.save_freq = save_freq
+        self.save_path = save_path
+        self.game_name = game_name
+
+    def _on_step(self) -> bool:
+        if self.n_calls % self.save_freq == 0:
+            self.model.save(f"{self.save_path}/{self.game_name}_step_{self.n_calls}")
+        return True
 
 def create_atari_environment(name: str, render: bool, render_fps = 60):
     render_mode = 'human' if render else None
@@ -28,10 +41,10 @@ def create_environment(name: str, render: bool, render_fps = 60):
     env = DummyVecEnv([lambda: env])
     return env
 
-def train(model, timesteps, epochs, tensorboard_log_name, model_directory):
+def train(model, timesteps, epochs, tensorboard_log_name, model_directory, callback=None):
     start_time = time.time()
     for i in range(epochs):
-        model.learn(total_timesteps=timesteps, reset_num_timesteps=False, tb_log_name=tensorboard_log_name)
+        model.learn(total_timesteps=timesteps, reset_num_timesteps=False, tb_log_name=tensorboard_log_name, callback=callback)
         model.save(f"{model_directory}/{timesteps * i}")
 
     end_time = time.time()
