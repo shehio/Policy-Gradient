@@ -1,21 +1,11 @@
-from helpers import create_directory_if_not_exists, create_atari_environment, train, SaveEveryStepCallback
-from stable_baselines3 import DQN
+from stable_baselines3 import PPO
+from stable_baselines3.common.env_util import make_atari_env
+from stable_baselines3.common.vec_env import VecFrameStack
 
-env_name = 'ALE/Pong-v5'
-log_directory = 'logs'
-model_directory = 'models/PPO'
+env = make_atari_env("ALE/Pong-v5", n_envs=1, seed=0)
+env = VecFrameStack(env, n_stack=4) # Stack 4 frames
 
-env = create_atari_environment(env_name, render=False)
-create_directory_if_not_exists(model_directory)
-create_directory_if_not_exists(log_directory)
+model = PPO("CnnPolicy", env, verbose=1)
+model.learn(total_timesteps=1000_000)
 
-# Use 'CnnPolicy' for image-based observations like Atari Breakout
-model = DQN('CnnPolicy', env, verbose=1, tensorboard_log=log_directory)
-
-save_callback = SaveEveryStepCallback(save_freq=100_000, save_path=model_directory, game_name='Pong')
-
-timesteps = 100_000_000
-epochs = 1000
-model = train(model, timesteps, epochs, env_name, model_directory, callback=save_callback)
-model.save(f'final_ppo_breakout_epochs_{epochs}_timesteps_{timesteps}')
-
+model.save(f"pong_ppo__cnn_1M")
