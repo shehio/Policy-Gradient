@@ -31,6 +31,8 @@ This repository studies AI in games through multiple approaches: classical searc
 - **Frame Preprocessing**: Optimized image processing for neural network input
 - **Type Annotations**: Full type safety for robust development
 - **Chess Engine Integration**: Stockfish and Leela Chess Zero for classical game analysis
+- **Periodic Model Saving**: Automatic model checkpointing every N steps during training
+- **Stable Baselines3 Integration**: Pre-built PPO implementations with custom callbacks
 
 ## Games Classification
 Games can be classified into many different dimensions based on:
@@ -121,25 +123,28 @@ Sometimes, the source code is present so an API exists (or could exist) to provi
 ## Directory Structure
 ```
 Policy-Gradient/
-├── src/                   # Source code modules
-│   ├── pg/                # Policy Gradient implementation
-│   │   ├── agent.py       # PG agent logic
-│   │   ├── game.py        # Game environment
-│   │   ├── hyperparameters.py # PG hyperparameters
-│   │   ├── memory.py      # Episode memory buffer
-│   │   ├── mlp.py         # Legacy MLP (NumPy)
-│   │   └── mlp_torch.py   # Modern MLP (PyTorch)
-│   └── dqn/               # DQN implementation
-│       ├── agent.py       # DQN agent logic
-│       ├── model.py       # Dueling CNN model
-│       └── config/        # DQN configuration classes
-├── scripts/               # Executable scripts
-│   ├── policy-gradient/   # PG training scripts
-│   ├── dqn/               # DQN training scripts
-│   └── game_model_manager.py # Model management utilities
-├── arcade/                # Atari game implementations
-│   ├── baselines/         # Stable Baselines3 implementations
-│   └── main.py            # Basic ALE interface
+├── atari/                 # Atari game implementations
+│   ├── src/               # Source code modules
+│   │   ├── pg/            # Policy Gradient implementation
+│   │   │   ├── agent.py   # PG agent logic
+│   │   │   ├── game.py    # Game environment
+│   │   │   ├── hyperparameters.py # PG hyperparameters
+│   │   │   ├── memory.py  # Episode memory buffer
+│   │   │   ├── mlp.py     # Legacy MLP (NumPy)
+│   │   │   └── mlp_torch.py # Modern MLP (PyTorch)
+│   │   └── dqn/           # DQN implementation
+│   │       ├── agent.py   # DQN agent logic
+│   │       ├── model.py   # Dueling CNN model
+│   │       └── config/    # DQN configuration classes
+│   ├── scripts/           # Executable scripts
+│   │   ├── policy-gradient/ # PG training scripts
+│   │   ├── dqn/           # DQN training scripts
+│   │   └── game_model_manager.py # Model management utilities
+│   └── baselines/         # Stable Baselines3 implementations
+│       ├── helpers.py     # Training utilities and callbacks
+│       ├── breakout_train.py # PPO training for Breakout
+│       ├── pacman_train.py # PPO training for Ms. Pacman
+│       └── breakout_test.py # Test trained models
 ├── chess/                 # Chess engine integration
 │   ├── engine-scripts/    # Build scripts for Stockfish and Leela
 │   └── game-analysis.py   # Chess game analysis tools
@@ -165,7 +170,7 @@ Policy-Gradient/
 
 **1. Train on Pong (Binary Actions):**
 ```sh
-python scripts/policy-gradient/pgpong.py
+python atari/scripts/policy-gradient/pgpong.py
 ```
 - Uses MLP with binary action space (UP/DOWN)
 - Optimized for Pong's simple mechanics
@@ -173,7 +178,7 @@ python scripts/policy-gradient/pgpong.py
 
 **2. Train on Breakout (Binary Actions):**
 ```sh
-python scripts/policy-gradient/pgbreakout.py
+python atari/scripts/policy-gradient/pgbreakout.py
 ```
 - Uses MLP with binary action space (LEFT/RIGHT)
 - Handles Breakout's paddle movement and ball physics
@@ -181,7 +186,7 @@ python scripts/policy-gradient/pgbreakout.py
 
 **3. Train on Ms. Pacman (Multi-Action CNN):**
 ```sh
-python scripts/policy-gradient/pgpacman.py
+python atari/scripts/policy-gradient/pgpacman.py
 ```
 - Uses CNN with 9-action space (all directions + NOOP)
 - Color-aware preprocessing for ghost detection
@@ -193,20 +198,20 @@ python scripts/policy-gradient/pgpacman.py
 **Single script for all games:**
 ```sh
 # Train Pong (loads latest model by default)
-python scripts/policy-gradient/pg_trainer.py pong --render
+python atari/scripts/policy-gradient/pg_trainer.py pong --render
 
 # Train Breakout with custom parameters
-python scripts/policy-gradient/pg_trainer.py breakout --learning-rate 2e-4 --batch-size 5
+python atari/scripts/policy-gradient/pg_trainer.py breakout --learning-rate 2e-4 --batch-size 5
 
 # Train Pacman from scratch (no pre-trained model)
-python scripts/policy-gradient/pg_trainer.py pacman --no-load-network
+python atari/scripts/policy-gradient/pg_trainer.py pacman --no-load-network
 ```
 
 ### DQN Training
 
 **Train on Pong (DQN):**
 ```sh
-python scripts/dqn/pong-dqn.py
+python atari/scripts/dqn/pong-dqn.py
 ```
 - Uses Dueling CNN architecture
 - Experience replay and target networks
@@ -214,19 +219,30 @@ python scripts/dqn/pong-dqn.py
 
 **Train on Ms. Pacman (DQN):**
 ```sh
-python scripts/dqn/pacman-dqn.py
+python atari/scripts/dqn/pacman-dqn.py
 ```
 - Uses Dueling CNN with frame stacking
 - Advanced exploration strategies
 - Optimized for complex maze navigation
 
-### Stable Baselines3 (Arcade)
+### Stable Baselines3 (Atari)
 
-**Train Breakout with PPO:**
+**Train Breakout with PPO (with periodic saving):**
 ```sh
-cd arcade/baselines
+cd atari/baselines
 python breakout_train.py
 ```
+- Saves model every 100,000 steps
+- Uses PPO algorithm with CNN policy
+- Automatic checkpointing with game name in filename
+
+**Train Ms. Pacman with PPO:**
+```sh
+python pacman_train.py
+```
+- Saves model every 100,000 steps
+- Optimized for complex maze navigation
+- Uses CNN policy for spatial reasoning
 
 **Test trained model:**
 ```sh
@@ -304,6 +320,25 @@ The DQN uses a Dueling CNN architecture:
 - **Target Network**: Separate network for computing target Q-values
 - **Epsilon-Greedy Exploration**: Balances exploration vs exploitation
 - **Frame Stacking**: Uses 4 consecutive frames as state representation
+
+## Stable Baselines3 Implementation
+
+### PPO Training with Periodic Saving
+The baselines implementation uses Stable Baselines3's PPO algorithm with custom callbacks for periodic model saving:
+
+- **SaveEveryStepCallback**: Automatically saves models every N steps (configurable)
+- **Game-specific naming**: Models are saved with game name prefix (e.g., `Breakout_step_100000`)
+- **CNN Policy**: Uses convolutional neural networks for image-based observations
+- **Tensorboard logging**: Real-time training metrics and visualization
+
+### Training Configuration
+```python
+# Example configuration from breakout_train.py
+env_name = 'ALE/Breakout-v5'
+timesteps = 100_000_000
+epochs = 1000
+save_freq = 100_000  # Save every 100k steps
+```
 
 ## Classical Games Support
 - **Atari 2600**: Through Arcade Learning Environment (ALE)
