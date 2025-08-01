@@ -27,12 +27,12 @@ except ImportError as e:
 
 def test_test_parse_arguments():
     """Test that argument parsing works with required arguments."""
-    with patch('sys.argv', ['atari_baseline_test.py', '--model', 'test_model']):
+    with patch("sys.argv", ["atari_baseline_test.py", "--model", "test_model"]):
         args = test_parse_arguments()
-        assert args.model == 'test_model'
-        assert args.env == 'ALE/Pong-v5'
+        assert args.model == "test_model"
+        assert args.env == "ALE/Pong-v5"
         assert args.episodes == 3
-        assert args.algorithm == 'auto'
+        assert args.algorithm == "auto"
         assert args.delay == 0.01
 
 

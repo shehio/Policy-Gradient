@@ -1,5 +1,9 @@
 # Game AI & Reinforcement Learning
 
+[![Build Status](https://github.com/shehabyasser/Policy-Gradient/actions/workflows/test.yml/badge.svg)](https://github.com/shehabyasser/Policy-Gradient/actions/workflows/test.yml)
+[![Tests](https://github.com/shehabyasser/Policy-Gradient/actions/workflows/test.yml/badge.svg?event=push)](https://github.com/shehabyasser/Policy-Gradient/actions/workflows/test.yml)
+
+
 A comprehensive repository for implementing and experimenting with various reinforcement learning algorithms and classical game AI techniques.
 
 ## Project Overview
