@@ -1,10 +1,13 @@
 # Atari Training Script Guide
 
-This directory contains training scripts for Atari games using Stable Baselines3. The main script `atari_baseline_train.py` is a flexible, command-line driven trainer that supports multiple algorithms and environments.
+This directory contains training and testing scripts for Atari games using Stable Baselines3. The main scripts are:
+
+- `atari_baseline_train.py`: Flexible, command-line driven trainer that supports multiple algorithms and environments
+- `atari_baseline_test.py`: Test trained models with rendering and performance analysis
 
 ## Quick Start
 
-### Basic Usage
+### Training
 ```bash
 # Train PPO on Pong (default settings)
 python atari_baseline_train.py
@@ -14,6 +17,18 @@ python atari_baseline_train.py --algorithm dqn --env ALE/Breakout-v5 --timesteps
 
 # Train A2C with CNN policy on Ms. Pacman infinitely
 python atari_baseline_train.py -a a2c_cnn -e ALE/MsPacman-v5 -t infinite
+```
+
+### Testing
+```bash
+# Test a PPO model on Pong
+python atari_baseline_test.py --model pong_ppo_cnn_100000
+
+# Test a DQN model on Breakout
+python atari_baseline_test.py -m breakout_dqn_cnn_500000 -e ALE/Breakout-v5
+
+# Test with custom settings
+python atari_baseline_test.py -m pong_a2c_cnn_1M -n 5 -d 0.02
 ```
 
 ## Command Line Arguments
@@ -256,14 +271,112 @@ python atari_baseline_train.py --help
 
 ## Related Files
 
-- `pong_test.py`: Test trained models with rendering
-- `breakout_train.py`: Specific training script for Breakout
-- `pacman_train.py`: Specific training script for Ms. Pacman
-- `helpers.py`: Utility functions for training
+- `atari_baseline_test.py`: Test trained models with rendering
+
 
 ## Dependencies
 
 Make sure you have the required packages installed:
 ```bash
 pip install stable_baselines3 gymnasium[atari] ale-py
+``` 
+
+## Testing Trained Models
+
+The `atari_baseline_test.py` script allows you to test trained models with visual rendering and performance analysis.
+
+### Command Line Arguments
+
+| Argument | Short | Default | Description |
+|----------|-------|---------|-------------|
+| `--model` | `-m` | **Required** | Path to trained model (without .zip extension) |
+| `--env` | `-e` | `ALE/Pong-v5` | Environment to test on |
+| `--episodes` | `-n` | `3` | Number of episodes to run |
+| `--algorithm` | `-a` | `auto` | Algorithm type: `auto`, `ppo`, `dqn`, `a2c` |
+| `--delay` | `-d` | `0.01` | Delay between frames in seconds |
+
+### Basic Testing
+
+```bash
+# Test a PPO model (auto-detects algorithm)
+python atari_baseline_test.py --model pong_ppo_cnn_100000
+
+# Test a DQN model on Breakout
+python atari_baseline_test.py -m breakout_dqn_cnn_500000 -e ALE/Breakout-v5
+
+# Test with more episodes
+python atari_baseline_test.py -m pong_a2c_cnn_1M -n 10
+```
+
+### Advanced Testing
+
+```bash
+# Test with custom frame delay (slower playback)
+python atari_baseline_test.py -m pong_ppo_cnn_1M -d 0.05
+
+# Test with specific algorithm (if auto-detection fails)
+python atari_baseline_test.py -m my_model -a ppo
+
+# Test on different environment
+python atari_baseline_test.py -m pong_ppo_cnn_1M -e ALE/Breakout-v5
+```
+
+### Output
+
+The test script provides:
+- **Visual rendering**: Watch the agent play in real-time
+- **Episode details**: Reward and step count for each episode
+- **Performance summary**: Average, best, and worst episode rewards
+- **Error handling**: Lists available models if specified model not found
+
+### Example Output
+```
+Testing PPO model on ALE/Pong-v5
+Model: pong_ppo_cnn_100000
+Episodes: 3
+Frame delay: 0.01s
+--------------------------------------------------
+Loaded PPO model from pong_ppo_cnn_100000
+Starting episode 1
+Episode 1 finished with reward: 21.0, steps: 1500
+Starting episode 2
+Episode 2 finished with reward: 18.0, steps: 1200
+Starting episode 3
+Episode 3 finished with reward: 24.0, steps: 1800
+
+Summary: 3 episodes completed
+Average reward: 21.00
+Best episode: 24.0
+Worst episode: 18.0
+```
+
+### Getting Help
+```bash
+# Show all available options for testing
+python atari_baseline_test.py --help
+```
+
+### Troubleshooting Testing
+
+1. **Model not found**: The script will list all available models in the directory
+2. **Wrong algorithm**: Use `--algorithm` to specify the correct algorithm type
+3. **Slow rendering**: Increase `--delay` for slower playback
+4. **No visual output**: Make sure you're running in an environment that supports GUI
+
+## Complete Workflow Example
+
+Here's a complete example of training and testing a model:
+
+```bash
+# 1. Train a PPO model on Pong
+python atari_baseline_train.py -a ppo -t 500000 -n 4
+
+# 2. Test the trained model
+python atari_baseline_test.py -m pong_ppo_cnn_500000 -n 5
+
+# 3. Continue training for more timesteps
+python atari_baseline_train.py -a ppo -t 1000000 -n 4
+
+# 4. Test the improved model
+python atari_baseline_test.py -m pong_ppo_cnn_1500000 -n 5
 ``` 

@@ -1,0 +1,107 @@
+import torch
+import torch.nn as nn
+import torch.optim as optim
+import numpy as np
+import os
+from typing import Tuple
+
+class MLPMultiAction(nn.Module):
+    def __init__(self, input_count: int, hidden_layers_count: int, output_count: int, network_file: str, game_name: str) -> None:
+        super().__init__()
+        self.input_count = input_count
+        self.hidden_layers_count = hidden_layers_count
+        self.output_count = output_count
+        self.game_name = game_name.replace("/", "_").replace("-", "_")
+        self.device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
+        print(f"MLPMultiAction initialized on device: {self.device}")
+        
+        # Network architecture with better initialization
+        self.fc1 = nn.Linear(input_count, hidden_layers_count)
+        self.fc2 = nn.Linear(hidden_layers_count, output_count)
+        self.relu = nn.ReLU()
+        self.softmax = nn.Softmax(dim=-1)
+        
+        # Better initialization for training stability
+        nn.init.xavier_uniform_(self.fc1.weight)
+        nn.init.zeros_(self.fc1.bias)
+        nn.init.xavier_uniform_(self.fc2.weight)
+        nn.init.zeros_(self.fc2.bias)
+        
+        self.optimizer = optim.RMSprop(self.parameters(), lr=1e-4, alpha=0.99, eps=1e-8)
+        self.gradient_buffer = []
+        self.network_file = network_file
+        self.to(self.device)
+        print(f"Model: {input_count}->{hidden_layers_count}->{output_count}")
+
+    def forward(self, x: torch.Tensor) -> torch.Tensor:
+        x = self.fc1(x)
+        x = self.relu(x)
+        x = self.fc2(x)
+        x = self.softmax(x)
+        return x
+
+    def forward_pass(self, input: np.ndarray) -> Tuple[np.ndarray, np.ndarray]:
+        input_tensor = torch.from_numpy(input).float().to(self.device)
+        with torch.no_grad():
+            output = self.forward(input_tensor)
+            hidden_layer = self.relu(self.fc1(input_tensor))
+        output_cpu = output.cpu().numpy()
+        hidden_cpu = hidden_layer.cpu().numpy()
+        return output_cpu, hidden_cpu
+
+    def backward_pass(self, eph: np.ndarray, epdlogp: np.ndarray, epx: np.ndarray) -> None:
+        self.gradient_buffer.append((epx, eph, epdlogp))
+
+    def train(self, learning_rate: float, decay_rate: float) -> None:
+        if not self.gradient_buffer:
+            return
+        self.optimizer.param_groups[0]['lr'] = learning_rate
+        self.optimizer.param_groups[0]['alpha'] = decay_rate
+        self.optimizer.zero_grad()
+        all_inputs = []
+        all_hidden = []
+        all_advantages = []
+        for epx, eph, epdlogp in self.gradient_buffer:
+            all_inputs.append(epx)
+            all_hidden.append(eph)
+            all_advantages.append(epdlogp)
+        inputs = torch.from_numpy(np.vstack(all_inputs)).float().to(self.device)
+        hidden = torch.from_numpy(np.vstack(all_hidden)).float().to(self.device)
+        advantages = torch.from_numpy(np.vstack(all_advantages)).float().to(self.device)
+        if torch.isnan(inputs).any() or torch.isinf(inputs).any():
+            print("🚨 CRITICAL: NaN or infinite inputs detected! Skipping training.")
+            self.gradient_buffer = []
+            return
+        if torch.isnan(advantages).any() or torch.isinf(advantages).any():
+            print("🚨 CRITICAL: NaN or infinite advantages detected! Skipping training.")
+            self.gradient_buffer = []
+            return
+        output = self.forward(inputs)
+        output = torch.clamp(output, 1e-7, 1.0 - 1e-7)
+        # Categorical cross-entropy loss for policy gradient
+        loss = -torch.sum(torch.log(output) * advantages)
+        if torch.isnan(loss) or torch.isinf(loss):
+            print("🚨 CRITICAL: NaN or infinite loss detected! Skipping training.")
+            self.gradient_buffer = []
+            return
+        loss.backward()
+        torch.nn.utils.clip_grad_norm_(self.parameters(), max_norm=1.0)
+        self.optimizer.step()
+        self.gradient_buffer = []
+
+    def load_network(self, episode_number: int) -> None:
+        if episode_number > 0:
+            base_name = os.path.splitext(self.network_file)[0]
+            file_name = f"{base_name}_{self.game_name}_i{self.input_count}_h{self.hidden_layers_count}_o{self.output_count}_{episode_number}"
+            if os.path.exists(file_name):
+                state_dict = torch.load(file_name, map_location=self.device)
+                self.load_state_dict(state_dict)
+                print(f"Loaded model: {file_name}")
+            else:
+                print(f"Model file not found: {file_name}")
+
+    def save_network(self, episode_number: int) -> None:
+        base_name = os.path.splitext(self.network_file)[0]
+        file_name = f"{base_name}_{self.game_name}_i{self.input_count}_h{self.hidden_layers_count}_o{self.output_count}_{episode_number}"
+        os.makedirs(os.path.dirname(file_name), exist_ok=True)
+        torch.save(self.state_dict(), file_name) 
