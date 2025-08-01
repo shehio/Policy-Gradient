@@ -1,0 +1,42 @@
+name: Test Suite
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: 3.13
+
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+
+    - name: Run tests
+      run: |
+        python -m pytest tests/ -v
+
+    - name: Check code style
+      run: |
+        pip install flake8 black
+        flake8 . --count --exit-zero --max-line-length=88
+        black --check .
+
+    - name: Test imports
+      run: |
+        echo "Testing imports..."
+        cd atari/baselines
+        python -c "from atari_baseline_train import parse_arguments"
+        python -c "from atari_baseline_test import parse_arguments"
+        echo "✅ All imports successful" 
