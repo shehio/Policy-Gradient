@@ -1,14 +1,16 @@
 import torch.nn as nn
 import torch.nn.functional as F
 
+
 class DuelCNNImproved(nn.Module):
     """
     Improved CNN with Duel Algo. https://arxiv.org/abs/1511.06581
     Updated to match the description with 512 hidden units and LayerNorm for stability
     """
+
     def __init__(self, h, w, output_size):
         super(DuelCNNImproved, self).__init__()
-        self.conv1 = nn.Conv2d(in_channels=4,  out_channels=32, kernel_size=8, stride=4)
+        self.conv1 = nn.Conv2d(in_channels=4, out_channels=32, kernel_size=8, stride=4)
         self.bn1 = nn.BatchNorm2d(32)
         convw, convh = self.conv2d_size_calc(w, h, kernel_size=8, stride=4)
         self.conv2 = nn.Conv2d(in_channels=32, out_channels=64, kernel_size=4, stride=2)
@@ -53,4 +55,4 @@ class DuelCNNImproved(nn.Module):
         # Combine value and advantage
         q = Vx + (Ax - Ax.mean())
 
-        return q 
+        return q

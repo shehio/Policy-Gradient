@@ -5,28 +5,36 @@ import numpy as np
 import os
 from typing import Tuple
 
+
 class MLPMultiAction(nn.Module):
-    def __init__(self, input_count: int, hidden_layers_count: int, output_count: int, network_file: str, game_name: str) -> None:
+    def __init__(
+        self,
+        input_count: int,
+        hidden_layers_count: int,
+        output_count: int,
+        network_file: str,
+        game_name: str,
+    ) -> None:
         super().__init__()
         self.input_count = input_count
         self.hidden_layers_count = hidden_layers_count
         self.output_count = output_count
         self.game_name = game_name.replace("/", "_").replace("-", "_")
-        self.device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
+        self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
         print(f"MLPMultiAction initialized on device: {self.device}")
-        
+
         # Network architecture with better initialization
         self.fc1 = nn.Linear(input_count, hidden_layers_count)
         self.fc2 = nn.Linear(hidden_layers_count, output_count)
         self.relu = nn.ReLU()
         self.softmax = nn.Softmax(dim=-1)
-        
+
         # Better initialization for training stability
         nn.init.xavier_uniform_(self.fc1.weight)
         nn.init.zeros_(self.fc1.bias)
         nn.init.xavier_uniform_(self.fc2.weight)
         nn.init.zeros_(self.fc2.bias)
-        
+
         self.optimizer = optim.RMSprop(self.parameters(), lr=1e-4, alpha=0.99, eps=1e-8)
         self.gradient_buffer = []
         self.network_file = network_file
@@ -49,14 +57,16 @@ class MLPMultiAction(nn.Module):
         hidden_cpu = hidden_layer.cpu().numpy()
         return output_cpu, hidden_cpu
 
-    def backward_pass(self, eph: np.ndarray, epdlogp: np.ndarray, epx: np.ndarray) -> None:
+    def backward_pass(
+        self, eph: np.ndarray, epdlogp: np.ndarray, epx: np.ndarray
+    ) -> None:
         self.gradient_buffer.append((epx, eph, epdlogp))
 
     def train(self, learning_rate: float, decay_rate: float) -> None:
         if not self.gradient_buffer:
             return
-        self.optimizer.param_groups[0]['lr'] = learning_rate
-        self.optimizer.param_groups[0]['alpha'] = decay_rate
+        self.optimizer.param_groups[0]["lr"] = learning_rate
+        self.optimizer.param_groups[0]["alpha"] = decay_rate
         self.optimizer.zero_grad()
         all_inputs = []
         all_hidden = []
@@ -73,7 +83,9 @@ class MLPMultiAction(nn.Module):
             self.gradient_buffer = []
             return
         if torch.isnan(advantages).any() or torch.isinf(advantages).any():
-            print("🚨 CRITICAL: NaN or infinite advantages detected! Skipping training.")
+            print(
+                "🚨 CRITICAL: NaN or infinite advantages detected! Skipping training."
+            )
             self.gradient_buffer = []
             return
         output = self.forward(inputs)
@@ -93,11 +105,11 @@ class MLPMultiAction(nn.Module):
         if episode_number > 0:
             base_name = os.path.splitext(self.network_file)[0]
             file_name = f"{base_name}_{self.game_name}_i{self.input_count}_h{self.hidden_layers_count}_o{self.output_count}_{episode_number}"
-            
+
             # Look in new models directory structure
             models_dir = f"../../models/pg/{self.game_name}"
             file_path = os.path.join(models_dir, file_name)
-            
+
             if os.path.exists(file_path):
                 state_dict = torch.load(file_path, map_location=self.device)
                 self.load_state_dict(state_dict)
@@ -108,12 +120,12 @@ class MLPMultiAction(nn.Module):
     def save_network(self, episode_number: int) -> None:
         base_name = os.path.splitext(self.network_file)[0]
         file_name = f"{base_name}_{self.game_name}_i{self.input_count}_h{self.hidden_layers_count}_o{self.output_count}_{episode_number}"
-        
+
         # Ensure the new models directory exists
         models_dir = f"../../models/pg/{self.game_name}"
         if not os.path.exists(models_dir):
             os.makedirs(models_dir, exist_ok=True)
-        
+
         # Save in new models directory
         file_path = os.path.join(models_dir, file_name)
-        torch.save(self.state_dict(), file_path) 
+        torch.save(self.state_dict(), file_path)

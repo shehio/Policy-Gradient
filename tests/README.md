@@ -2,7 +2,7 @@
 
 This directory contains comprehensive tests for the Policy-Gradient project.
 
-## 🧪 Test Structure
+## Test Structure
 
 ```
 tests/
@@ -13,7 +13,7 @@ tests/
 └── README.md                      # This file
 ```
 
-## 🚀 Quick Start
+## Quick Start
 
 ### Run All Tests
 ```bash
@@ -39,7 +39,7 @@ pytest tests/test_dqn.py::TestDuelingCNN -v
 pytest tests/test_policy_gradient.py::TestMLP::test_mlp_initialization -v
 ```
 
-## 📋 Test Categories
+## Test Categories
 
 ### 1. Unit Tests
 - **Model Tests**: Test individual neural network models
@@ -60,7 +60,7 @@ pytest tests/test_policy_gradient.py::TestMLP::test_mlp_initialization -v
 - **Bandit**: Security vulnerability scanning
 - **Safety**: Dependency vulnerability checking
 
-## 🔧 Test Configuration
+## Test Configuration
 
 ### pytest.ini
 - Test discovery patterns
@@ -74,7 +74,7 @@ pytest tests/test_policy_gradient.py::TestMLP::test_mlp_initialization -v
 - Parallel job execution
 - Coverage reporting
 
-## 📊 Coverage Reports
+## Coverage Reports
 
 ### HTML Coverage
 ```bash
@@ -92,7 +92,7 @@ pytest --cov=atari --cov-report=term-missing
 pytest --cov=atari --cov-report=xml
 ```
 
-## 🎯 Test Markers
+## Test Markers
 
 ### Available Markers
 - `@pytest.mark.slow`: Slow-running tests
@@ -111,7 +111,7 @@ pytest -m unit
 pytest -m integration
 ```
 
-## 🐛 Debugging Tests
+## Debugging Tests
 
 ### Verbose Output
 ```bash
@@ -130,7 +130,7 @@ pytest tests/test_dqn.py::TestDuelingCNN::test_model_initialization -s
 pytest --tb=short -s
 ```
 
-## 📝 Writing Tests
+## Writing Tests
 
 ### Test Naming Convention
 - Files: `test_*.py`
@@ -163,7 +163,7 @@ with patch('module.external_function') as mock_func:
     assert result == expected_value
 ```
 
-## 🔄 Continuous Integration
+## Continuous Integration
 
 ### GitHub Actions Workflow
 - **Triggers**: Push to main/master, Pull Requests
@@ -180,7 +180,7 @@ with patch('module.external_function') as mock_func:
 python run_tests.py
 ```
 
-## 📈 Coverage Goals
+## Coverage Goals
 
 ### Current Coverage
 - **Atari Baselines**: ~80%
@@ -192,7 +192,7 @@ python run_tests.py
 - **Integration Tests**: >80%
 - **Overall**: >85%
 
-## 🚨 Common Issues
+## Common Issues
 
 ### Import Errors
 ```bash
@@ -213,7 +213,7 @@ with patch('module.submodule.Class') as mock_class:
     # Mock implementation
 ```
 
-## 📚 Resources
+## Resources
 
 - [pytest Documentation](https://docs.pytest.org/)
 - [pytest-mock Documentation](https://pytest-mock.readthedocs.io/)

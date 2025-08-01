@@ -5,4 +5,4 @@ from .training_config import TrainingConfig
 from .learning_config import LearningConfig
 from .exploration_config import ExplorationConfig
 from .image_config import ImageConfig
-from .hyperparameters import HyperParameters 
+from .hyperparameters import HyperParameters

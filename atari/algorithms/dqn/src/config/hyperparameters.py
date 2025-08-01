@@ -8,7 +8,15 @@ from .image_config import ImageConfig
 
 
 class HyperParameters:
-    def __init__(self, environment_config: EnvironmentConfig, model_config: ModelConfig, training_config: TrainingConfig, learning_config: LearningConfig, exploration_config: ExplorationConfig, image_config: ImageConfig):
+    def __init__(
+        self,
+        environment_config: EnvironmentConfig,
+        model_config: ModelConfig,
+        training_config: TrainingConfig,
+        learning_config: LearningConfig,
+        exploration_config: ExplorationConfig,
+        image_config: ImageConfig,
+    ):
         self.environment = environment_config
         self.model = model_config
         self.training = training_config
