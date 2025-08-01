@@ -7,7 +7,7 @@ import re
 import argparse
 
 def parse_arguments():
-    parser = argparse.ArgumentParser(description='Train RL agents on Pong using Stable Baselines3')
+    parser = argparse.ArgumentParser(description='Train RL agents on Atari games using Stable Baselines3')
     parser.add_argument('--algorithm', '-a', type=str, choices=['ppo', 'dqn', 'a2c', 'a2c_cnn'], 
                        default='ppo', help='Algorithm to use (default: ppo)')
     parser.add_argument('--timesteps', '-t', type=str, default='100000',
