@@ -1,7 +1,7 @@
 # Game AI & Reinforcement Learning
 
-[![Build Status](https://github.com/shehabyasser/rl/actions/workflows/test.yml/badge.svg)](https://github.com/shehabyasser/rl/actions/workflows/test.yml)
-[![Tests](https://github.com/shehabyasser/rl/actions/workflows/test.yml/badge.svg?event=push)](https://github.com/shehabyasser/rl/actions/workflows/test.yml)
+[![Build Status](https://github.com/shehio/rl/actions/workflows/test.yml/badge.svg)](https://github.com/shehio/rl/actions/workflows/test.yml)
+[![Tests](https://github.com/shehio/rl/actions/workflows/test.yml/badge.svg?event=push)](https://github.com/shehio/rl/actions/workflows/test.yml)
 
 
 A comprehensive repository for implementing and experimenting with various reinforcement learning algorithms and classical game AI techniques.
@@ -109,11 +109,11 @@ python river-crossing-puzzle.py
 3. Update relevant README files
 4. Test your changes thoroughly
 
-## 📄 License
+## License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
-## 🔗 Related Projects
+## Related Projects
 
 - [Stable Baselines3](https://stable-baselines3.readthedocs.io/) - RL algorithms
 - [Gymnasium](https://gymnasium.farama.org/) - RL environments
