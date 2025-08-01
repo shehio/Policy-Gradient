@@ -6,6 +6,9 @@ import time
 import gymnasium as gym
 import argparse
 import os
+import cv2
+import numpy as np
+from datetime import datetime
 
 
 def parse_arguments():
@@ -48,6 +51,19 @@ def parse_arguments():
         default=0.01,
         help="Delay between frames in seconds (default: 0.01)",
     )
+    parser.add_argument(
+        "--record",
+        "-r",
+        action="store_true",
+        help="Record video of the gameplay",
+    )
+    parser.add_argument(
+        "--video_path",
+        "-v",
+        type=str,
+        default=None,
+        help="Path for the output video file (default: auto-generated)",
+    )
 
     return parser.parse_args()
 
@@ -65,15 +81,53 @@ def detect_algorithm_from_model(model_path):
         return A2C
 
 
-def render_model(model_path, env_name, algorithm_class, num_episodes=3, delay=0.01):
+def render_model(model_path, env_name, algorithm_class, num_episodes=3, delay=0.01, record_video=False, video_path=None):
     """
     Render a trained model playing the game
     """
-    # Create environment with rendering
-    env = make_atari_env(
-        env_name, n_envs=1, seed=0, env_kwargs={"render_mode": "human"}
-    )
+    # Create environment with appropriate render mode
+    if record_video:
+        # Use rgb_array for video recording
+        env = make_atari_env(
+            env_name, n_envs=1, seed=0, env_kwargs={"render_mode": "rgb_array"}
+        )
+    else:
+        # Use human for live viewing
+        env = make_atari_env(
+            env_name, n_envs=1, seed=0, env_kwargs={"render_mode": "human"}
+        )
+    
     env = VecFrameStack(env, n_stack=4)  # Stack 4 frames
+    
+    # Setup video recording
+    video_writer = None
+    if record_video:
+        if video_path is None:
+            timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+            video_path = f"gameplay_{timestamp}.mp4"
+        
+        # Get the first frame to determine video dimensions
+        test_obs = env.reset()
+        test_frame = env.render()
+        if test_frame is not None:
+            height, width = test_frame.shape[:2]
+            # Try different codecs for better compatibility
+            try:
+                fourcc = cv2.VideoWriter_fourcc(*'avc1')  # H.264 codec
+                video_writer = cv2.VideoWriter(video_path, fourcc, 30.0, (width, height))
+            except:
+                try:
+                    fourcc = cv2.VideoWriter_fourcc(*'mp4v')  # MP4 codec
+                    video_writer = cv2.VideoWriter(video_path, fourcc, 30.0, (width, height))
+                except:
+                    fourcc = cv2.VideoWriter_fourcc(*'XVID')  # XVID codec
+                    video_path = video_path.replace('.mp4', '.avi')
+                    video_writer = cv2.VideoWriter(video_path, fourcc, 30.0, (width, height))
+            print(f"Recording video to: {video_path}")
+        else:
+            print("Warning: Could not get frame dimensions, using default size")
+            fourcc = cv2.VideoWriter_fourcc(*'mp4v')
+            video_writer = cv2.VideoWriter(video_path, fourcc, 30.0, (640, 480))
 
     # Load the model
     try:
@@ -99,6 +153,21 @@ def render_model(model_path, env_name, algorithm_class, num_episodes=3, delay=0.
             total_reward += rewards[0]
             step_count += 1
 
+            # Capture frame for video recording
+            if record_video and video_writer is not None:
+                try:
+                    frame = env.render()
+                    if frame is not None:
+                        # Handle vectorized environment (frame might be a list)
+                        if isinstance(frame, list):
+                            frame = frame[0]  # Take first environment's frame
+                        
+                        # Convert from RGB to BGR for OpenCV
+                        frame_bgr = cv2.cvtColor(frame, cv2.COLOR_RGB2BGR)
+                        video_writer.write(frame_bgr)
+                except Exception as e:
+                    print(f"Warning: Could not capture frame: {e}")
+
             # Add delay to make it watchable
             time.sleep(delay)
 
@@ -110,6 +179,11 @@ def render_model(model_path, env_name, algorithm_class, num_episodes=3, delay=0.
                 break
 
     env.close()
+    
+    # Cleanup video recording
+    if video_writer is not None:
+        video_writer.release()
+        print(f"Video saved to: {video_path}")
 
     # Print summary
     if total_rewards:
@@ -160,9 +234,12 @@ def main():
     print(f"Model: {args.model}")
     print(f"Episodes: {args.episodes}")
     print(f"Frame delay: {args.delay}s")
+    print(f"Recording: {args.record}")
+    if args.record:
+        print(f"Video path: {args.video_path or 'auto-generated'}")
     print("-" * 50)
 
-    render_model(args.model, args.env, algorithm_class, args.episodes, args.delay)
+    render_model(args.model, args.env, algorithm_class, args.episodes, args.delay, args.record, args.video_path)
 
 
 if __name__ == "__main__":
