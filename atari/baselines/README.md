@@ -1,19 +1,19 @@
 # Atari Training Script Guide
 
-This directory contains training scripts for Atari games using Stable Baselines3. The main script `pong_train.py` is a flexible, command-line driven trainer that supports multiple algorithms and environments.
+This directory contains training scripts for Atari games using Stable Baselines3. The main script `atari_baseline_train.py` is a flexible, command-line driven trainer that supports multiple algorithms and environments.
 
 ## Quick Start
 
 ### Basic Usage
 ```bash
 # Train PPO on Pong (default settings)
-python pong_train.py
+python atari_baseline_train.py
 
 # Train DQN on Breakout for 500k timesteps
-python pong_train.py --algorithm dqn --env ALE/Breakout-v5 --timesteps 500000
+python atari_baseline_train.py --algorithm dqn --env ALE/Breakout-v5 --timesteps 500000
 
 # Train A2C with CNN policy on Ms. Pacman infinitely
-python pong_train.py -a a2c_cnn -e ALE/MsPacman-v5 -t infinite
+python atari_baseline_train.py -a a2c_cnn -e ALE/MsPacman-v5 -t infinite
 ```
 
 ## Command Line Arguments
@@ -39,7 +39,7 @@ None - all arguments have sensible defaults.
 - **Use case**: General purpose training
 
 ```bash
-python pong_train.py --algorithm ppo
+python atari_baseline_train.py --algorithm ppo
 ```
 
 ### 2. DQN (Deep Q-Network)
@@ -48,7 +48,7 @@ python pong_train.py --algorithm ppo
 - **Use case**: When you want to learn Q-values
 
 ```bash
-python pong_train.py --algorithm dqn
+python atari_baseline_train.py --algorithm dqn
 ```
 
 ### 3. A2C (Advantage Actor-Critic) - MLP
@@ -57,7 +57,7 @@ python pong_train.py --algorithm dqn
 - **Use case**: When CNN is not needed
 
 ```bash
-python pong_train.py --algorithm a2c
+python atari_baseline_train.py --algorithm a2c
 ```
 
 ### 4. A2C (Advantage Actor-Critic) - CNN
@@ -66,7 +66,7 @@ python pong_train.py --algorithm a2c
 - **Use case**: When you need spatial reasoning
 
 ```bash
-python pong_train.py --algorithm a2c_cnn
+python atari_baseline_train.py --algorithm a2c_cnn
 ```
 
 ## Training Modes
@@ -76,13 +76,13 @@ Train for a specific number of timesteps:
 
 ```bash
 # Train for 100k timesteps (default)
-python pong_train.py
+python atari_baseline_train.py
 
 # Train for 1M timesteps
-python pong_train.py --timesteps 1000000
+python atari_baseline_train.py --timesteps 1000000
 
 # Train for 500k timesteps
-python pong_train.py -t 500000
+python atari_baseline_train.py -t 500000
 ```
 
 ### Infinite Training
@@ -90,10 +90,10 @@ Train continuously until manually stopped:
 
 ```bash
 # Infinite training (press Ctrl+C to stop)
-python pong_train.py --timesteps infinite
+python atari_baseline_train.py --timesteps infinite
 
 # Or use the short form
-python pong_train.py -t inf
+python atari_baseline_train.py -t inf
 ```
 
 ## Environment Options
@@ -110,20 +110,20 @@ python pong_train.py -t inf
 ### Example Environment Usage
 ```bash
 # Train on Breakout
-python pong_train.py --env ALE/Breakout-v5
+python atari_baseline_train.py --env ALE/Breakout-v5
 
 # Train on Ms. Pacman
-python pong_train.py -e ALE/MsPacman-v5
+python atari_baseline_train.py -e ALE/MsPacman-v5
 
 # Train on Space Invaders
-python pong_train.py --env ALE/SpaceInvaders-v5
+python atari_baseline_train.py --env ALE/SpaceInvaders-v5
 ```
 
 ## Parallel Environments
 
 ### Single Environment (Default)
 ```bash
-python pong_train.py --n_envs 1
+python atari_baseline_train.py --n_envs 1
 ```
 - Good for testing and debugging
 - Lower memory usage
@@ -132,13 +132,13 @@ python pong_train.py --n_envs 1
 ### Multiple Environments
 ```bash
 # 4 parallel environments (recommended)
-python pong_train.py --n_envs 4
+python atari_baseline_train.py --n_envs 4
 
 # 8 parallel environments (faster)
-python pong_train.py -n 8
+python atari_baseline_train.py -n 8
 
 # 16 parallel environments (high performance)
-python pong_train.py --n_envs 16
+python atari_baseline_train.py --n_envs 16
 ```
 - Faster training
 - Better sample efficiency
@@ -151,10 +151,10 @@ The script automatically finds and loads the most recent model for the chosen al
 
 ```bash
 # If pong_ppo_cnn_100000.zip exists, it will be loaded
-python pong_train.py --algorithm ppo
+python atari_baseline_train.py --algorithm ppo
 
 # If breakout_dqn_cnn_500000.zip exists, it will be loaded
-python pong_train.py -a dqn -e ALE/Breakout-v5
+python atari_baseline_train.py -a dqn -e ALE/Breakout-v5
 ```
 
 ### Model Naming Convention
@@ -173,7 +173,7 @@ Examples:
 
 ### Example 1: Quick PPO Training
 ```bash
-python pong_train.py --algorithm ppo --timesteps 100000 --n_envs 4
+python atari_baseline_train.py --algorithm ppo --timesteps 100000 --n_envs 4
 ```
 - Trains PPO on Pong for 100k timesteps
 - Uses 4 parallel environments
@@ -181,7 +181,7 @@ python pong_train.py --algorithm ppo --timesteps 100000 --n_envs 4
 
 ### Example 2: Long DQN Training
 ```bash
-python pong_train.py -a dqn -e ALE/Breakout-v5 -t 2000000 -n 8
+python atari_baseline_train.py -a dqn -e ALE/Breakout-v5 -t 2000000 -n 8
 ```
 - Trains DQN on Breakout for 2M timesteps
 - Uses 8 parallel environments
@@ -189,7 +189,7 @@ python pong_train.py -a dqn -e ALE/Breakout-v5 -t 2000000 -n 8
 
 ### Example 3: Infinite A2C Training
 ```bash
-python pong_train.py -a a2c_cnn -e ALE/MsPacman-v5 -t infinite -n 4
+python atari_baseline_train.py -a a2c_cnn -e ALE/MsPacman-v5 -t infinite -n 4
 ```
 - Trains A2C with CNN on Ms. Pacman infinitely
 - Uses 4 parallel environments
@@ -198,7 +198,7 @@ python pong_train.py -a a2c_cnn -e ALE/MsPacman-v5 -t infinite -n 4
 
 ### Example 4: Reproducible Training
 ```bash
-python pong_train.py --algorithm ppo --seed 42 --n_envs 1
+python atari_baseline_train.py --algorithm ppo --seed 42 --n_envs 1
 ```
 - Trains PPO with fixed random seed
 - Uses single environment for debugging
@@ -209,34 +209,34 @@ python pong_train.py --algorithm ppo --seed 42 --n_envs 1
 ### For Faster Training
 ```bash
 # Use more parallel environments
-python pong_train.py --n_envs 8
+python atari_baseline_train.py --n_envs 8
 
 # Use infinite training for long sessions
-python pong_train.py -t infinite
+python atari_baseline_train.py -t infinite
 
 # Use PPO (generally fastest to converge)
-python pong_train.py -a ppo
+python atari_baseline_train.py -a ppo
 ```
 
 ### For Memory Efficiency
 ```bash
 # Use fewer parallel environments
-python pong_train.py --n_envs 1
+python atari_baseline_train.py --n_envs 1
 
 # Use MLP policy instead of CNN
-python pong_train.py -a a2c
+python atari_baseline_train.py -a a2c
 ```
 
 ### For Best Results
 ```bash
 # Use 4-8 parallel environments
-python pong_train.py --n_envs 4
+python atari_baseline_train.py --n_envs 4
 
 # Train for at least 1M timesteps
-python pong_train.py -t 1000000
+python atari_baseline_train.py -t 1000000
 
 # Use CNN policy for visual games
-python pong_train.py -a ppo  # or a2c_cnn
+python atari_baseline_train.py -a ppo  # or a2c_cnn
 ```
 
 ## Troubleshooting
@@ -251,7 +251,7 @@ python pong_train.py -a ppo  # or a2c_cnn
 ### Getting Help
 ```bash
 # Show all available options
-python pong_train.py --help
+python atari_baseline_train.py --help
 ```
 
 ## Related Files
