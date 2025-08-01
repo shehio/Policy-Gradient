@@ -106,7 +106,7 @@ python river-crossing-puzzle.py
 
 Watch our trained Deep Q-Network (DQN) agent playing Pong after 6 million training steps:
 
-![Pong DQN Gameplay](assets/videos/pong_dqn_cnn_6M_gameplay.mp4)
+![Pong DQN Gameplay](assets/videos/pong_dqn_cnn_6M_gameplay.gif)
 
 **Model Details:**
 - **Algorithm**: Deep Q-Network (DQN) with Dueling CNN architecture
