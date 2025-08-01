@@ -13,9 +13,6 @@ atari/
 │   ├── pg/                    # Policy Gradient implementation
 │   │   ├── scripts/           # PG training scripts
 │   │   └── src/               # PG source code
-│   └── a2c/                   # Advantage Actor-Critic (future)
-│       ├── scripts/
-│       └── src/
 ├── baselines/                 # Stable Baselines3 implementations
 │   ├── atari_baseline_train.py
 │   ├── atari_baseline_test.py
@@ -68,7 +65,14 @@ python pgbreakout.py
 python pgpacman.py
 ```
 
-## Algorithm Implementations
+## Detailed Documentation
+
+### Algorithm-Specific Guides
+- **[algorithms/dqn/README.md](algorithms/dqn/README.md)** - Complete DQN implementation guide
+- **[algorithms/pg/README.md](algorithms/pg/README.md)** - Complete Policy Gradient implementation guide
+- **[baselines/README.md](baselines/README.md)** - Stable Baselines3 usage guide
+
+## 🎮 Algorithm Implementations
 
 ### 1. DQN (Deep Q-Network)
 - **Location**: `algorithms/dqn/`
@@ -95,12 +99,12 @@ Models are organized by algorithm and game:
 - `models/pg/breakout/` - PG models for Breakout
 - `models/baselines/` - Stable Baselines3 models
 
-## Common Utilities
+### Model File Types
+- **Stable Baselines3**: `.zip` files (e.g., `pong_ppo_cnn_1000000.zip`)
+- **DQN**: `.pkl` files + `.json` (epsilon) + `.txt` (output logs)
+- **Policy Gradient**: Custom naming with episode numbers
 
-Shared utilities are in the `common/` directory:
-- `common/utils/` - Model management, recording utilities
-- `common/environments/` - Environment wrappers and configurations
-- `common/configs/` - Shared configuration files
+
 
 ## Getting Started
 
@@ -118,16 +122,34 @@ Shared utilities are in the `common/` directory:
 
 3. **Follow the specific README** in each directory for detailed instructions.
 
-## Dependencies
+## 📦 Dependencies
 
 ```bash
 pip install stable_baselines3 gymnasium[atari] ale-py torch numpy
 ```
 
-## Contributing
+## 🔄 Algorithm Comparison
+
+| Aspect | Policy Gradient | DQN | Stable Baselines3 |
+|--------|----------------|-----|-------------------|
+| **Learning Type** | On-policy | Off-policy | Both |
+| **Action Spaces** | Continuous & Discrete | Discrete | Both |
+| **Sample Efficiency** | Lower | Higher | High |
+| **Training Stability** | Less stable | More stable | Very stable |
+| **Implementation** | Custom | Custom | Pre-built |
+| **Best For** | Learning, experimentation | Learning, experimentation | Production |
+
+## 🤝 Contributing
 
 When adding new algorithms:
 1. Create a new directory under `algorithms/`
 2. Follow the existing structure (scripts/ and src/)
-3. Update this README with documentation
-4. Add appropriate model storage directories 
+3. Create a detailed README.md
+4. Update this README with documentation
+5. Add appropriate model storage directories
+
+## 🔗 Related Documentation
+
+- **[Main README](../README.md)** - Project overview and quick start
+- **[Chess README](../chess/README.md)** - Chess engine integration
+- **[Graph Search README](../graph-search/README.md)** - Classical search algorithms 
