@@ -87,14 +87,30 @@ def render_model(model_path, env_name, algorithm_class, num_episodes=3, delay=0.
 def main():
     args = parse_arguments()
     
-    # Check if model file exists
+    # Check if model file exists in the new directory structure
     model_file = f"{args.model}.zip"
-    if not os.path.exists(model_file):
+    model_paths = [
+        f"../models/baselines/{model_file}",  # New organized structure
+        model_file,  # Current directory (fallback)
+    ]
+    
+    model_found = False
+    for model_path in model_paths:
+        if os.path.exists(model_path):
+            args.model = model_path.replace('.zip', '')
+            model_found = True
+            break
+    
+    if not model_found:
         print(f"Error: Model file {model_file} not found!")
-        print("Available models:")
-        for file in os.listdir("."):
-            if file.endswith(".zip"):
-                print(f"  - {file.replace('.zip', '')}")
+        print("Available models in ../models/baselines/:")
+        baselines_dir = "../models/baselines"
+        if os.path.exists(baselines_dir):
+            for file in os.listdir(baselines_dir):
+                if file.endswith(".zip"):
+                    print(f"  - {file.replace('.zip', '')}")
+        else:
+            print("  No models directory found")
         return
     
     # Determine algorithm

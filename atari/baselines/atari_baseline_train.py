@@ -2,9 +2,11 @@ from stable_baselines3 import PPO, DQN, A2C
 from stable_baselines3.common.env_util import make_atari_env
 from stable_baselines3.common.vec_env import VecFrameStack
 import ale_py  # This registers the ALE environments
+import os
 import glob
 import re
 import argparse
+import sys
 
 def parse_arguments():
     parser = argparse.ArgumentParser(description='Train RL agents on Atari games using Stable Baselines3')
@@ -26,6 +28,10 @@ def get_env_name(env_string):
     # Remove ALE/ prefix and -v5 suffix
     env_name = env_string.replace('ALE/', '').replace('-v5', '').replace('-v4', '').replace('-v0', '')
     return env_name.lower()
+
+def ensure_model_dir(model_dir):
+    """Ensure the model directory exists"""
+    os.makedirs(model_dir, exist_ok=True)
 
 def find_latest_model(base_path):
     pattern = f"{base_path}_*.zip"
@@ -70,8 +76,12 @@ def main():
     algorithm, base_model_path, policy = algorithm_map[args.algorithm]
     print(f"Selected: {algorithm.__name__} with {policy} on {args.env}")
     
+    # Set up model directory
+    model_dir = f"../models/baselines"
+    ensure_model_dir(model_dir)
+    
     # Find and load the most recent model
-    latest_model, current_timesteps = find_latest_model(base_model_path)
+    latest_model, current_timesteps = find_latest_model(os.path.join(model_dir, base_model_path))
     
     if latest_model:
         print(f"Found latest model: {latest_model} ({current_timesteps:,} timesteps)")
@@ -94,13 +104,13 @@ def main():
                 current_timesteps += 100000
                 
                 # Save checkpoint every 100000 timesteps
-                save_path = f"{base_model_path}_{current_timesteps}"
+                save_path = os.path.join(model_dir, f"{base_model_path}_{current_timesteps}")
                 model.save(save_path)
                 print(f"Checkpoint saved: {save_path} ({current_timesteps:,} total timesteps)")
                 
         except KeyboardInterrupt:
             print(f"\nTraining stopped by user at {current_timesteps:,} timesteps")
-            final_save_path = f"{base_model_path}_{current_timesteps}_final"
+            final_save_path = os.path.join(model_dir, f"{base_model_path}_{current_timesteps}_final")
             model.save(final_save_path)
             print(f"Final model saved as: {final_save_path}")
     else:
@@ -112,7 +122,7 @@ def main():
             
             # Save the final model
             final_timesteps = current_timesteps + training_timesteps
-            save_path = f"{base_model_path}_{final_timesteps}"
+            save_path = os.path.join(model_dir, f"{base_model_path}_{final_timesteps}")
             model.save(save_path)
             print(f"Training completed! Model saved as: {save_path}")
             
@@ -120,7 +130,7 @@ def main():
             print(f"Invalid timesteps value: {training_input}. Defaulting to 100,000 timesteps...")
             model.learn(total_timesteps=100000, reset_num_timesteps=False)
             final_timesteps = current_timesteps + 100000
-            save_path = f"{base_model_path}_{final_timesteps}"
+            save_path = os.path.join(model_dir, f"{base_model_path}_{final_timesteps}")
             model.save(save_path)
             print(f"Training completed! Model saved as: {save_path}")
 

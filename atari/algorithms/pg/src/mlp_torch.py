@@ -115,8 +115,8 @@ class MLP(nn.Module):
             base_name = os.path.splitext(self.network_file)[0]
             file_name = f"{base_name}_{self.game_name}_i{self.input_count}_h{self.hidden_layers_count}_o{self.output_count}_{episode_number}"
             
-            # Look in models directory
-            models_dir = "atari/scripts/policy-gradient/models"
+            # Look in new models directory structure
+            models_dir = f"../../models/pg/{self.game_name}"
             file_path = os.path.join(models_dir, file_name)
             
             if os.path.exists(file_path):
@@ -130,12 +130,12 @@ class MLP(nn.Module):
         base_name = os.path.splitext(self.network_file)[0] 
         file_name = f"{base_name}_{self.game_name}_i{self.input_count}_h{self.hidden_layers_count}_o{self.output_count}_{episode_number}"
         
-        # Ensure the models directory exists
-        models_dir = "atari/scripts/policy-gradient/models"
+        # Ensure the new models directory exists
+        models_dir = f"../../models/pg/{self.game_name}"
         if not os.path.exists(models_dir):
             os.makedirs(models_dir, exist_ok=True)
         
-        # Save in models directory
+        # Save in new models directory
         file_path = os.path.join(models_dir, file_name)
         torch.save(self.state_dict(), file_path)
 

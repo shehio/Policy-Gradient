@@ -2,7 +2,9 @@
 
 This directory contains a custom implementation of Policy Gradient (REINFORCE) algorithm for Atari games.
 
-## Structure
+> **📚 For general Atari information, see [atari/README.md](../README.md)**
+
+## 📁 Structure
 
 ```
 pg/
@@ -26,18 +28,7 @@ pg/
         └── preprocess_pacman.py
 ```
 
-## Features
-
-- **REINFORCE Algorithm**: Direct policy optimization
-- **PyTorch Implementation**: Modern MLP with GPU support
-- **CNN Support**: Convolutional networks for Pacman
-- **Episode Memory**: Stores complete episodes for training
-- **Multi-Action Support**: 9-action space for Pacman
-- **Frame Preprocessing**: Optimized image processing
-
-## Usage
-
-### Training
+## 🚀 Quick Start
 
 ```bash
 # Train on Pong (binary actions)
@@ -51,16 +42,88 @@ python scripts/pgpacman.py
 
 # Use generic trainer
 python scripts/pg_trainer.py pong --render
+
+# Test trained model
+python scripts/pg_tester.py --model ../../models/pg/pong/torch_mlp_pong_i6400_h200_o1_90000
 ```
 
-### Testing
+## 🧠 Policy Gradient Features
+
+- **REINFORCE Algorithm**: Direct policy optimization
+- **PyTorch Implementation**: Modern MLP with GPU support
+- **CNN Support**: Convolutional networks for Pacman
+- **Episode Memory**: Stores complete episodes for training
+- **Multi-Action Support**: 9-action space for Pacman
+- **Frame Preprocessing**: Optimized image processing
+
+## 🏗️ Architecture
+
+### MLP Architecture (Pong/Breakout)
+- **Input**: 6400 units (80x80 preprocessed frames)
+- **Hidden**: 200 units with ReLU activation
+- **Output**: 1 unit with Sigmoid activation
+- **Policy**: Binary action selection (UP/DOWN or LEFT/RIGHT)
+
+### CNN Architecture (Pacman)
+- **Input**: 7 channels at 80x80 resolution
+- **Conv1**: 32 filters, 8x8 kernel, stride 4
+- **Conv2**: 64 filters, 4x4 kernel, stride 2
+- **Conv3**: 64 filters, 3x3 kernel, stride 1
+- **Fully Connected**: 200 hidden units
+- **Output**: 9 action probabilities
+
+## ⚙️ Configuration
+
+Key hyperparameters in `src/hyperparameters.py`:
+```python
+# Training
+learning_rate = 1e-3
+batch_size = 10
+max_episodes = 100000
+
+# Network
+input_size = 6400
+hidden_size = 200
+output_size = 1  # or 9 for Pacman
+
+# Exploration
+temperature = 1.0
+```
+
+## 📊 Performance
+
+- **Pong**: 20+ average reward after 70k episodes
+- **Breakout**: Good paddle control and ball tracking
+- **Pacman**: Complex maze navigation with ghost avoidance
+- **Training Time**: 2-4 hours for 100k episodes on CPU
+
+## 💾 Model Storage
+
+Trained models are saved in:
+- `../../models/pg/pong/` for Pong models
+- `../../models/pg/breakout/` for Breakout models
+- `../../models/pg/pacman/` for Pacman models
+
+### Model Naming Convention
+```
+{base_name}_{game_name}_i{input_size}_h{hidden_size}_o{output_size}_{episode}
+```
+
+## 🔧 Dependencies
 
 ```bash
-# Test trained model
-python scripts/pg_tester.py --model path/to/model --game pong
+pip install torch numpy gymnasium[atari] ale-py
 ```
 
-## Game-Specific Implementations
+## 📈 Training Process
+
+1. **Episode Collection**: Run complete episodes with current policy
+2. **Reward Calculation**: Compute discounted rewards for each step
+3. **Policy Update**: Update network weights using REINFORCE
+4. **Exploration**: Use temperature scheduling for exploration
+5. **Model Saving**: Save checkpoints every N episodes
+
+## 🎮 Game-Specific Implementations
 
 ### Pong & Breakout
 - **Action Space**: Binary (UP/DOWN for Pong, LEFT/RIGHT for Breakout)
@@ -73,54 +136,29 @@ python scripts/pg_tester.py --model path/to/model --game pong
 - **Policy**: Softmax output for multi-action selection
 - **Preprocessing**: Color-aware preprocessing for ghost detection
 
-## Configuration
+## 🔍 Key Differences from DQN
 
-Key hyperparameters in `src/hyperparameters.py`:
-- Learning rate
-- Batch size
-- Episode length
-- Network architecture
-- Training duration
+| Aspect | Policy Gradient | DQN |
+|--------|----------------|-----|
+| **Learning Type** | On-policy | Off-policy |
+| **Action Space** | Both | Discrete only |
+| **Policy Type** | Stochastic | Deterministic |
+| **Sample Efficiency** | Lower | Higher |
+| **Training Stability** | Less stable | More stable |
+| **Implementation** | Simpler | More complex |
+| **Best For** | Continuous actions | Discrete actions |
 
-## Model Storage
+## 🎯 REINFORCE Algorithm
 
-Trained models are saved in:
-- `../../models/pg/pong/` for Pong models
-- `../../models/pg/breakout/` for Breakout models
-- `../../models/pg/pacman/` for Pacman models
+The REINFORCE algorithm directly optimizes the policy:
 
-## Dependencies
+1. **Collect Episode**: Run policy π(s) for complete episode
+2. **Compute Returns**: Calculate discounted rewards R(t)
+3. **Update Policy**: ∇θ J(θ) = E[∇θ log π(a|s) R(t)]
+4. **Repeat**: Continue until convergence
 
-```bash
-pip install torch numpy gymnasium[atari] ale-py
-```
+## 🔗 Related Documentation
 
-## Architecture
-
-### MLP Architecture (Pong/Breakout)
-- **Input**: 6400 units (80x80 preprocessed frames)
-- **Hidden**: 200 units with ReLU activation
-- **Output**: 1 unit with Sigmoid activation
-
-### CNN Architecture (Pacman)
-- **Input**: 7 channels at 80x80 resolution
-- **Conv1**: 32 filters, 8x8 kernel, stride 4
-- **Conv2**: 64 filters, 4x4 kernel, stride 2
-- **Conv3**: 64 filters, 3x3 kernel, stride 1
-- **Fully Connected**: 200 hidden units
-- **Output**: 9 action probabilities
-
-## Performance
-
-- **Pong**: Achieves 20+ average reward after 70k episodes
-- **Breakout**: Good paddle control and ball tracking
-- **Pacman**: Complex maze navigation with ghost avoidance
-- **Training Time**: 2-4 hours for 100k episodes on CPU
-
-## Key Differences from DQN
-
-- **Policy-based**: Learns π(s) → a directly
-- **On-policy**: Uses current policy for acting and learning
-- **Stochastic**: Outputs action probabilities
-- **Episode-based**: Trains on complete episodes
-- **Higher variance**: Less stable but can handle continuous actions 
+- **[atari/README.md](../README.md)** - General Atari information
+- **[dqn/README.md](../dqn/README.md)** - DQN comparison
+- **[baselines/README.md](../baselines/README.md)** - Stable Baselines3 A2C 

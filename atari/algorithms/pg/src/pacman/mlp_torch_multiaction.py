@@ -93,15 +93,27 @@ class MLPMultiAction(nn.Module):
         if episode_number > 0:
             base_name = os.path.splitext(self.network_file)[0]
             file_name = f"{base_name}_{self.game_name}_i{self.input_count}_h{self.hidden_layers_count}_o{self.output_count}_{episode_number}"
-            if os.path.exists(file_name):
-                state_dict = torch.load(file_name, map_location=self.device)
+            
+            # Look in new models directory structure
+            models_dir = f"../../models/pg/{self.game_name}"
+            file_path = os.path.join(models_dir, file_name)
+            
+            if os.path.exists(file_path):
+                state_dict = torch.load(file_path, map_location=self.device)
                 self.load_state_dict(state_dict)
-                print(f"Loaded model: {file_name}")
+                print(f"Loaded model: {file_path}")
             else:
-                print(f"Model file not found: {file_name}")
+                print(f"Model file not found: {file_path}")
 
     def save_network(self, episode_number: int) -> None:
         base_name = os.path.splitext(self.network_file)[0]
         file_name = f"{base_name}_{self.game_name}_i{self.input_count}_h{self.hidden_layers_count}_o{self.output_count}_{episode_number}"
-        os.makedirs(os.path.dirname(file_name), exist_ok=True)
-        torch.save(self.state_dict(), file_name) 
+        
+        # Ensure the new models directory exists
+        models_dir = f"../../models/pg/{self.game_name}"
+        if not os.path.exists(models_dir):
+            os.makedirs(models_dir, exist_ok=True)
+        
+        # Save in new models directory
+        file_path = os.path.join(models_dir, file_name)
+        torch.save(self.state_dict(), file_path) 

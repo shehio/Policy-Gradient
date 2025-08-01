@@ -31,7 +31,7 @@ def main():
         ),
         model_config=ModelConfig(
             save_models=True,
-            model_path="./atari/scripts/dqn/models/pacman-cnn-improved-",
+            model_path="../../models/dqn/pacman/pacman-cnn-improved-",
             save_model_interval=10,
             train_model=True,
             load_model_from_file=True,
