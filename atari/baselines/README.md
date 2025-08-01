@@ -13,6 +13,9 @@ python atari_baseline_train.py --algorithm ppo --env ALE/Pong-v5 --timesteps 100
 # Test trained model with rendering
 python atari_baseline_test.py --model pong_ppo_cnn_1000000
 
+# Record gameplay video
+python atari_baseline_test.py --model pong_dqn_cnn_6000000 --record
+
 # Train with infinite training (Ctrl+C to stop)
 python atari_baseline_train.py --algorithm dqn --env ALE/Breakout-v5 --timesteps infinite
 ```
@@ -59,6 +62,8 @@ Options:
   --episodes, -n     Number of episodes to run [default: 3]
   --algorithm, -a    Algorithm type: auto, ppo, dqn, a2c [default: auto]
   --delay, -d        Frame delay in seconds [default: 0.01]
+  --record, -r       Record video of gameplay [default: False]
+  --video_path, -v   Custom video output path [default: auto-generated]
 ```
 
 ## 🎮 Environment Options
@@ -147,6 +152,25 @@ python atari_baseline_test.py --model pong_ppo_cnn_1000000 --episodes 10
 # - Best episode reward
 # - Worst episode reward
 # - Standard deviation
+```
+
+### Video Recording
+```bash
+# Record gameplay with auto-generated filename
+python atari_baseline_test.py --model pong_dqn_cnn_6000000 --record
+
+# Record with custom filename
+python atari_baseline_test.py --model pong_dqn_cnn_6000000 --record --video_path my_gameplay.mp4
+
+# Record longer gameplay with slower playback
+python atari_baseline_test.py --model pong_dqn_cnn_6000000 --record --episodes 5 --delay 0.05
+
+# Video specifications:
+# - Format: MP4
+# - Frame rate: 30 FPS
+# - Resolution: Auto-detected from environment
+# - Codec: H.264 (mp4v)
+# - Location: Current directory (atari/baselines/)
 ```
 
 ## 🔧 Advanced Configuration

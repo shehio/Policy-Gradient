@@ -102,6 +102,27 @@ python river-crossing-puzzle.py
 
 ## Performance
 
+### Demo: Pong DQN Agent
+
+Watch our trained Deep Q-Network (DQN) agent playing Pong after 6 million training steps:
+
+![Pong DQN Gameplay](assets/videos/pong_dqn_cnn_6M_gameplay.mp4)
+
+**Model Details:**
+- **Algorithm**: Deep Q-Network (DQN) with Dueling CNN architecture
+- **Environment**: ALE/Pong-v5 (Atari Learning Environment)
+- **Training Steps**: 6,000,000
+- **Architecture**: Convolutional Neural Network with dueling streams
+- **Performance**: Achieves consistent high scores through strategic paddle positioning
+
+**Technical Specifications:**
+- **Input**: 4 stacked grayscale frames (84x84 pixels)
+- **Actions**: 2 discrete actions (UP/DOWN)
+- **Network**: 3 convolutional layers + dueling streams (value + advantage)
+- **Training**: Experience replay, target networks, epsilon-greedy exploration
+
+The agent demonstrates strong gameplay by learning to predict ball trajectories and position the paddle optimally. The dueling architecture separates value and advantage estimation for more stable learning.
+
 ## Contributing
 
 1. Choose the appropriate subdirectory for your contribution
