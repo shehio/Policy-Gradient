@@ -4,8 +4,7 @@ Contains all game-specific settings, agents, and hyperparameters.
 """
 
 import torch
-import numpy as np
-from typing import Optional, Callable, Dict, Any
+from typing import Dict, Any
 from dqn.agent import Agent
 from dqn.pacman.agent import AgentImproved
 from dqn.config.environment_config import EnvironmentConfig
