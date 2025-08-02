@@ -1,13 +1,12 @@
 from stable_baselines3 import A2C, PPO, DQN
 from stable_baselines3.common.env_util import make_atari_env
 from stable_baselines3.common.vec_env import VecFrameStack
-import ale_py
-import time
-import gymnasium as gym
 import argparse
 import os
+import ale_py
+import time
+import time
 import cv2
-import numpy as np
 from datetime import datetime
 
 
@@ -81,7 +80,15 @@ def detect_algorithm_from_model(model_path):
         return A2C
 
 
-def render_model(model_path, env_name, algorithm_class, num_episodes=3, delay=0.01, record_video=False, video_path=None):
+def render_model(
+    model_path,
+    env_name,
+    algorithm_class,
+    num_episodes=3,
+    delay=0.01,
+    record_video=False,
+    video_path=None,
+):
     """
     Render a trained model playing the game
     """
@@ -96,37 +103,43 @@ def render_model(model_path, env_name, algorithm_class, num_episodes=3, delay=0.
         env = make_atari_env(
             env_name, n_envs=1, seed=0, env_kwargs={"render_mode": "human"}
         )
-    
+
     env = VecFrameStack(env, n_stack=4)  # Stack 4 frames
-    
+
     # Setup video recording
     video_writer = None
     if record_video:
         if video_path is None:
             timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
             video_path = f"gameplay_{timestamp}.mp4"
-        
+
         # Get the first frame to determine video dimensions
-        test_obs = env.reset()
+        env.reset()
         test_frame = env.render()
         if test_frame is not None:
             height, width = test_frame.shape[:2]
             # Try different codecs for better compatibility
             try:
-                fourcc = cv2.VideoWriter_fourcc(*'avc1')  # H.264 codec
-                video_writer = cv2.VideoWriter(video_path, fourcc, 30.0, (width, height))
-            except:
+                fourcc = cv2.VideoWriter_fourcc(*"avc1")  # H.264 codec
+                video_writer = cv2.VideoWriter(
+                    video_path, fourcc, 30.0, (width, height)
+                )
+            except Exception:
                 try:
-                    fourcc = cv2.VideoWriter_fourcc(*'mp4v')  # MP4 codec
-                    video_writer = cv2.VideoWriter(video_path, fourcc, 30.0, (width, height))
-                except:
-                    fourcc = cv2.VideoWriter_fourcc(*'XVID')  # XVID codec
-                    video_path = video_path.replace('.mp4', '.avi')
-                    video_writer = cv2.VideoWriter(video_path, fourcc, 30.0, (width, height))
+                    fourcc = cv2.VideoWriter_fourcc(*"mp4v")  # MP4 codec
+                    video_writer = cv2.VideoWriter(
+                        video_path, fourcc, 30.0, (width, height)
+                    )
+                except Exception:
+                    fourcc = cv2.VideoWriter_fourcc(*"XVID")  # XVID codec
+                    video_path = video_path.replace(".mp4", ".avi")
+                    video_writer = cv2.VideoWriter(
+                        video_path, fourcc, 30.0, (width, height)
+                    )
             print(f"Recording video to: {video_path}")
         else:
             print("Warning: Could not get frame dimensions, using default size")
-            fourcc = cv2.VideoWriter_fourcc(*'mp4v')
+            fourcc = cv2.VideoWriter_fourcc(*"mp4v")
             video_writer = cv2.VideoWriter(video_path, fourcc, 30.0, (640, 480))
 
     # Load the model
@@ -161,7 +174,7 @@ def render_model(model_path, env_name, algorithm_class, num_episodes=3, delay=0.
                         # Handle vectorized environment (frame might be a list)
                         if isinstance(frame, list):
                             frame = frame[0]  # Take first environment's frame
-                        
+
                         # Convert from RGB to BGR for OpenCV
                         frame_bgr = cv2.cvtColor(frame, cv2.COLOR_RGB2BGR)
                         video_writer.write(frame_bgr)
@@ -173,13 +186,14 @@ def render_model(model_path, env_name, algorithm_class, num_episodes=3, delay=0.
 
             if dones[0]:
                 print(
-                    f"Episode {episode + 1} finished with reward: {total_reward}, steps: {step_count}"
+                    f"Episode {episode + 1} finished with reward: "
+                    f"{total_reward}, steps: {step_count}"
                 )
                 total_rewards.append(total_reward)
                 break
 
     env.close()
-    
+
     # Cleanup video recording
     if video_writer is not None:
         video_writer.release()
@@ -239,7 +253,15 @@ def main():
         print(f"Video path: {args.video_path or 'auto-generated'}")
     print("-" * 50)
 
-    render_model(args.model, args.env, algorithm_class, args.episodes, args.delay, args.record, args.video_path)
+    render_model(
+        args.model,
+        args.env,
+        algorithm_class,
+        args.episodes,
+        args.delay,
+        args.record,
+        args.video_path,
+    )
 
 
 if __name__ == "__main__":
