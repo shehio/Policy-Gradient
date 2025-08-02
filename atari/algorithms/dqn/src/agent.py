@@ -77,7 +77,7 @@ class Agent:
             frame = image
 
         frame = frame[
-            self.crop_dim[0]: self.crop_dim[1], self.crop_dim[2] : self.crop_dim[3]
+            self.crop_dim[0] : self.crop_dim[1], self.crop_dim[2] : self.crop_dim[3]
         ]  # Cut from top
         frame = cv2.resize(frame, (self.target_w, self.target_h))  # Resize
         frame = frame.reshape(self.target_w, self.target_h) / 255  # Normalize
