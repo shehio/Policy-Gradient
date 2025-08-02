@@ -147,6 +147,27 @@ Watch our trained Deep Q-Network (DQN) agent playing Breakout after 5 million tr
 
 The agent shows improved strategic gameplay by learning to break bricks efficiently while maintaining paddle control. The enhanced life tracking ensures episodes run until all lives are lost, providing longer gameplay demonstrations.
 
+### Demo: Ms. Pacman DQN Agent
+
+Watch our trained Deep Q-Network (DQN) agent playing Ms. Pacman after 700,000 training steps:
+
+![Ms. Pacman DQN Gameplay](assets/videos/mspacman_dqn_cnn_700000_gameplay.gif)
+
+**Model Details:**
+- **Algorithm**: Deep Q-Network (DQN) with Dueling CNN architecture
+- **Environment**: ALE/MsPacman-v5 (Atari Learning Environment)
+- **Training Steps**: 700,000
+- **Architecture**: Convolutional Neural Network with dueling streams
+- **Performance**: Demonstrates maze navigation and ghost avoidance
+
+**Technical Specifications:**
+- **Input**: 4 stacked grayscale frames (84x84 pixels)
+- **Actions**: 9 discrete actions (8 directions + no-op)
+- **Network**: 3 convolutional layers + dueling streams (value + advantage)
+- **Training**: Experience replay, target networks, epsilon-greedy exploration
+
+The agent demonstrates strategic gameplay by learning to navigate mazes, collect dots, and avoid ghosts. The multi-action space (9 actions) makes this a more complex environment than binary-action games like Pong.
+
 ## Contributing
 
 1. Choose the appropriate subdirectory for your contribution
