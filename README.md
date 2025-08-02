@@ -123,6 +123,27 @@ Watch our trained Deep Q-Network (DQN) agent playing Pong after 6 million traini
 
 The agent demonstrates strong gameplay by learning to predict ball trajectories and position the paddle optimally. The dueling architecture separates value and advantage estimation for more stable learning.
 
+### Demo: Breakout DQN Agent
+
+Watch our trained Deep Q-Network (DQN) agent playing Breakout after 3.6 million training steps:
+
+![Breakout DQN Gameplay](assets/videos/breakout_dqn_cnn_3.6M_gameplay.gif)
+
+**Model Details:**
+- **Algorithm**: Deep Q-Network (DQN) with Dueling CNN architecture
+- **Environment**: ALE/Breakout-v5 (Atari Learning Environment)
+- **Training Steps**: 3,600,000
+- **Architecture**: Convolutional Neural Network with dueling streams
+- **Performance**: Demonstrates brick-breaking strategy and paddle control
+
+**Technical Specifications:**
+- **Input**: 4 stacked grayscale frames (84x84 pixels)
+- **Actions**: 3 discrete actions (LEFT/RIGHT/FIRE)
+- **Network**: 3 convolutional layers + dueling streams (value + advantage)
+- **Training**: Experience replay, target networks, epsilon-greedy exploration
+
+The agent shows strategic gameplay by learning to break bricks efficiently while maintaining paddle control. The improved life tracking ensures episodes run until all lives are lost.
+
 ## Contributing
 
 1. Choose the appropriate subdirectory for your contribution
