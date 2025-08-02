@@ -4,7 +4,7 @@
 [![Tests](https://github.com/shehio/rl/actions/workflows/test.yml/badge.svg?event=push)](https://github.com/shehio/rl/actions/workflows/test.yml)
 
 
-A comprehensive repository for implementing and experimenting with various reinforcement learning algorithms and classical game AI techniques.
+A comprehensive repository for implementing and experimenting with various reinforcement learning algorithms and classical game AI techniques. The objective of this repo is not to create the best playing agent but to experiment and explore different agents playing board games and video games.
 
 ## Project Overview
 
@@ -61,6 +61,9 @@ python river-crossing-puzzle.py
 ```
 
 ## Detailed Documentation
+
+### Theory & Algorithms
+- **[THEORY.md](THEORY.md)** - Comprehensive guide to RL algorithms and theory
 
 ### Atari Games & RL
 - **[atari/README.md](atari/README.md)** - Complete guide to Atari implementations
@@ -125,16 +128,16 @@ The agent demonstrates strong gameplay by learning to predict ball trajectories 
 
 ### Demo: Breakout DQN Agent
 
-Watch our trained Deep Q-Network (DQN) agent playing Breakout after 3.6 million training steps:
+Watch our trained Deep Q-Network (DQN) agent playing Breakout after 5 million training steps:
 
-![Breakout DQN Gameplay](assets/videos/breakout_dqn_cnn_3.6M_gameplay.gif)
+![Breakout DQN Gameplay](assets/videos/breakout_dqn_cnn_5M_gameplay.gif)
 
 **Model Details:**
 - **Algorithm**: Deep Q-Network (DQN) with Dueling CNN architecture
 - **Environment**: ALE/Breakout-v5 (Atari Learning Environment)
-- **Training Steps**: 3,600,000
+- **Training Steps**: 5,000,000
 - **Architecture**: Convolutional Neural Network with dueling streams
-- **Performance**: Demonstrates brick-breaking strategy and paddle control
+- **Performance**: Demonstrates advanced brick-breaking strategy and paddle control
 
 **Technical Specifications:**
 - **Input**: 4 stacked grayscale frames (84x84 pixels)
@@ -142,7 +145,7 @@ Watch our trained Deep Q-Network (DQN) agent playing Breakout after 3.6 million 
 - **Network**: 3 convolutional layers + dueling streams (value + advantage)
 - **Training**: Experience replay, target networks, epsilon-greedy exploration
 
-The agent shows strategic gameplay by learning to break bricks efficiently while maintaining paddle control. The improved life tracking ensures episodes run until all lives are lost.
+The agent shows improved strategic gameplay by learning to break bricks efficiently while maintaining paddle control. The enhanced life tracking ensures episodes run until all lives are lost, providing longer gameplay demonstrations.
 
 ## Contributing
 
