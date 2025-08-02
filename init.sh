@@ -1,6 +1,6 @@
 #!/bin/bash
-
 brew install swig
+brew install ffmpeg
 
 # Create virtual environment
 python3.11 -m venv venv   
