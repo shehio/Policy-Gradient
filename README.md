@@ -149,16 +149,16 @@ The agent shows improved strategic gameplay by learning to break bricks efficien
 
 ### Demo: Ms. Pacman DQN Agent
 
-Watch our trained Deep Q-Network (DQN) agent playing Ms. Pacman after 700,000 training steps:
+Watch our trained Deep Q-Network (DQN) agent playing Ms. Pacman after 10 million training steps:
 
-![Ms. Pacman DQN Gameplay](assets/videos/mspacman_dqn_cnn_700000_gameplay.gif)
+![Ms. Pacman DQN Gameplay](assets/videos/mspacman_dqn_cnn_10M_gameplay.gif)
 
 **Model Details:**
 - **Algorithm**: Deep Q-Network (DQN) with Dueling CNN architecture
 - **Environment**: ALE/MsPacman-v5 (Atari Learning Environment)
-- **Training Steps**: 700,000
+- **Training Steps**: 10,000,000
 - **Architecture**: Convolutional Neural Network with dueling streams
-- **Performance**: Demonstrates maze navigation and ghost avoidance
+- **Performance**: Advanced maze navigation, ghost avoidance, and power pellet strategy
 
 **Technical Specifications:**
 - **Input**: 4 stacked grayscale frames (84x84 pixels)
@@ -166,7 +166,7 @@ Watch our trained Deep Q-Network (DQN) agent playing Ms. Pacman after 700,000 tr
 - **Network**: 3 convolutional layers + dueling streams (value + advantage)
 - **Training**: Experience replay, target networks, epsilon-greedy exploration
 
-The agent demonstrates strategic gameplay by learning to navigate mazes, collect dots, and avoid ghosts. The multi-action space (9 actions) makes this a more complex environment than binary-action games like Pong.
+The agent demonstrates sophisticated gameplay by learning to navigate complex mazes, collect dots efficiently, avoid ghosts strategically, and utilize power pellets effectively. The extended training (10M steps) enables the agent to develop advanced strategies for this complex multi-action environment.
 
 ## Contributing
 
