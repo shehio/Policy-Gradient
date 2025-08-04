@@ -60,7 +60,7 @@ The DQN uses a Dueling CNN architecture:
 ### Network Details
 - **Input**: 80x80 preprocessed grayscale frames
 - **Conv1**: 32 filters, 8x8 kernel, stride 4
-- **Conv2**: 64 filters, 4x4 kernel, stride 2  
+- **Conv2**: 64 filters, 4x4 kernel, stride 2
 - **Conv3**: 64 filters, 3x3 kernel, stride 1
 - **Fully Connected**: 512 hidden units
 - **Output**: Q-values for each action
@@ -153,4 +153,4 @@ pip install torch numpy gymnasium[atari] ale-py
 
 - **[atari/README.md](../README.md)** - General Atari information
 - **[baselines/README.md](../baselines/README.md)** - Stable Baselines3 DQN
-- **[pg/README.md](../pg/README.md)** - Policy Gradient comparison 
+- **[pg/README.md](../pg/README.md)** - Policy Gradient comparison

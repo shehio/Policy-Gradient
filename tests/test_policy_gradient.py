@@ -85,7 +85,6 @@ class TestMLP:
         with patch("mlp_torch.torch.save") as mock_save, patch(
             "mlp_torch.torch.load"
         ) as mock_load, patch("mlp_torch.os.path.exists", return_value=True):
-
             # Test saving
             mlp.save_network(100)
             mock_save.assert_called()

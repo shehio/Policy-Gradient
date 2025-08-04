@@ -152,4 +152,4 @@ When adding new algorithms:
 
 - **[Main README](../README.md)** - Project overview and quick start
 - **[Chess README](../chess/README.md)** - Chess engine integration
-- **[Graph Search README](../graph-search/README.md)** - Classical search algorithms 
+- **[Graph Search README](../graph-search/README.md)** - Classical search algorithms

@@ -5,4 +5,3 @@ terraform init
 terraform plan
 terraform apply -auto-approve
 ssh -i generic.pem ubuntu@<instance-public-ip>
-

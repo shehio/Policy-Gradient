@@ -51,4 +51,4 @@ fi
 echo "Setup complete! Running the main script..."
 echo "Script will run in the background and continue even if it fails..."
 nohup python scripts/pgpong.py > training.log 2>&1 &
-echo "Training started in background. Check training.log for output." 
+echo "Training started in background. Check training.log for output."

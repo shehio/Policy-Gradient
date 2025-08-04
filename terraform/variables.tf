@@ -16,4 +16,4 @@ variable "instance_type" {
 variable "key_name" {
   description = "Name of the AWS EC2 Key Pair to use for SSH access"
   default     = "generic"
-} 
+}

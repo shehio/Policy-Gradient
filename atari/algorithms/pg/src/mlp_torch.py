@@ -99,9 +99,7 @@ class MLP(nn.Module):
             return
 
         if torch.isnan(advantages).any() or torch.isinf(advantages).any():
-            print(
-                "🚨 CRITICAL: NaN or infinite advantages detected! Skipping training."
-            )
+            print("🚨 CRITICAL: NaN or infinite advantages detected! Skipping training.")
             self.gradient_buffer = []
             return
 

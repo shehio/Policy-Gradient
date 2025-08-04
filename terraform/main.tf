@@ -78,22 +78,22 @@ resource "aws_instance" "gpu_runner" {
     set -e
     exec > >(tee /var/log/user-data.log|logger -t user-data -s 2>/dev/console) 2>&1
     echo "Starting user data script..."
-    
+
     cd /home/ubuntu
     echo "Current directory: $(pwd)"
-    
+
     # Clone using HTTPS instead of SSH
     echo "Cloning repository..."
     git clone https://github.com/shehio/Policy-Gradient.git || true
     cd Policy-Gradient
     echo "Repository cloned to: $(pwd)"
-    
+
     # Make setup script executable and run it
     echo "Making setup script executable..."
     chmod +x terraform/setup.sh
     echo "Running setup script..."
     bash terraform/setup.sh
-    
+
     echo "User data script completed successfully!"
   EOF
-} 
+}

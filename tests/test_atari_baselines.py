@@ -159,7 +159,6 @@ class TestAtariBaselineTest:
         with patch("atari_baseline_test.PPO", mock_ppo), patch(
             "atari_baseline_test.DQN", mock_dqn
         ), patch("atari_baseline_test.A2C", mock_a2c):
-
             assert detect_algorithm_from_model("pong_ppo_cnn_100000") == mock_ppo
             assert detect_algorithm_from_model("breakout_dqn_cnn_500000") == mock_dqn
             assert detect_algorithm_from_model("pacman_a2c_cnn_200000") == mock_a2c

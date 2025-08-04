@@ -23,7 +23,6 @@ from dqn.config.hyperparameters import HyperParameters  # type: ignore
 
 
 def main():
-
     # Create hyperparameters using the HyperParameters class
     hyperparams = HyperParameters(
         environment_config=EnvironmentConfig(

@@ -90,4 +90,4 @@ chmod +x run_tests.py
 4. **Commit and push**
 5. **GitHub Actions runs automatically**
 
-That's it! The testing setup is now much simpler and easier to use. 🎉 
+That's it! The testing setup is now much simpler and easier to use. 🎉

@@ -155,10 +155,8 @@ def run_recording(model_path, env_name, game_name):
     # Generate output filenames
     timesteps = extract_timesteps_from_model(model_path)
     video_filename = f"{game_name}_dqn_cnn_{timesteps}_gameplay.mp4"
-    gif_filename = f"{game_name}_dqn_cnn_{timesteps}_gameplay.gif"
 
     video_path = videos_dir / video_filename
-    gif_path = videos_dir / gif_filename
 
     print(f"Recording video to: {video_path}")
 
@@ -252,7 +250,7 @@ def main():
             gif_path = convert_to_gif(video_path, game_name)
 
             if gif_path:
-                print(f"\nSuccessfully created gameplay recording!")
+                print("\nSuccessfully created gameplay recording!")
                 print(f"Video: {video_path}")
                 print(f"GIF: {gif_path}")
             else:

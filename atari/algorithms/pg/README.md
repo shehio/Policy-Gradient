@@ -161,4 +161,4 @@ The REINFORCE algorithm directly optimizes the policy:
 
 - **[atari/README.md](../README.md)** - General Atari information
 - **[dqn/README.md](../dqn/README.md)** - DQN comparison
-- **[baselines/README.md](../baselines/README.md)** - Stable Baselines3 A2C 
+- **[baselines/README.md](../baselines/README.md)** - Stable Baselines3 A2C

@@ -36,4 +36,4 @@ if [ "$PUBLIC_IP" != "None" ] && [ -n "$PUBLIC_IP" ]; then
     echo "ssh -i generic.pem ubuntu@$PUBLIC_IP 'tail -f /home/ubuntu/Policy-Gradient/training.log'"
 else
     echo "Instance doesn't have a public IP yet. It might still be starting up."
-fi 
+fi

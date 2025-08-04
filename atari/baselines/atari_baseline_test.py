@@ -3,10 +3,9 @@ from stable_baselines3.common.env_util import make_atari_env
 from stable_baselines3.common.vec_env import VecFrameStack
 import argparse
 import os
-import ale_py
-import time
 import time
 import cv2
+import ale_py
 from datetime import datetime
 
 

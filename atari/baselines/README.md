@@ -260,4 +260,4 @@ Solution: Install ale-py: pip install ale-py
 - **[atari/README.md](../README.md)** - General Atari information
 - **[algorithms/dqn/README.md](../algorithms/dqn/README.md)** - Custom DQN implementation
 - **[algorithms/pg/README.md](../algorithms/pg/README.md)** - Custom Policy Gradient implementation
-- **[Stable Baselines3 Docs](https://stable-baselines3.readthedocs.io/)** - Official documentation 
+- **[Stable Baselines3 Docs](https://stable-baselines3.readthedocs.io/)** - Official documentation

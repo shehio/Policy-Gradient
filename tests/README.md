@@ -141,12 +141,12 @@ pytest --tb=short -s
 ```python
 class TestMyClass:
     """Test the MyClass functionality."""
-    
+
     def test_initialization(self):
         """Test that the class can be initialized."""
         obj = MyClass()
         assert obj is not None
-    
+
     def test_method_behavior(self):
         """Test specific method behavior."""
         obj = MyClass()
@@ -219,4 +219,4 @@ with patch('module.submodule.Class') as mock_class:
 - [pytest-mock Documentation](https://pytest-mock.readthedocs.io/)
 - [Coverage.py Documentation](https://coverage.readthedocs.io/)
 - [Flake8 Documentation](https://flake8.pycqa.org/)
-- [Black Documentation](https://black.readthedocs.io/) 
+- [Black Documentation](https://black.readthedocs.io/)
