@@ -63,6 +63,13 @@ def parse_arguments():
         default=None,
         help="Path for the output video file (default: auto-generated)",
     )
+    parser.add_argument(
+        "--max_steps",
+        "-s",
+        type=int,
+        default=10000,
+        help="Maximum steps per episode (default: 10000)",
+    )
 
     return parser.parse_args()
 
@@ -88,6 +95,7 @@ def render_model(
     delay=0.01,
     record_video=False,
     video_path=None,
+    max_steps=10000,
 ):
     """
     Render a trained model playing the game
@@ -159,12 +167,34 @@ def render_model(
         obs = env.reset()
         total_reward = 0
         step_count = 0
+        lives = None
+        game_over = False
 
-        while True:
+        while not game_over:
             action, _states = model.predict(obs, deterministic=True)
             obs, rewards, dones, infos = env.step(action)
             total_reward += rewards[0]
             step_count += 1
+
+            # Check for step limit
+            if step_count >= max_steps:
+                game_over = True
+                print(f"Episode {episode + 1} reached maximum steps ({max_steps})")
+
+            # Check for lives info in the environment
+            if infos and len(infos) > 0:
+                info = infos[0]
+                if "lives" in info:
+                    current_lives = info["lives"]
+                    if lives is None:
+                        lives = current_lives
+                        print(f"Starting with {lives} lives")
+                    elif current_lives < lives:
+                        lives = current_lives
+                        print(f"Lost a life! {lives} remaining")
+                    elif current_lives == 0:
+                        game_over = True
+                        print("All lives lost! Game over.")
 
             # Capture frame for video recording
             if record_video and video_writer is not None:
@@ -184,13 +214,25 @@ def render_model(
             # Add delay to make it watchable
             time.sleep(delay)
 
-            if dones[0]:
+            # Show progress every 1000 steps
+            if step_count % 1000 == 0:
                 print(
-                    f"Episode {episode + 1} finished with reward: "
-                    f"{total_reward}, steps: {step_count}"
+                    f"Episode {episode + 1}: {step_count} steps, "
+                    f"reward: {total_reward:.1f}"
                 )
-                total_rewards.append(total_reward)
-                break
+
+            # Also check if the environment says it's done
+            if dones[0] and not game_over:
+                # If we don't have lives info, assume this is game over
+                if lives is None:
+                    game_over = True
+                    print("Episode ended (no lives info available)")
+
+        print(
+            f"Episode {episode + 1} finished with reward: "
+            f"{total_reward}, steps: {step_count}"
+        )
+        total_rewards.append(total_reward)
 
     env.close()
 
@@ -261,6 +303,7 @@ def main():
         args.delay,
         args.record,
         args.video_path,
+        args.max_steps,
     )
 
 
