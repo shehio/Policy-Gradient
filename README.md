@@ -179,9 +179,11 @@ The agent demonstrates sophisticated gameplay by learning to navigate complex ma
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
-## Related Projects
+## Resources
 
-- [Stable Baselines3](https://stable-baselines3.readthedocs.io/) - RL algorithms
 - [Gymnasium](https://gymnasium.farama.org/) - RL environments
+- [Stable Baselines3](https://stable-baselines3.readthedocs.io/) - RL algorithms
+- [Deep Reinforcement Learning: Pong from Pixels](https://karpathy.github.io/2016/05/31/rl/) - Andrej Karpathy's excellent tutorial on Policy Gradients
+- [Frame Skipping and Preprocessing for Deep Q-Networks on Atari 2600 Games](https://danieltakeshi.github.io/2016/11/25/frame-skipping-and-preprocessing-for-deep-q-networks-on-atari-2600-games/) - Technical guide on Atari preprocessing techniques
 - [Stockfish](https://stockfishchess.org/) - Chess engine
 - [Leela Chess Zero](https://lczero.org/) - Neural chess engine
