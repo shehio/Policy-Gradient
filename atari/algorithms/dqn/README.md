@@ -4,7 +4,7 @@ This directory contains a custom implementation of Deep Q-Network (DQN) for Atar
 
 > **📚 For general Atari information, see [atari/README.md](../README.md)**
 
-## 📁 Structure
+## Structure
 
 ```
 dqn/
@@ -49,7 +49,7 @@ python scripts/dqn_tester.py --model ../../models/dqn/pong/pong-cnn-900
 - **Frame Stacking**: Uses 4 consecutive frames as state representation
 - **Epsilon-Greedy Exploration**: Balances exploration vs exploitation
 
-## 🏗️ Architecture
+## Architecture
 
 The DQN uses a Dueling CNN architecture:
 1. **Convolutional Layers**: Feature extraction from game pixels
@@ -65,7 +65,7 @@ The DQN uses a Dueling CNN architecture:
 - **Fully Connected**: 512 hidden units
 - **Output**: Q-values for each action
 
-## ⚙️ Configuration
+## Configuration
 
 The DQN implementation uses a modular configuration system:
 
@@ -126,7 +126,7 @@ pip install torch numpy gymnasium[atari] ale-py
 4. **Target Network**: Periodically update target network for stability
 5. **Exploration**: Gradually reduce epsilon for exploitation
 
-## 🎮 Game-Specific Implementations
+## Game-Specific Implementations
 
 ### Pong
 - **Action Space**: 2 actions (UP/DOWN)

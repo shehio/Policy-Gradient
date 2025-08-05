@@ -29,14 +29,14 @@ python atari_baseline_train.py --algorithm dqn --env ALE/Breakout-v5 --timesteps
 | **A2C** | MLP | Simple environments | 30 min - 1 hour |
 | **A2C (CNN)** | CNN | Complex visual environments | 1-2 hours |
 
-## 📁 Files
+## Files
 
 - `atari_baseline_train.py` - Generic training script for all algorithms
 - `atari_baseline_test.py` - Testing script with rendering
 - `helpers.py` - Training utilities and callbacks
 - `README.md` - This documentation
 
-## ⚙️ Command Line Arguments
+## Command Line Arguments
 
 ### Training Script (`atari_baseline_train.py`)
 
@@ -66,7 +66,7 @@ Options:
   --video_path, -v   Custom video output path [default: auto-generated]
 ```
 
-## 🎮 Environment Options
+## Environment Options
 
 ### Popular Atari Games
 ```bash

@@ -2,7 +2,7 @@
 
 This guide shows you how to run tests for the Policy-Gradient project.
 
-## 🚀 Quick Start
+## Quick Start
 
 ### Run All Tests Locally
 ```bash
@@ -29,7 +29,7 @@ flake8 . --count --exit-zero --max-line-length=88
 black --check .
 ```
 
-## 📋 What Gets Tested
+## What Gets Tested
 
 ### 1. Unit Tests
 - **Atari Baselines**: Argument parsing, environment handling
@@ -43,7 +43,7 @@ black --check .
 ### 3. Imports
 - **Import Validation**: Make sure all modules can be imported
 
-## 🔄 GitHub Actions (CI)
+## GitHub Actions (CI)
 
 When you push code or create a pull request, GitHub Actions automatically:
 
@@ -55,7 +55,7 @@ When you push code or create a pull request, GitHub Actions automatically:
 
 If any step fails, the CI will show you exactly what went wrong.
 
-## 🐛 Common Issues
+## Common Issues
 
 ### Import Errors
 ```bash
@@ -76,13 +76,13 @@ pip install -r requirements.txt
 chmod +x run_tests.py
 ```
 
-## 📊 Test Results
+## Test Results
 
-- **✅ Green**: Tests passed
-- **❌ Red**: Tests failed - check the error message
-- **⚠️ Yellow**: Style warnings - fix to improve code quality
+- **Green**: Tests passed
+- **Red**: Tests failed - check the error message
+- **Yellow**: Style warnings - fix to improve code quality
 
-## 🎯 Simple Workflow
+## Simple Workflow
 
 1. **Write code**
 2. **Run tests locally**: `python run_tests.py`
@@ -90,4 +90,4 @@ chmod +x run_tests.py
 4. **Commit and push**
 5. **GitHub Actions runs automatically**
 
-That's it! The testing setup is now much simpler and easier to use. 🎉
+That's it! The testing setup is now much simpler and easier to use.

@@ -4,7 +4,7 @@ This directory contains a custom implementation of Policy Gradient (REINFORCE) a
 
 > **📚 For general Atari information, see [atari/README.md](../README.md)**
 
-## 📁 Structure
+## Structure
 
 ```
 pg/
@@ -56,7 +56,7 @@ python scripts/pg_tester.py --model ../../models/pg/pong/torch_mlp_pong_i6400_h2
 - **Multi-Action Support**: 9-action space for Pacman
 - **Frame Preprocessing**: Optimized image processing
 
-## 🏗️ Architecture
+## Architecture
 
 ### MLP Architecture (Pong/Breakout)
 - **Input**: 6400 units (80x80 preprocessed frames)
@@ -72,7 +72,7 @@ python scripts/pg_tester.py --model ../../models/pg/pong/torch_mlp_pong_i6400_h2
 - **Fully Connected**: 200 hidden units
 - **Output**: 9 action probabilities
 
-## ⚙️ Configuration
+## Configuration
 
 Key hyperparameters in `src/hyperparameters.py`:
 ```python
@@ -123,7 +123,7 @@ pip install torch numpy gymnasium[atari] ale-py
 4. **Exploration**: Use temperature scheduling for exploration
 5. **Model Saving**: Save checkpoints every N episodes
 
-## 🎮 Game-Specific Implementations
+## Game-Specific Implementations
 
 ### Pong & Breakout
 - **Action Space**: Binary (UP/DOWN for Pong, LEFT/RIGHT for Breakout)

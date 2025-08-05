@@ -47,7 +47,7 @@ class Agent:
         # Check if there are any rewards - if not, skip training entirely
         if np.sum(self.memory.rewards) == 0:
             print(
-                "⚠️  WARNING: No rewards received - skipping training (no learning signal)"
+                "WARNING: No rewards received - skipping training (no learning signal)"
             )
             return
 
@@ -71,7 +71,7 @@ class Agent:
         # Check for vanishing gradient
         gradient_magnitude = np.mean(np.abs(episode_dlogps))
         if gradient_magnitude < 1e-6:
-            print("⚠️  WARNING: Very small gradients detected!")
+            print("WARNING: Very small gradients detected!")
 
         self.policy_network.backward_pass(
             episode_hidden_layers, episode_dlogps, episode_states

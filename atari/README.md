@@ -72,7 +72,7 @@ python pgpacman.py
 - **[algorithms/pg/README.md](algorithms/pg/README.md)** - Complete Policy Gradient implementation guide
 - **[baselines/README.md](baselines/README.md)** - Stable Baselines3 usage guide
 
-## 🎮 Algorithm Implementations
+## Algorithm Implementations
 
 ### 1. DQN (Deep Q-Network)
 - **Location**: `algorithms/dqn/`

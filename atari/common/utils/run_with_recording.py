@@ -17,9 +17,9 @@ def run_game_with_recording(
     video_dir = output_path / f"{game_name}_videos"
     video_dir.mkdir(exist_ok=True)
 
-    print(f"🎬 Starting recording for: {game_name}")
-    print(f"📁 Output: {output_path}")
-    print(f"📹 Videos: {video_dir}")
+    print(f"Starting recording for: {game_name}")
+    print(f"Output: {output_path}")
+    print(f"Videos: {video_dir}")
 
     # Build command for pg_trainer.py
     cmd = [
@@ -68,18 +68,18 @@ def run_game_with_recording(
 
         process.wait()
 
-        print(f"\n✅ Training completed!")
-        print(f"📄 Log saved to: {log_file}")
-        print(f"📹 Videos saved to: {video_dir}")
+        print(f"\nTraining completed!")
+        print(f"Log saved to: {log_file}")
+        print(f"Videos saved to: {video_dir}")
 
         return True
 
     except KeyboardInterrupt:
-        print("\n⏹️  Training interrupted by user")
+        print("\nTraining interrupted by user")
         process.terminate()
         return False
     except Exception as e:
-        print(f"❌ Error running training: {e}")
+        print(f"Error running training: {e}")
         return False
 
 

@@ -20,12 +20,12 @@ def run_command(command, description):
         result = subprocess.run(
             command, shell=True, check=True, capture_output=True, text=True
         )
-        print("✅ SUCCESS")
+        print("SUCCESS")
         if result.stdout.strip():
             print(result.stdout)
         return True
     except subprocess.CalledProcessError as e:
-        print("❌ FAILED")
+        print("FAILED")
         print(f"Error: {e}")
         if e.stdout.strip():
             print("STDOUT:", e.stdout)
@@ -77,7 +77,7 @@ def main():
     print("=" * 50)
     print("📊 TEST SUMMARY")
     print("=" * 50)
-    print("✅ All tests passed!")
+    print("All tests passed!")
     print("🎉 Code quality checks passed!")
     print("🚀 Ready for deployment!")
     return True
@@ -87,6 +87,6 @@ if __name__ == "__main__":
     success = main()
     if not success:
         print()
-        print("❌ Some tests failed.")
+        print("Some tests failed.")
         print("🔧 Please fix the issues above.")
         sys.exit(1)

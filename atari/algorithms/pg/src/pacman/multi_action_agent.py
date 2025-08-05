@@ -90,7 +90,7 @@ class MultiActionAgent:
         # Print temperature every 10 episodes
         if episode_number % 10 == 0:
             print(
-                f"🌡️  Temperature: {self.current_temperature:.3f}, Episode: {episode_number}"
+                f"Temperature: {self.current_temperature:.3f}, Episode: {episode_number}"
             )
 
         # Only train if we have meaningful rewards
@@ -104,11 +104,11 @@ class MultiActionAgent:
 
     def __accumulate_gradient(self) -> None:
         if len(self.memory.rewards) == 0:
-            print("⚠️  WARNING: No rewards received - skipping training")
+            print("WARNING: No rewards received - skipping training")
             return
 
         if np.sum(self.memory.rewards) == 0:
-            print("⚠️  WARNING: Zero total reward - skipping training")
+            print("WARNING: Zero total reward - skipping training")
             return
 
         episode_states = np.vstack(self.memory.states)
@@ -139,7 +139,7 @@ class MultiActionAgent:
         gradient_magnitude = np.mean(np.abs(episode_dlogps))
         if gradient_magnitude > 0.5:  # More conservative clipping
             episode_dlogps = episode_dlogps * (0.5 / gradient_magnitude)
-            print(f"⚠️  Clipped gradients from {gradient_magnitude:.3f} to 0.5")
+            print(f"Clipped gradients from {gradient_magnitude:.3f} to 0.5")
 
         self.policy_network.backward_pass(
             episode_hidden_layers, episode_dlogps, episode_states
