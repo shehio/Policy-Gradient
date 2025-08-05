@@ -83,7 +83,9 @@ class MLPMultiAction(nn.Module):
             self.gradient_buffer = []
             return
         if torch.isnan(advantages).any() or torch.isinf(advantages).any():
-            print("🚨 CRITICAL: NaN or infinite advantages detected! Skipping training.")
+            print(
+                "🚨 CRITICAL: NaN or infinite advantages detected! Skipping training."
+            )
             self.gradient_buffer = []
             return
         output = self.forward(inputs)
