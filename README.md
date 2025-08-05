@@ -18,8 +18,8 @@ This repository contains implementations of:
 
 ```
 rl/
-├── atari/                 # Atari game implementations
-│   ├── algorithms/        # Custom RL implementations
+├── atari/                # Atari game implementations
+│   ├── algorithms/       # Custom RL implementations
 │   │   ├── dqn/          # Deep Q-Network
 │   │   └── pg/           # Policy Gradient
 │   ├── baselines/        # Stable Baselines3 implementations
