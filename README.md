@@ -38,12 +38,49 @@ rl/
 ./init.sh
 ```
 
+### Virtual Environment Setup
+The project uses a Python virtual environment to manage dependencies. The `init.sh` script automatically:
+- Creates a virtual environment (`venv/`)
+- Installs all required packages from `requirements.txt`
+- Downloads Atari ROMs via AutoROM
+- Installs and configures pre-commit hooks for code formatting
+
+**Important Notes:**
+- Always activate the virtual environment before running scripts: `source venv/bin/activate`
+- The virtual environment must be activated from the root `rl/` directory
+- You can navigate to subdirectories after activation - the environment persists in the same shell session
+- If you see `(venv)` in your prompt, the virtual environment is active
+
+### Code Quality & Pre-commit Hooks
+The project includes pre-commit hooks that automatically:
+- Format code with Black (line length: 88 characters)
+- Remove trailing whitespace
+- Fix end-of-file issues
+- Check for merge conflicts
+- Validate YAML files
+
+To manually run the hooks: `pre-commit run --all-files`
+
 ### Atari Games (Reinforcement Learning)
 ```bash
 # For detailed instructions, see atari/README.md
 cd atari/baselines
 python atari_baseline_train.py --algorithm ppo --env ALE/Pong-v5
 ```
+
+**Recording Gameplay:**
+```bash
+# Record gameplay using the most recent model
+python record_gameplay.py <game_name>
+# Example: python record_gameplay.py spaceinvaders
+```
+
+The recording script automatically:
+- Finds the most recent trained model for the specified game
+- Records gameplay and saves as MP4 video
+- Converts to GIF format for easy viewing
+- Uses precise timestep naming (e.g., "7.5M" for 7,500,000 steps)
+- Saves files to `assets/videos/` directory
 
 ### Chess Engines
 ```bash

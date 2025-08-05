@@ -136,9 +136,15 @@ def extract_timesteps_from_model(model_path):
         timesteps = int(match.group(1))
         # Format timesteps for display
         if timesteps >= 1000000:
-            return f"{timesteps // 1000000}M"
+            # Use floating point division to preserve decimal part
+            millions = timesteps / 1000000
+            return f"{millions:.1f}M".replace(".0M", "M")  # Remove .0 for whole numbers
         elif timesteps >= 1000:
-            return f"{timesteps // 1000}k"
+            # Use floating point division to preserve decimal part
+            thousands = timesteps / 1000
+            return f"{thousands:.1f}k".replace(
+                ".0k", "k"
+            )  # Remove .0 for whole numbers
         else:
             return str(timesteps)
     return "unknown"
