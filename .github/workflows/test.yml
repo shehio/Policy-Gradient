@@ -18,10 +18,11 @@ jobs:
       with:
         python-version: 3.13
 
-    - name: Install dependencies
+    - name: Install test dependencies
       run: |
         python -m pip install --upgrade pip
         pip install -r requirements.txt
+        pip install flake8 black==23.12.1
 
     - name: Run tests
       run: |
@@ -29,14 +30,13 @@ jobs:
 
     - name: Check code style
       run: |
-        pip install flake8 black==23.12.1
         flake8 . --count --exit-zero --max-line-length=88 --exclude=venv
         black --check --line-length=88 .
 
-    - name: Test imports
+    - name: Test specific imports
       run: |
-        echo "Testing imports..."
+        echo "Testing specific module imports..."
         cd atari/baselines
         python -c "from atari_baseline_train import parse_arguments"
         python -c "from atari_baseline_test import parse_arguments"
-        echo "All imports successful"
+        echo "All module imports successful"

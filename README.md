@@ -1,7 +1,7 @@
 # Game AI & Reinforcement Learning
 
-[![Build Status](https://github.com/shehio/rl/actions/workflows/test.yml/badge.svg)](https://github.com/shehio/rl/actions/workflows/test.yml)
-[![Tests](https://github.com/shehio/rl/actions/workflows/test.yml/badge.svg?event=push)](https://github.com/shehio/rl/actions/workflows/test.yml)
+[![Build](https://github.com/shehio/rl/actions/workflows/build.yml/badge.svg)](https://github.com/shehio/rl/actions/workflows/build.yml)
+[![Tests](https://github.com/shehio/rl/actions/workflows/test.yml/badge.svg)](https://github.com/shehio/rl/actions/workflows/test.yml)
 
 
 A comprehensive repository for implementing and experimenting with various reinforcement learning algorithms and classical game AI techniques. The objective of this repo is not to create the best playing agent but to experiment and explore different agents playing board games and video games.
