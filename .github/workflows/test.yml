@@ -29,9 +29,9 @@ jobs:
 
     - name: Check code style
       run: |
-        pip install flake8 black
+        pip install flake8 black==23.12.1
         flake8 . --count --exit-zero --max-line-length=88 --exclude=venv
-        black --check .
+        black --check --line-length=88 .
 
     - name: Test imports
       run: |
