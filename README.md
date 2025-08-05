@@ -205,6 +205,27 @@ Watch our trained Deep Q-Network (DQN) agent playing Ms. Pacman after 10 million
 
 The agent demonstrates sophisticated gameplay by learning to navigate complex mazes, collect dots efficiently, avoid ghosts strategically, and utilize power pellets effectively. The extended training (10M steps) enables the agent to develop advanced strategies for this complex multi-action environment.
 
+### Demo: Space Invaders DQN Agent
+
+Watch our trained Deep Q-Network (DQN) agent playing Space Invaders after 7.5 million training steps:
+
+![Space Invaders DQN Gameplay](assets/videos/spaceinvaders_dqn_cnn_7.5M_gameplay.gif)
+
+**Model Details:**
+- **Algorithm**: Deep Q-Network (DQN) with Dueling CNN architecture
+- **Environment**: ALE/SpaceInvaders-v5 (Atari Learning Environment)
+- **Training Steps**: 7,500,000
+- **Architecture**: Convolutional Neural Network with dueling streams
+- **Performance**: Strategic alien targeting, shield utilization, and movement optimization
+
+**Technical Specifications:**
+- **Input**: 4 stacked grayscale frames (84x84 pixels)
+- **Actions**: 3 discrete actions (LEFT/RIGHT/FIRE)
+- **Network**: 3 convolutional layers + dueling streams (value + advantage)
+- **Training**: Experience replay, target networks, epsilon-greedy exploration
+
+The agent demonstrates effective gameplay by learning to prioritize targets, use shields strategically, and maintain optimal positioning. The precise timestep naming (7.5M) reflects the exact training duration, showcasing the agent's development through extended training.
+
 ## Contributing
 
 1. Choose the appropriate subdirectory for your contribution
