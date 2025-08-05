@@ -9,7 +9,7 @@ on:
 jobs:
   test:
     runs-on: ubuntu-latest
-    
+
     steps:
     - uses: actions/checkout@v4
 
@@ -39,4 +39,4 @@ jobs:
         cd atari/baselines
         python -c "from atari_baseline_train import parse_arguments"
         python -c "from atari_baseline_test import parse_arguments"
-        echo "✅ All imports successful" 
+        echo "All imports successful"
